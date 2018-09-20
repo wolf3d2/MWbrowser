@@ -29,8 +29,8 @@ import com.jbak.superbrowser.ui.OnAction;
 import com.jbak.superbrowser.ui.themes.MyTheme;
 import com.jbak.ui.CustomPopup;
 
-public abstract class DialogImport extends ThemedDialog {
-
+public abstract class DialogImport extends ThemedDialog 
+{
 	TextView tv_dirname;
 	TextView tv_empty;
 	CheckBox cb_set;

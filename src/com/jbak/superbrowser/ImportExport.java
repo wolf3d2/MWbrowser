@@ -126,8 +126,8 @@ public class ImportExport
 			        out+=c.getColumnName(5)+"="+parent+stat.STR_CR;
 			        out+=END_BOOKMARK+stat.STR_CR+stat.STR_CR;
 			        fw.write(out);
+		        	count_bm++;
 	        	}
-	        	count_bm++;
 	        	} while (c.moveToNext());
         	c.close();
         	

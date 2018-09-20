@@ -396,7 +396,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 
 //			// MotionEvent parameters
 			long downTime = SystemClock.uptimeMillis();
-			long eventTime = SystemClock.uptimeMillis()+1500;
+			long eventTime = SystemClock.uptimeMillis();
 			int action = MotionEvent.ACTION_DOWN;
 			int x = pt.x;
 			int y = pt.y;

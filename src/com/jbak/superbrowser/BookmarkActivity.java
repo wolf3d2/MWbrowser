@@ -45,6 +45,7 @@ import com.jbak.superbrowser.ui.MenuPanelButton;
 import com.jbak.superbrowser.ui.MenuPanelButton.MenuBookmark;
 import com.jbak.superbrowser.ui.OnAction;
 import com.jbak.superbrowser.ui.PanelButton;
+import com.jbak.superbrowser.ui.dialogs.DialogImport;
 import com.jbak.superbrowser.ui.dialogs.MenuSettingBookmarks;
 import com.jbak.superbrowser.ui.dialogs.ThemedDialog;
 import com.jbak.superbrowser.ui.themes.DesktopTheme;
