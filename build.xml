@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JbakBrowser" default="help">
+
+    <!-- The local.properties file is created and updated by the 'android' tool.
+         It contains the path to the SDK. It should *NOT* be checked into
+         Version Control Systems. -->
+    <property file="local.properties" />
+
+    <!-- The ant.properties file can be created by you. It is only edited by the
+         'android' tool to add properties to it.
+         This is the place to change some Ant specific build properties.
+         Here are some properties you may want to change/update:
+
+         source.dir
+             The name of the source directory. Default is 'src'.
+         out.dir
+             The name of the output directory. Default is 'bin'.
+
+         For other overridable properties, look at the beginning of the rules
+         files in the SDK, at tools/ant/build.xml
+
+         Properties related to the SDK location or the project target should
+         be updated using the 'android' tool with the 'update' action.
+
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems.
+
+         -->
+    <property file="ant.properties" />
+
+    <!-- if sdk.dir was not set from one of the property file, then
+         get it from the ANDROID_HOME env var.
+         This must be done before we load project.properties since
+         the proguard config can use sdk.dir -->
+    <property environment="env" />
+    <condition property="sdk.dir" value="${env.ANDROID_HOME}">
+        <isset property="env.ANDROID_HOME" />
+    </condition>
+
+    <!-- The project.properties file is created and updated by the 'android'
+         tool, as well as ADT.
+
+         This contains project specific properties such as project target, and library
+         dependencies. Lower level build properties are stored in ant.properties
+         (or in .classpath for Eclipse projects).
+
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems. -->
+    <loadproperties srcFile="project.properties" />
+
+    <!-- quick check on sdk.dir -->
+    <fail
+            message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through the ANDROID_HOME environment variable."
+            unless="sdk.dir"
+    />
+
+    <!--
+        Import per project custom build rules if present at the root of the project.
+        This is the place to put custom intermediary targets such as:
+            -pre-build
+            -pre-compile
+            -post-compile (This is typically used for code obfuscation.
+                           Compiled code location: ${out.classes.absolute.dir}
+                           If this is not done in place, override ${out.dex.input.absolute.dir})
+            -post-package
+            -post-build
+            -pre-clean
+    -->
+    <import file="custom_rules.xml" optional="true" />
+    <target name="write-version" >
+		<property file="ant.version.properties"/>
+		<echo message="${build.major}.${build.minor}.${build.integer}" file="version.txt"/>
+	 </target>
+    <target name="revision-increment" >
+         <propertyfile  file="ant.version.properties">
+            <entry key="build.major" default="0" type="int" pattern="0"/>
+            <entry key="build.minor" default="0" type="int" pattern="00"/>
+            <entry key="build.integer" default="0"  type="int" operation="+" value="1" pattern="0"/>
+    	 </propertyfile>
+         <property file="ant.version.properties"/>
+		<replaceregexp file="ant.version.properties" match="^#.*[\r\n]" replace="" flags="m" />
+		<echo message="Version name: ${build.major}.${build.minor}.${build.integer}"/>
+		<echo message="Version code: ${build.integer}"/>
+     <property name="match.end" value='"' />
+        
+        <property name="matchVersionCode.start" value='android:versionCode=\"' />
+        <replaceregexp file="AndroidManifest.xml" match='${matchVersionCode.start}[^"]*${match.end}' replace="${matchVersionCode.start}${build.integer}${match.end}" />
+        <property name="matchVersionName.start" value='android:versionName=\"' />
+        <replaceregexp file="AndroidManifest.xml" match='${matchVersionName.start}[^"]*${match.end}' replace="${matchVersionName.start}${build.major}.${build.minor}.${build.integer}${match.end}" />
+	 </target>
+    <target name="set-amazon-build" >
+        <replaceregexp 
+				file="src/com/jbak/superbrowser/AntConfig.java" 
+				match='(public static final String MARKET)\s?=.*' 
+				replace="\1 = MARKET_AMAZON;" 
+				byline="true"
+			/>
+	 </target>
+    <target name="set-google-build" >
+        <replaceregexp 
+				file="src/com/jbak/superbrowser/AntConfig.java" 
+				match='(public static final String MARKET)\s?=.*' 
+				replace="\1 = MARKET_GOOGLE;" 
+				byline="true"
+			/>
+	 </target>
+    <target name="set-samsung-build" >
+        <replaceregexp 
+				file="src/com/jbak/superbrowser/AntConfig.java" 
+				match='(public static final String MARKET)\s?=.*' 
+				replace="\1 = MARKET_SAMSUNG;" 
+				byline="true"
+			/>
+	 </target>
+	<target name="rename-release-with-version-number">
+		<xmlproperty file="AndroidManifest.xml" 
+					 prefix="themanifest" 
+					 collapseAttributes="true"/>
+		<property name="out.final.file" 
+		          location="builds/JbakBrowser-${themanifest.manifest.android:versionName}-${distrib}.apk" />
+	</target>
+	<target name="rename-test-with-version-number">
+		<xmlproperty file="AndroidManifest.xml" 
+					 prefix="themanifest" 
+					 collapseAttributes="true"/>
+	
+	<echo message="JbakBrowser-${themanifest.manifest.android:versionName}-${distrib}.apk"/>
+		 <copy file="builds/JbakBrowser-${themanifest.manifest.android:versionName}-${distrib}.apk" tofile="builds/beta-JbakBrowser-${themanifest.manifest.android:versionName}-4pda.apk" overwrite="true" failonerror="true"/>
+		 <copy file="builds/JbakBrowser-${themanifest.manifest.android:versionName}-${distrib}.apk" tofile="builds/beta-JbakBrowser-${themanifest.manifest.android:versionName}-vk.txt" overwrite="true" failonerror="true"/>
+	</target>
+	<target name="-set-release-mode"
+		 depends="rename-release-with-version-number,android_rules.-set-release-mode">
+		<echo message="target: ${build.target}"></echo>
+	</target>
+
+	 <target name="amazon-build" >
+		<antcall target="set-amazon-build"/>
+		<antcall target="clean"/>
+		<antcall target="release"><param name="distrib" value="amazon"/></antcall>
+	</target>
+	 <target name="samsung-build" >
+		<antcall target="set-samsung-build"/>
+		<antcall target="clean"/>
+		<antcall target="release"><param name="distrib" value="samsung"/></antcall>
+	</target>
+	 <target name="google-build" >
+		<antcall target="set-google-build"/>
+		<antcall target="clean"/>
+		<antcall target="release"><param name="distrib" value="google"/></antcall>
+	</target>
+	 <target name="google-increment-build" >
+		<antcall target="revision-increment"/>
+		<antcall target="google-build"/>
+	</target>
+	 <target name="beta-build" >
+		<antcall target="set-google-build"/>
+		<antcall target="clean"/>
+		<antcall target="release"><param name="distrib" value="beta"/></antcall>
+		<antcall target="rename-test-with-version-number"><param name="distrib" value="beta"/></antcall>
+	</target>
+	 <target name="beta-increment-build" >
+		<antcall target="revision-increment"/>
+		<antcall target="beta-build"/>
+	</target>
+
+    <import file="${sdk.dir}/tools/ant/build.xml" />
+
+</project>

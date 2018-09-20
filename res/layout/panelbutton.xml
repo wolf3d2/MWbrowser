@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <ImageView android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        />
+    <ImageView android:id="@+id/image"
+        android:layout_width="@dimen/panelButtonIcon"
+        android:layout_height="@dimen/panelButtonIcon"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="2dp"
+        />
+    <ImageView android:id="@+id/smallImage"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:adjustViewBounds="true"
+        android:layout_alignBottom="@id/image"
+        android:layout_alignLeft="@id/image"
+        />
+    <TextView android:id="@+id/normalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:lines="2"
+        android:maxLines="2"
+        android:textColor="#ffffff"
+        android:gravity="center_horizontal"
+        android:padding="0dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textSize="@dimen/panel_buttons_font_size"
+        android:layout_below="@id/image"
+        />
+    </RelativeLayout>

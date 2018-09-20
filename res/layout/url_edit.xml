@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <com.jbak.ui.SuggestionEdit
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/textUrl"
+        style="@style/textEdit"
+        android:listSelector="@null"
+        android:background="@drawable/url_bk"
+        android:hint="@string/hint_url"
+        android:imeOptions="flagNoExtractUi|actionGo"
+        android:inputType="textMultiLine|textPostalAddress"
+        android:maxLines="4"
+	    android:textCursorDrawable="@null"
+        android:padding="@dimen/magic_padding" />

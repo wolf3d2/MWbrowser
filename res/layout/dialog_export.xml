@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+	<TextView
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_vertical"
+	    android:paddingLeft="@dimen/magic_padding"
+        android:text="@string/act_export_path"
+	    android:textColor="#000" />
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/magic_padding"
+        android:id="@+id/dirSelector"
+        >
+    <ImageView 
+        	android:layout_width="32dp"
+        	android:layout_height="32dp"
+        	android:id="@+id/dirImage"
+        	android:src="@drawable/folder"
+        	android:layout_gravity="center_vertical"
+        />
+
+	<TextView
+	    android:id="@+id/dirname"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_vertical"
+	    android:paddingLeft="@dimen/magic_padding"
+	    android:textColor="#000" />
+    
+</LinearLayout>
+
+		<CheckBox
+        android:id="@+id/cb_save_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/act_export_cb1"
+        android:textColor="#000" 
+        />
+
+</LinearLayout>
+</ScrollView>

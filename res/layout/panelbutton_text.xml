@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout         xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/search_bk"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:minWidth="38dp"
+        android:gravity="center_horizontal"
+    >
+    <TextView
+        android:id="@+id/normalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:ellipsize="end"
+        android:textColor="#ffffff"
+        android:padding="0dp"
+        android:gravity="center"
+        android:maxWidth="@dimen/text_row_max_size"
+        android:textSize="@dimen/panel_buttons_font_size"
+        />
+</LinearLayout>

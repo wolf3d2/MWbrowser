@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+	<TextView
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_vertical"
+	    android:paddingLeft="@dimen/magic_padding"
+        android:text="@string/act_import_path"
+	    android:textColor="#000" />
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/magic_padding"
+        android:id="@+id/dirSelector"
+        >
+    <ImageView 
+        	android:layout_width="32dp"
+        	android:layout_height="32dp"
+        	android:id="@+id/dirImage"
+        	android:src="@drawable/folder"
+        	android:layout_gravity="center_vertical"
+        />
+
+	<TextView
+	    android:id="@+id/dirname"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_vertical"
+	    android:paddingLeft="@dimen/magic_padding"
+	    android:textColor="#000" />
+    
+</LinearLayout>
+
+	<CheckBox
+	    android:id="@+id/cb_import_setting"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/act_import_cb_set"
+	    android:textColor="#000" />
+
+	<CheckBox
+	    android:id="@+id/cb_import_bookmark"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/act_import_cb_bm"
+	    android:textColor="#000" />
+
+	<TextView
+	    android:id="@+id/tv_import_empty"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    android:paddingLeft="@dimen/magic_padding"
+	    android:text="@string/act_import_empty"
+	    android:textColor="#000" />
+    
+</LinearLayout>
+</ScrollView>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff" >
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/dialogTitle" />
+
+    <FrameLayout
+        android:id="@+id/adframe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+    <com.jbak.superbrowser.ui.HorizontalPanel
+        android:id="@+id/horizontal_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/adframe"
+        android:layout_alignWithParentIfMissing="true" />
+	<FrameLayout android:id="@+id/recyclerContainer"
+        android:padding="@dimen/magic_padding"
+        android:layout_above="@id/horizontal_panel"
+        android:layout_below="@id/title" 
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+	    />
+
+    <LinearLayout
+        android:id="@+id/progressLoad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone" 
+        >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateOnly="true" />
+    </LinearLayout>
+
+</RelativeLayout>

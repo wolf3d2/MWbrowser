@@ -1,0 +1,229 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    >
+    <LinearLayout
+        android:id="@+id/searchPage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:background="#000000"
+        >
+         <TextView 
+            android:id="@+id/searchPage_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:padding="@dimen/magic_padding"
+            />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/searchText"
+            style="@style/textEdit"
+            android:layout_width="0dip"
+            android:layout_weight="0.5"
+		    android:singleLine="true"
+            android:imeOptions="actionSearch|flagNoExtractUi" />
+
+        <ImageView
+            android:id="@+id/search_close"
+            android:padding="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/clear" />
+
+        <ImageView
+            android:id="@+id/search_up"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="5dp"
+            android:src="@drawable/up" />
+
+        <ImageView
+            android:id="@+id/search_down"
+            android:padding="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/down" />
+
+    </LinearLayout>
+    </LinearLayout>
+        <com.jbak.superbrowser.ui.TextProgressBar
+        android:id="@+id/progressLoad"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:progressDrawable="@drawable/progress"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:progress="100"
+        android:visibility="gone" />
+    
+	<LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/topPanelContainer"
+        android:layout_below="@id/progressLoad"
+        android:orientation="vertical"
+	    />
+	<LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottomPanelContainer"
+        android:layout_above="@id/searchPage"
+        android:layout_alignWithParentIfMissing="true"
+        android:orientation="vertical"
+	    />
+
+    <RelativeLayout
+        android:id="@+id/tempWebViewFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topPanelContainer"
+        android:layout_above="@id/bottomPanelContainer"
+        android:background="#ffffff"
+        android:visibility="invisible"
+        />
+	<FrameLayout
+        android:id="@+id/webViewFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topPanelContainer"
+        android:layout_above="@id/bottomPanelContainer"
+        android:background="#ffffff"
+        />
+    <FrameLayout
+        android:id="@+id/loadErrorFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topPanelContainer"
+        android:layout_above="@id/bottomPanelContainer"
+        />
+    
+    <RelativeLayout
+        android:id="@+id/magicButtonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:layout_below="@id/topPanelContainer"
+        android:layout_above="@id/bottomPanelContainer" 
+        >
+
+        <ImageView
+            android:id="@+id/magicButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/magic_button_size"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="40dp"
+            android:alpha="128"
+            android:src="@drawable/magic_button" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/navigationLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp"
+        android:layout_above="@id/bottomPanelContainer"
+        android:layout_below="@id/topPanelContainer"
+        android:visibility="gone"
+        >
+
+<!-- <TextView -->
+<!--     android:id="@+id/np_setting" -->
+<!--     android:layout_width="wrap_content" -->
+<!--     android:layout_height="wrap_content" -->
+<!--     android:layout_alignParentLeft="true" -->
+<!--     android:layout_marginBottom="40dp" -->
+<!--     android:alpha="128" -->
+<!--     android:text=" set " -->
+<!--     android:textColor="#00f" -->
+<!--     android:textSize="20sp" /> -->
+        
+<TextView
+    android:id="@+id/np_left"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_marginBottom="40dp"
+    android:alpha="128"
+    android:text=" ◁ "
+    android:textColor="#00f"
+    android:textSize="40sp" />
+        
+<TextView
+    android:id="@+id/np_right"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_toRightOf="@+id/np_left"
+    android:alpha="128"
+    android:gravity="center"
+    android:text=" ▷ "
+    android:textColor="#00f"
+    android:textSize="40sp" />
+        
+<TextView
+    android:id="@+id/np_up"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_toRightOf="@+id/np_right"
+    android:alpha="128"
+    android:gravity="center"
+    android:text=" △ "
+    android:textColor="#00f"
+    android:textSize="40sp" />
+        
+<TextView
+    android:id="@+id/np_down"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_toRightOf="@+id/np_up"
+    android:alpha="128"
+    android:gravity="center"
+    android:text=" ▽ "
+    android:textColor="#00f"
+    android:textSize="40sp" />
+        
+</RelativeLayout>
+
+    <Button
+        android:id="@+id/round_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:text="up/down" />
+    
+        <!--  ProgressBar
+            android:id="@+id/videoProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" /-->
+        <FrameLayout
+            android:id="@+id/customLayoutFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000"
+            android:visibility="gone" />
+    
+    <FrameLayout
+        android:id="@+id/main_panel_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</RelativeLayout>

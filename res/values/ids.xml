@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<item type="id" name="full_view"/>    
+		<item type="id" name="smartphone"/>    
+	<item type="id" name="copy_link"/>    
+	<item type="id" name="exit"/>    
+	<item type="id" name="history"/>    
+	<item type="id" name="pageTop"/>    
+	<item type="id" name="pageBottom"/>    
+	<item type="id" name="refresh"/>    
+	<item type="id" name="share"/>    
+	<item type="id" name="viewType"/>    
+	<item type="id" name="searchPage"/>    
+	<item type="id" name="forward"/>    
+	<item type="id" name="bookmarks"/>    
+	<item type="id" name="idClose"/>
+	<item type="id" name="idVideoPlayer"/>
+	<item type="id" name="listEmpty"/>
+	<item type="id" name="player_container"/>
+	<item type="id" name="player_menu"/>
+	<item type="id" name="dialogBody"/>
+	<item type="id" name="text"/>
+	<item type="id" name="horizontal_panel"/>
+	<item type="id" name="title"/>
+	<item type="id" name="action_panel"/>
+	<item type="id" name="buttonYes"/>
+	<item type="id" name="buttonNo"/>
+	<item type="id" name="buttonOk"/>
+</resources>

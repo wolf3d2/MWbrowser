@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+     <TextView 
+xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/title"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_centerVertical="true"
+	    android:padding="@dimen/magic_padding"
+	    android:background="@drawable/black_color_background"
+	    android:layout_alignParentRight="true"
+	    style="@style/generalText"
+	    android:textSize="@dimen/menu_text_size"
+         />
+

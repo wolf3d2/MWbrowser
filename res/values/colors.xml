@@ -1,0 +1,8 @@
+<resources>
+
+    <color name="red_color">#ff0000</color>
+    <color name="transparent">#00ff0000</color>
+	<color name="blue_color">#007cc3</color>    
+	<color name="button_stroke">#dddddd</color>
+
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:hint="@string/filename"
+        android:maxLines="3"
+	    android:paddingLeft="3dp"
+	    android:paddingRight="2dp"
+        android:paddingBottom="5dp"
+        android:textColor="#000"
+        android:textCursorDrawable="@null" />
+
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:id="@+id/dirSelector"
+        >
+    <ImageView 
+        	android:layout_width="32dp"
+        	android:layout_height="32dp"
+        	android:id="@+id/dirImage"
+        	android:src="@drawable/folder"
+        	android:layout_gravity="center_vertical"
+        />
+	<TextView android:layout_width="match_parent"
+	    		android:layout_height="wrap_content"
+	    		style="@style/textView"
+	    		android:layout_toRightOf="@id/dirImage"
+	    		android:id="@+id/dirName"
+	    		android:layout_alignTop="@id/dirImage"
+	    		android:paddingLeft="@dimen/magic_padding"
+        	android:layout_gravity="center_vertical"
+	    />    
+</LinearLayout>
+<LinearLayout 
+    android:id="@+id/networkSelector"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/dirSelector"
+    android:orientation="vertical"
+    >
+<TextView style="@style/textView"
+    android:textStyle="bold"
+    android:id="@+id/downloadNetworkTitle"
+    android:text="@string/downloadNetwork"
+    android:paddingTop="@dimen/magic_padding"
+    android:paddingBottom="0dp"
+    />
+<TextView style="@style/textView"
+    android:id="@+id/downloadNetwork"
+    android:text="@string/downloadNetwork"
+    android:paddingTop="0dp"
+    android:paddingLeft="@dimen/magic_padding"
+    android:paddingBottom="@dimen/magic_padding"
+    />
+</LinearLayout>
+<CheckBox style="@style/textView"
+    android:text="@string/downloadShowDownloader"
+    android:id="@+id/showDownloader"
+    android:layout_below="@id/networkSelector"
+    />
+</RelativeLayout>

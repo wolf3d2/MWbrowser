@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="panelButtonSize">84dp</dimen>    
+	<dimen name="panelButtonIcon">42dp</dimen>
+	<dimen name="panelButtonMediumIcon">24dp</dimen>    
+	<dimen name="panelButtonMediumSize">75dp</dimen>    
+	<dimen name="panelButtonMediumBigWidthSize">90dp</dimen>    
+	<dimen name="panelButtonSizeSmall">40dp</dimen>    
+	<dimen name="magic_padding">5dp</dimen>
+	<dimen name="small_icon_size">28px</dimen>		
+	<dimen name="button_corner">4dp</dimen>		
+	<dimen name="button_line_width">1px</dimen>		
+	<dimen name="menu_text_size">14sp</dimen>		
+	<dimen name="alert_padding">15dp</dimen>		
+	<dimen name="general_text_size">13sp</dimen>
+	<dimen name="link_text_size">14sp</dimen>
+	<dimen name="bigger_text_size">16sp</dimen>
+    <dimen name="panel_buttons_font_size">12sp</dimen>
+    <dimen name="editor_text_size">14sp</dimen>
+	<dimen name="magic_button_size">50dp</dimen>
+	<dimen name="magic_button_margin">40dp</dimen>
+	<dimen name="panelButtonSquareSize">116dp</dimen>
+	<dimen name="device_type">0px</dimen>
+	
+	<dimen name="text_row_min_size">90dp</dimen>				
+	<dimen name="text_row_max_size">160dp</dimen>				
+	<dimen name="plus_button_max_size">35dp</dimen>				
+</resources>
