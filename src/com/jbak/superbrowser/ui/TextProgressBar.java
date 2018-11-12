@@ -15,7 +15,7 @@ import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
 public class TextProgressBar extends ProgressBar {  
-    private String mExistText=stat.STR_NULL;
+    private String mExistText=st.STR_NULL;
     private TextPaint mTextPaint;
     boolean enableText = false;
     int mTextPadding;

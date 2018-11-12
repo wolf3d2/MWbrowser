@@ -2,6 +2,8 @@ package com.jbak.superbrowser;
 
 import java.util.ArrayList;
 
+import ru.mail.mailnews.st;
+
 public class ActArray extends ArrayList<Action> {
 	public ActArray() {
 	}
@@ -85,7 +87,7 @@ public class ActArray extends ArrayList<Action> {
 	public String getCommaSeparated()
 	{
 		int sz = size();
-		String str = stat.STR_NULL;
+		String str = st.STR_NULL;
 		for(int i=0;i<sz;i++)
 		{
 			str+=get(i).command;

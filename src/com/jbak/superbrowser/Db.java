@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.Browser;
 import android.text.TextUtils;
+import ru.mail.mailnews.st;
 
 import com.jbak.utils.DbConverter;
 import com.jbak.utils.DbUtils;
@@ -258,7 +259,7 @@ public class Db extends SQLiteOpenHelper implements StrConst,IConst{
 				if(!TextUtils.isEmpty(js))
 					bm = Bookmark.fromJSON(new JSONObject(js));
 				if(bm==null)
-					bm = new Bookmark(stat.STR_NULL, "<EMPTY PAGE>",System.currentTimeMillis());
+					bm = new Bookmark(st.STR_NULL, "<EMPTY PAGE>",System.currentTimeMillis());
 				byte bytes[] = c.getBlob(c.getColumnIndex(Browser.BookmarkColumns.FAVICON));
 				if(bytes!=null&&bytes.length>0)
 					bm.param = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -426,7 +427,7 @@ public class Db extends SQLiteOpenHelper implements StrConst,IConst{
 		public void saveIntArray(String name,List<Integer>ints)
 		{
 			int sz = ints.size();
-			String str = stat.STR_NULL;
+			String str = st.STR_NULL;
 			for(int i=0;i<sz;i++)
 			{
 				str+=ints.get(i);

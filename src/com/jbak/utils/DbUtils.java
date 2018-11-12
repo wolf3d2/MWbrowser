@@ -13,6 +13,7 @@ import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import ru.mail.mailnews.st;
 
 public class DbUtils {
 	public static interface StrConst
@@ -26,7 +27,7 @@ public class DbUtils {
 		public static final String _ID = "_id";
 		public static final String ASC = "asc";
 		public static final String DESC = "desc";
-		static final String _SPACE = stat.STR_SPACE;
+		static final String _SPACE = st.STR_SPACE;
 		public static final String _COMMA = ",";
 		public static final String AND = "and";
 		public static final String OR = "or";
@@ -113,7 +114,7 @@ public class DbUtils {
 		}
 		public CreateTable addRow(String colName, String colType) {
 			nextParam();
-			mResult+=colName+stat.STR_SPACE+colType;
+			mResult+=colName+st.STR_SPACE+colType;
 			return this;
 		}
 		public CreateTable addIdRow() {
@@ -157,7 +158,7 @@ public class DbUtils {
 		}
 		public Select()
 		{
-			mTable = stat.STR_NULL;
+			mTable = st.STR_NULL;
 		}
 		public Select(Select sel)
 		{
@@ -178,7 +179,7 @@ public class DbUtils {
 		/** Начинает Where */
 		public Select where()
 		{
-			mWhere = stat.STR_NULL;
+			mWhere = st.STR_NULL;
 			mSelects=null;
 			return this;
 		}
@@ -277,7 +278,7 @@ public class DbUtils {
 		 * @param limit Лимит выборки */
 		public Select limit(int limit)
 		{
-			this.mLimit=stat.STR_NULL+limit;
+			this.mLimit=st.STR_NULL+limit;
 			return this;
 		}
 		/** Сортировка выборки 

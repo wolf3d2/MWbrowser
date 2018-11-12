@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
+import ru.mail.mailnews.st;
 
 import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.stat;
@@ -32,7 +33,7 @@ public class JavaScriptProcessor {
 	public static final String JSONINFO_HTML = "html";
 	public static final String MYATTRIB = "jbakBrowserSelectedElement";
 	public static final String MYATTRIB_VAL = "true";
-	public static String page_in_str = stat.STR_NULL;
+	public static String page_in_str = st.STR_NULL;
 	
 	public JavaScriptProcessor(MainActivity act) {
 		setMain(act);
@@ -63,7 +64,7 @@ public class JavaScriptProcessor {
 //		}
 
 		if (info1.isEmpty())
-			page_in_str = stat.STR_NULL;
+			page_in_str = st.STR_NULL;
 		else
 			page_in_str = info1;
 		switch (code) {
@@ -158,12 +159,12 @@ public class JavaScriptProcessor {
 		}
 		if(code==JS_SET_VALUE)
 		{
-			String val = stat.STR_NULL;
+			String val = st.STR_NULL;
 			if(param instanceof String)
 			{
 				val = ((String)param).replace("\"", "\\\"");
 				val = val.replace("\n", "\\n");
-				val = val.replace("\r", stat.STR_SPACE);
+				val = val.replace("\r", st.STR_SPACE);
 			}
 			val='\"'+val+'\"';
 			String js = JS_GET_MY_ELEMENT+ " ; myElement.value="+val+";";

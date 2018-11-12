@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import com.jbak.superbrowser.stat;
 
+import ru.mail.mailnews.st;
 import ru.mail.webimage.ImageDownloader.LoadBitmap;
 import ru.mail.webimage.widgets.BgImgContainer;
 import android.content.Context;
@@ -402,7 +403,7 @@ public class WidgetImageLoader implements OnImageLoad{
         }
         @Override
         public String toString() {
-        	return url+stat.STR_SPACE+(wi==null||wi.get()==null?"null wi":wi.get().toString());
+        	return url+st.STR_SPACE+(wi==null||wi.get()==null?"null wi":wi.get().toString());
         }
     }
     public static void recycleImageView(ImageView imageView){

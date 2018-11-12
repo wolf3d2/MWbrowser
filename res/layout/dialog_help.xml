@@ -4,7 +4,7 @@
         android:layout_height="match_parent" >
 
         <TextView
-            android:id="@+id/description"
+            android:id="@+id/help"
             style="@style/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -12,6 +12,7 @@
             android:linksClickable="true"
             android:padding="@dimen/magic_padding"
             android:text="@string/about_text"
-            android:textSize="14dp" />
+            android:textSize="14dp" 
+            />
 
     </ScrollView>

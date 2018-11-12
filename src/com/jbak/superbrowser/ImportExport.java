@@ -103,9 +103,9 @@ public class ImportExport
 			FileWriter fw = new FileWriter(folder+File.separatorChar+FILENAME_BOOKMARK, false);
 			String out = null;
 	        if (c.moveToFirst()) {
-		        out = stat.STR_COMMENT+stat.STR_SPACE+CustomDialog.getAppName(m_c)
-	        		+stat.STR_SPACE+BOOKMARK+stat.STR_SPACE+stat.STR_CR;
-		        out+=VERSION+"="+VERSION_NUM_BOOKMARK+stat.STR_CR+stat.STR_CR;
+		        out = st.STR_COMMENT+st.STR_SPACE+st.getAppName(m_c)
+	        		+st.STR_SPACE+BOOKMARK+st.STR_SPACE+st.STR_CR;
+		        out+=VERSION+"="+VERSION_NUM_BOOKMARK+st.STR_CR+st.STR_CR;
 	        	fw.write(out);
 	        	fl=true;
 	        }
@@ -117,14 +117,14 @@ public class ImportExport
 	        	type = c.getLong(3);
 	        	parent = c.getLong(5);
 	        	if (type!=0&parent!=0) {
-			        out = BOOKMARK.toUpperCase()+stat.STR_CR;
-			        out+=c.getColumnName(0)+"="+c.getLong(0)+stat.STR_CR;
-			        out+=c.getColumnName(1)+"="+c.getString(1)+stat.STR_CR;
-			        out+=c.getColumnName(2)+"="+c.getString(2)+stat.STR_CR;
-			        out+=c.getColumnName(3)+"="+type+stat.STR_CR;
-			        out+=c.getColumnName(4)+"="+c.getLong(4)+stat.STR_CR;
-			        out+=c.getColumnName(5)+"="+parent+stat.STR_CR;
-			        out+=END_BOOKMARK+stat.STR_CR+stat.STR_CR;
+			        out = BOOKMARK.toUpperCase()+st.STR_CR;
+			        out+=c.getColumnName(0)+"="+c.getLong(0)+st.STR_CR;
+			        out+=c.getColumnName(1)+"="+c.getString(1)+st.STR_CR;
+			        out+=c.getColumnName(2)+"="+c.getString(2)+st.STR_CR;
+			        out+=c.getColumnName(3)+"="+type+st.STR_CR;
+			        out+=c.getColumnName(4)+"="+c.getLong(4)+st.STR_CR;
+			        out+=c.getColumnName(5)+"="+parent+st.STR_CR;
+			        out+=END_BOOKMARK+st.STR_CR+st.STR_CR;
 			        fw.write(out);
 		        	count_bm++;
 	        	}
@@ -134,7 +134,7 @@ public class ImportExport
 	        fw.flush();
 	        fw.close();
         	if (toast) 
-        		st.toast(m_c.getString(R.string.act_export_bm_complete)+stat.STR_SPACE+(count_bm-1));
+        		st.toast(m_c.getString(R.string.act_export_bm_complete)+st.STR_SPACE+(count_bm-1));
 			return true;
         }catch (Throwable e) 
 		{
@@ -249,9 +249,9 @@ public class ImportExport
 			return false;
 // импорт закладок		
 		if (imp_bm) {
-			String par = stat.STR_NULL;
-			String val = stat.STR_NULL;
-			String parr = stat.STR_NULL;
+			String par = st.STR_NULL;
+			String val = st.STR_NULL;
+			String parr = st.STR_NULL;
 			int indcom = -1;
 			FileReader fr;
 			int ind = -1;
@@ -272,7 +272,7 @@ public class ImportExport
 						parr = sc.nextLine();
 					}
 					// если строкам начинается с //, то это коммент
-					if (parr.startsWith(stat.STR_COMMENT))
+					if (parr.startsWith(st.STR_COMMENT))
 						continue;
 					parr = parr.trim();
 					if (parr.length() > 0) {
@@ -356,7 +356,7 @@ public class ImportExport
 
 						}
 					}
-		        	new ThemedDialog(m_c).setConfirmOk(m_c.getString(R.string.act_import_cb_bm),m_c.getString(R.string.act_import_complete)+stat.STR_SPACE+arrec.size(), null, new ConfirmOper() {
+		        	new ThemedDialog(m_c).setConfirmOk(m_c.getString(R.string.act_import_cb_bm),m_c.getString(R.string.act_import_complete)+st.STR_SPACE+arrec.size(), null, new ConfirmOper() {
 						
 						@Override
 						public void onConfirm(Object userParam) {
@@ -429,8 +429,8 @@ public class ImportExport
 	public class Record
     {
 		long id = 0;
-		String url = stat.STR_NULL;
-		String title = stat.STR_NULL;
+		String url = st.STR_NULL;
+		String title = st.STR_NULL;
 		long type = 0;
 		long data = 0;
 		long oldparent = 0;
@@ -439,8 +439,8 @@ public class ImportExport
         public Record()
         {
         	id = 0;
-    		url = stat.STR_NULL;
-    		title = stat.STR_NULL;
+    		url = st.STR_NULL;
+    		title = st.STR_NULL;
     		type = 0;
     		data = 0;
     		oldparent = 0;

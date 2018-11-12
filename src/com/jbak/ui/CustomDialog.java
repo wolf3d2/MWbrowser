@@ -156,6 +156,7 @@ public class CustomDialog extends Dialog implements OnClickListener{
 		if(mDialogText!=null)
 		{
 			mDialogText.setVisibility(TextUtils.isEmpty(text)?View.GONE:View.VISIBLE);
+			mDialogText.setVerticalScrollBarEnabled(true);
 			mDialogText.setText(text);
 		}
 		return this;
@@ -226,24 +227,6 @@ public class CustomDialog extends Dialog implements OnClickListener{
 			super.show();
 		}
 		catch(Throwable e){}
-	}
-	public static String getAppVersion(Context c)
-	{
-        PackageManager pm = c.getPackageManager();
-        try{
-         return pm.getPackageInfo(c.getPackageName(), 0).versionName;
-        }
-        catch (Throwable e) {
-        }
-        return stat.STR_NULL;
-	}
-	public static String getAppName(Context c)
-	{
-		return c.getString(R.string.app_name);
-	}
-	public static String getAppNameAndVersion(Context c)
-	{
-		return c.getString(R.string.app_name)+stat.STR_SPACE+getAppVersion(c);
 	}
 	protected void onOk(boolean ok)
 	{

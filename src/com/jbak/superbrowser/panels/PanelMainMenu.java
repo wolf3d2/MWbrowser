@@ -8,6 +8,8 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
+import ru.mail.mailnews.st;
+
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
 import com.jbak.superbrowser.BrowserApp;
@@ -90,9 +92,9 @@ public class PanelMainMenu extends FrameLayout implements WebViewEvent,OnGlobalE
 	}
 	public static void setMainmenuPanelActions(ActArray ar)
 	{
-		String out = stat.STR_NULL;
+		String out = st.STR_NULL;
 		for (int i=0;i<ar.size();i++){
-			out+= stat.STR_NULL+ar.get(i).command+",";
+			out+= st.STR_NULL+ar.get(i).command+",";
 		}
 		Prefs.setString(IConst.STRVAL_MAINMENU_PANEL, out);
 //		PanelSettings ps = PanelLayout.getPanelSettings();
@@ -121,7 +123,7 @@ public class PanelMainMenu extends FrameLayout implements WebViewEvent,OnGlobalE
 	// кнопки в левой панели
 	public static ActArray getMainMenuPanelActions()
 	{
-		String actions = Prefs.getString(IConst.STRVAL_MAINMENU_PANEL, stat.STR_NULL);
+		String actions = Prefs.getString(IConst.STRVAL_MAINMENU_PANEL, st.STR_NULL);
 		if(TextUtils.isEmpty(actions))
 		{
 			ActArray ar = new ActArray();
@@ -157,7 +159,7 @@ public class PanelMainMenu extends FrameLayout implements WebViewEvent,OnGlobalE
 			ar.add(Action.create(Action.SAVEFILE).setText(R.string.act_save_page));
 		ar.add(Action.create(Action.OPENFILE));
 		ar.add(Action.create(Action.QUICK_SETTINGS));
-		ar.add(Action.SETTINGS);
+		ar.add(Action.MAIN_SETTINGS);
 //		BrowserApp.pluginServer.getPluginActions(ar, Plugin.WINDOW_MAIN_MENU,this);
 		ar.add(Action.TRANSLATE_LINK);
 		return ar;

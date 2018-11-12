@@ -3,8 +3,13 @@ package com.jbak.superbrowser;
 import com.mw.superbrowser.R;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
 
 import org.json.JSONObject;
 
@@ -32,6 +37,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -92,10 +98,12 @@ import com.jbak.superbrowser.ui.themes.MyTheme;
 import com.jbak.superbrowser.utils.DbClear;
 import com.jbak.superbrowser.utils.TempCookieStorage;
 import com.jbak.ui.ConfirmOper;
+import com.jbak.ui.CustomDialog;
 import com.jbak.ui.CustomDialog.OnUserInput;
 import com.jbak.ui.CustomPopup;
 import com.jbak.ui.UIUtils;
 import com.jbak.utils.GlobalHandler;
+import com.jbak.utils.IniFile;
 import com.jbak.utils.StrBuilder;
 import com.jbak.utils.Utils;
 import com.jbak.utils.WeakRefArray;
@@ -104,6 +112,11 @@ import com.jbak.utils.WeakRefArray;
 @SuppressWarnings("deprecation")
 public class MainActivity extends Activity implements OnClickListener,OnLongClickListener,OnItemLongClickListener,IConst,BrowserApp.OnGlobalEventListener,GlobalHandler 
 {
+	// для снижения жора батарейки, обработка ведётся по таймеру
+	public static long addOnGlobalLayoutTimer = 0;
+	public static long addOnGlobalLayoutTimerTemp = 0;
+	// период в мс через, какой промежуток делать повторную обработку
+	public static long EVENT_TIME_PERIOD = 200;
 	// текущая тема -
 	// 0 - светлая
 	// 1 - тёмная
@@ -182,6 +195,8 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		super.onCreate(savedInstanceState);
 		mInstances.add(this);
 		Payment.check();
+//		 вызываекм падение чтоб сработал отчёт об ошибке
+//		 int bbb = Integer.valueOf("huk");
 		st.pref_navigation = Prefs.getNavigationMethod();
 		boolean tempSession =  getIntent().getData() instanceof Uri;
 		mTimer = new WebTimer(this);
@@ -266,10 +281,22 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			tabFirstStart();
 		}
 		onThemeChanged(MyTheme.get());
+		if (isNewVersion(this)) {
+			st.dialogHelp(this, getWhatsNew(), this.getString(R.string.act_whatsnew));
+		}
+
+		//addOnGlobalLayoutTimer
+		
+		// !!!!!! постоянно вызывается и жрёт батарейку
+		// чтобы снизить нагрузку, я сделал обработку по таймеру
 		mTopContainer.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-			
 			@Override
 			public void onGlobalLayout() {
+				addOnGlobalLayoutTimerTemp = new Date().getTime();
+				if (addOnGlobalLayoutTimer >
+						(addOnGlobalLayoutTimerTemp+EVENT_TIME_PERIOD))
+					return;
+				addOnGlobalLayoutTimer = new Date().getTime();
 				Rect r = new Rect();
 				mTopContainer.getWindowVisibleDisplayFrame(r);
 				int hd = r.height();
@@ -282,6 +309,53 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			}
 		});
 	}
+	boolean isNewVersion(Context c)
+	{
+		try {
+			boolean newvers = false;
+			IniFile ini = new IniFile(c);
+			String path = c.getFilesDir().toString()+ st.STR_SLASH;
+			ini.setFilename(path + ini.PAR_INI);
+			if (!ini.isFileExist()) {
+				ini.create(path, ini.PAR_INI);
+				newvers = true;
+			}
+			if (!ini.isFileExist())
+				return false;
+			String codever = st.getAppVersionCode(c);
+			String param = ini.getParamValue(ini.VERSION_CODE);
+			if (param == null) {
+				ini.setParam(ini.VERSION_CODE, codever);
+				return false;
+			}
+			if (newvers||codever.compareToIgnoreCase(param) != 0) {
+				ini.setParam(ini.VERSION_CODE, codever);
+				return true;
+			} 
+		} catch (Throwable e) {
+		}
+
+		return false;
+	}
+    /** читает diary_browser.txt*/
+    public String getWhatsNew()
+    {
+        byte[] buffer = null;
+        InputStream is;
+        try {
+            is = getAssets().open("whatsnew_browser.txt");
+            int size = is.available();
+            buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+        } catch (IOException e) {
+//            e.printStackTrace();
+        }
+        if (buffer!=null) {
+            return  new String(buffer);
+        }
+   		return null;
+    }
 	void onSoftKeyboardVisible(boolean visible)
 	{
 		if(mIsSoftKeyboradVisible!=visible)
@@ -402,8 +476,8 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		}
 		switch (a.command) {
 			case Action.COPY_ALL_OPEN_URL:
-				String out = stat.STR_NULL;
-				String str = stat.STR_NULL;
+				String out = st.STR_NULL;
+				String str = st.STR_NULL;
 				for (int i=0;i<mTabList.getCount();i++){
 					try {
 						str = (mTabList.getOpenedTabByPos(i)).getUrl().toString();
@@ -411,7 +485,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 							continue;
 					} catch (Throwable e) 
 					{
-						str=stat.STR_NULL;
+						str=st.STR_NULL;
 					}
 					out+= str+"\n";
 				}
@@ -1163,7 +1237,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	void saveCurrentWindowId()
 	{
 		if(getTab()!=null)
-			Db.getStringTable().save(CUR_WINDOW_ID, stat.STR_NULL+getTab().windowId);
+			Db.getStringTable().save(CUR_WINDOW_ID, st.STR_NULL+getTab().windowId);
 	}
 	@SuppressLint("NewApi")
 	public void clearWindow(Tab w)
@@ -1529,7 +1603,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	void doFontScale(int size)
 	{
 		boolean bigger = size>0; 
-		String sz = stat.STR_SPACE;
+		String sz = st.STR_SPACE;
 		if(Build.VERSION.SDK_INT>=14)
 		{
 			if(bigger)
@@ -1715,7 +1789,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		return mIsSoftKeyboradVisible;
 	}
 	public void openWebArchive(File f) {
-		String data = st.strFile(f);
+		String data = st.fileToStr(f);
 		if(TextUtils.isEmpty(data))
 		{
 			//CustomPopup.toast(this, R.string.);
@@ -1930,18 +2004,18 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
         case R.id.np_left:
         	if (mWebView!=null&&mWebView.canGoBack()){
         		tv.setText(IConst.NAVIGATION_BACK);
-        		tv.setHint(IConst.STR_NULL);
+        		tv.setHint(st.STR_NULL);
         	} else {
-        		tv.setText(IConst.STR_NULL);
+        		tv.setText(st.STR_NULL);
         		tv.setHint(IConst.NAVIGATION_BACK);
         	}
        		break;
         case R.id.np_right:
         	if (mWebView!=null&&mWebView.canGoForward()){
         		tv.setText(IConst.NAVIGATION_FORWARD);
-        		tv.setHint(IConst.STR_NULL);
+        		tv.setHint(st.STR_NULL);
         	} else {
-        		tv.setText(IConst.STR_NULL);
+        		tv.setText(st.STR_NULL);
         		tv.setHint(IConst.NAVIGATION_FORWARD);
         	}
        		break;

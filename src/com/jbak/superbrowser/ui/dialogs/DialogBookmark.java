@@ -101,6 +101,8 @@ public abstract class DialogBookmark extends ThemedDialog {
 			Prefs.setBoolean(Prefs.SHOW_KBD, cb_show_kbd.isChecked());
 			if (cb_show_kbd.isChecked())
 				st.showEditKeyboard(mName);
+			else
+				st.hideEditKeyboard(mName);
 		}
 		if(v.getId()==R.id.preview)
 			return;
@@ -112,7 +114,7 @@ public abstract class DialogBookmark extends ThemedDialog {
 				public void onAction(Action act) {
  					mParentFolder = (Bookmark) act.param;
 					mDir.setText(mParentFolder.getTitle());
-					String saveid = stat.STR_NULL+(Long)mParentFolder.param; 
+					String saveid = st.STR_NULL+(Long)mParentFolder.param; 
 					Db.getStringTable().save(Db.LAST_BOOKMARK_FOLDER_ID, saveid);
 				}
 			});

@@ -2,18 +2,30 @@
 <com.jbak.superbrowser.ui.LinearLayoutEx xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    >
+    
     <TextView android:id="@+id/title"
         android:maxLines="4"
         style="@style/dialogTitle"
         />
+
     <FrameLayout 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/contentFrame"
         android:padding="@dimen/magic_padding"
         />
-	<com.jbak.superbrowser.ui.HorizontalPanel 
+
+    <CheckBox
+        android:id="@+id/cb_showkbd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/show_kbd"
+        android:textColor="#000"
+        android:visibility="gone" />
+
+    <com.jbak.superbrowser.ui.HorizontalPanel 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:id="@+id/bottomPanel"

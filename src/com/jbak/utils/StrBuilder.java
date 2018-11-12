@@ -4,6 +4,7 @@ import com.jbak.superbrowser.stat;
 
 import android.content.Context;
 import android.text.TextUtils;
+import ru.mail.mailnews.st;
 
 public class StrBuilder extends ContextRef{
 	
@@ -16,9 +17,9 @@ public class StrBuilder extends ContextRef{
 	public static final String TAG_B="b";
 	public static final String EOL="\n";
     public static String DOTS="…";
-    public static String EMPTY=stat.STR_NULL;
+    public static String EMPTY=st.STR_NULL;
 
-	String mStr=stat.STR_NULL;
+	String mStr=st.STR_NULL;
 	public StrBuilder(Context c)
 	{
 		setContext(c);
@@ -35,7 +36,7 @@ public class StrBuilder extends ContextRef{
 	{
 		if(text!=null)
 		{
-			if(mStr.length()>0&&!mStr.endsWith(stat.STR_SPACE)&&!mStr.endsWith(EOL))
+			if(mStr.length()>0&&!mStr.endsWith(st.STR_SPACE)&&!mStr.endsWith(EOL))
 				mStr+=' ';
 			mStr+=text;
 		}

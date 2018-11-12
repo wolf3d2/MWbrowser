@@ -108,7 +108,7 @@ public class BookmarkView extends FrameLayout{
 		if(bm.getUrl()!=null)
 			url = stat.decode(bm.getUrl());
 		else
-			url = stat.STR_NULL;
+			url = st.STR_NULL;
 		if(TextUtils.isEmpty(text))
 			text = url;
 		mBigText.setText(bm.getTitle());

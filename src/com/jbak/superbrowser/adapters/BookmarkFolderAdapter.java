@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import ru.mail.mailnews.st;
 
 import com.jbak.reverseEngine.BrowserContract;
 import com.jbak.superbrowser.BitmapLoader;
@@ -251,7 +252,7 @@ public abstract class BookmarkFolderAdapter extends CursorBookmarkAdapter implem
 	}
 
 	public void createFolder() {
-		new ThemedDialog(getContext()).setInput(getContext().getString(R.string.act_create_folder), stat.STR_NULL, new OnUserInput() {
+		new ThemedDialog(getContext()).setInput(getContext().getString(R.string.act_create_folder), st.STR_NULL, new OnUserInput() {
 			
 			@Override
 			public void onUserInput(boolean ok, String newText) {

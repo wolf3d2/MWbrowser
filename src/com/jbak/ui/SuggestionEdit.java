@@ -15,6 +15,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import ru.mail.mailnews.st;
 
 import com.jbak.superbrowser.stat;
 import com.jbak.superbrowser.ui.themes.MyTheme;
@@ -148,7 +149,7 @@ public class SuggestionEdit extends AutoCompleteTextView implements OnClickListe
 		{
 			if(mMode==MODE_CLEAR)
 			{
-				setText(stat.STR_NULL);
+				setText(st.STR_NULL);
 			}
 			else if(mVoiceClickListener!=null)
 				mVoiceClickListener.onClick(v);

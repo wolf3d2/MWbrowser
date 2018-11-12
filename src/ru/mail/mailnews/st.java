@@ -15,22 +15,18 @@ import java.util.TimeZone;
 
 import org.json.JSONArray;
 
-import com.jbak.superbrowser.Bookmark;
-import com.jbak.superbrowser.Db;
 import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.Prefs;
-import com.jbak.superbrowser.ImportExport.Record;
-import com.jbak.superbrowser.ui.dialogs.ThemedDialog;
-import com.jbak.ui.ConfirmOper;
+import com.jbak.superbrowser.ui.dialogs.DialogHelp;
 import com.mw.superbrowser.R;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,7 +34,6 @@ import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -57,7 +52,17 @@ import android.widget.Toast;
 
 public class st
 {
-	// текущая навигация. По умолчанию - жестами
+	public static final String STR_COMMENT = "//";
+	public static final String STR_SPACE = " ";
+    public static final String STR_ZERO = "0";
+    public static final String STR_ONE = "1";
+	public static final String STR_NULL = "";
+	public static final String STR_CR = "\n";
+	public static final String STR_FILE = "file:///";
+    public static final String STR_EQALLY = "=";
+    public static final String STR_SLASH= "/";
+
+    // текущая навигация. По умолчанию - жестами
     public static int pref_navigation = 2;
     public static boolean fl_temp_hide_navigationpanel  = false;
     public static boolean DEBUG = true;
@@ -203,108 +208,6 @@ public class st
         }
         UniObserver callback;
     }
-    /** Создаёт диалог с текстом text, заголовком title и кнопкой Ok
-     *@param c Контекст
-     *@param text Текст сообщения
-     *@param title Заголовок, может быть null
-     *@param callback Обработчик нажатия кнопоки. Может быть null. 
-     *@return Возвращает созданный диалог
-      */
-    public static AlertDialog UserAlert(Context c,String text,String title,UniObserver callback)
-    {
-        
-        return UserAlert(c, text, title, true, callback);
-    }
-    
-    public static AlertDialog UserAlert(Context c,String text,String button, String title,final OnButtonListener listener)
-    {
-        try
-        {
-            AlertDialog.Builder bd = new AlertDialog.Builder(c);
-            AlertDialog dlg = bd.create();
-            if(title!=null)
-                dlg.setTitle(title);
-            dlg.setMessage(text);
-            dlg.setCancelable(true);
-            dlg.setOnCancelListener(new OnCancelListener()
-            {
-                @Override
-                public void onCancel(DialogInterface dialog)
-                {
-                    listener.onClick(dialog, AlertDialog.BUTTON_NEGATIVE);
-                }
-            });
-            dlg.setButton(AlertDialog.BUTTON_POSITIVE, button!=null?button:c.getString(android.R.string.ok),listener);
-            dlg.show();
-            return dlg;
-        }
-        catch (Throwable e) {
-        }
-        return null;
-    }
-    public static AlertDialog UserAlert(Context c,String text,String title, boolean cancelable, UniObserver callback)
-    {
-        try
-        {
-            AlertDialog.Builder bd = new AlertDialog.Builder(c);
-            AlertDialog dlg = bd.create();
-            dlg.setMessage(text);
-            OnButtonListener cl = new OnButtonListener(callback);
-            if(title!=null)
-                dlg.setTitle(title);
-            dlg.setButton(AlertDialog.BUTTON_POSITIVE, c.getString(android.R.string.ok),cl);
-            dlg.setCancelable(cancelable);
-            dlg.show();
-            return dlg;
-        }
-        catch (Throwable e) {
-        }
-        return null;
-    }
-    public static AlertDialog YesNoDialog(Context c,String text,String yesText,String noText,final OnButtonListener listener)
-    {
-        AlertDialog.Builder bd = new AlertDialog.Builder(c);
-        AlertDialog dlg = bd.create();
-        dlg.setMessage(text);
-        dlg.setButton(AlertDialog.BUTTON_POSITIVE, yesText,listener);
-        dlg.setButton(AlertDialog.BUTTON_NEGATIVE, noText,listener);
-        dlg.setCancelable(true);
-        dlg.setOnCancelListener(new OnCancelListener()
-        {
-            @Override
-            public void onCancel(DialogInterface dialog)
-            {
-                listener.onClick(dialog, AlertDialog.BUTTON_NEGATIVE);
-            }
-        });
-        try{
-        	dlg.show();
-        }catch(Throwable th){
-        	listener.onClick(dlg, AlertDialog.BUTTON_POSITIVE);
-        	return null;
-        }
-        return dlg;
-    }
-    /** Создаёт диалог с текстом text, заголовком title и кнопками да/нет 
-     *@param c Контекст
-     *@param text Текст сообщения
-     *@param title Заголовок, может быть null
-     *@param callback Обработчик нажатия кнопок. Конструкция вызова - callback.OnObserver(Integer buttonCode, callback.m_param2)
-     *@return Возвращает созданный диалог
-      */
-           public static AlertDialog YesNoDialog(Context c,String text,String yesText,String noText,String title,UniObserver callback)
-           {
-               AlertDialog.Builder bd = new AlertDialog.Builder(c);
-               AlertDialog dlg = bd.create();
-               dlg.setMessage(text);
-               OnButtonListener cl = new OnButtonListener(callback);
-               if(title!=null)
-                   dlg.setTitle(title);
-               dlg.setButton(AlertDialog.BUTTON_POSITIVE, yesText,cl);
-               dlg.setButton(AlertDialog.BUTTON_NEGATIVE, noText,cl);
-               dlg.show();
-               return dlg;
-           }
 
            public static String getCurTimeString(Context c)
            {
@@ -358,7 +261,8 @@ public class st
     		   dialogHelp(c, text, tit);
     	   }
     	   public static void dialogHelp(Context c, String text, String title) {
-    		   new ThemedDialog(c).setAlert(text, title).show();
+				new DialogHelp(c, title, text, null)
+				.show();
     	   }
            private static DisplayMetrics dm;
            public static int dp2px(Context context, int dp){
@@ -475,7 +379,7 @@ public class st
 	    	int or = c.getResources().getConfiguration().orientation;
 	        return  or!= Configuration.ORIENTATION_PORTRAIT;
 	    }
-	    public static String strFile(File f)
+	    public static String fileToStr(File f)
 	    {
 	    	String s= null;
 			try{
@@ -490,11 +394,11 @@ public class st
 			}
 			return s;
 	    }
-		public static String strFile(String filename)
+		public static String fileToStr(String filename)
 		{
 			File f = new File(filename);
 			if (f!=null)
-				return strFile(f);
+				return fileToStr(f);
 			return null;
 		}
 	    public static boolean strToFile(String s,File f)
@@ -591,5 +495,35 @@ public class st
 	        
 	        return new String(buffer).toString();
 	   }
+	    /** название приложения */
+		public static String getAppName(Context c)
+		{
+			return st.STR_NULL+c.getString(R.string.app_name);
+		}
+	    /** возвращает строку с названием текущей версии */
+	    public static String getAppVersionName(Context c)
+	    {
+			try {
+					return st.STR_NULL+c.getPackageManager().getPackageInfo(c.getPackageName(), 0).versionName;
+			} catch (NameNotFoundException e) {}
+			return st.STR_ZERO;
+	    }
+	    /** возвращает строку с кодом текущей версии */
+		public static String getAppVersionCode(Context c)
+		{
+	        PackageManager pm = c.getPackageManager();
+	        try{
+	         return st.STR_NULL+pm.getPackageInfo(c.getPackageName(), 0).versionCode;
+	        }
+	        catch (Throwable e) {
+	        }
+	        return st.STR_NULL;
+		}
+		public static String getAppNameAndVersion(Context c)
+		{
+			return st.STR_NULL+st.getAppName(c)
+					+st.STR_SPACE+st.getAppVersionName(c)
+					+st.STR_SPACE+"("+st.getAppVersionCode(c)+")";
+		}
 	    
 }

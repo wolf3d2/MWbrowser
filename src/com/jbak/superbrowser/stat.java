@@ -90,7 +90,7 @@ public class stat implements IConst {
 	// пока отключил - доделать!
 	public static boolean fl_loadPCmode = false;
 
-	public static String url =stat.STR_NULL;
+	public static String url =st.STR_NULL;
 	public static final String START_URL = "https://google.com";
 	public static byte[] bitmapToByte(Bitmap bitmap)
     {
@@ -461,7 +461,7 @@ public class stat implements IConst {
 						obs.m_param1 = new IllegalBlockSizeException();
 						return;
 					}
-					String savepath = stat.STR_NULL;
+					String savepath = st.STR_NULL;
 					try {
 						String ext = extension;
 						if(url!=null)
@@ -518,7 +518,7 @@ public class stat implements IConst {
 				if(id<0)
 				{
 					if(parentDir!=null)
-						Db.getStringTable().save(Db.LAST_BOOKMARK_FOLDER_ID, stat.STR_NULL+parentDir.getBookmarkFolderId());
+						Db.getStringTable().save(Db.LAST_BOOKMARK_FOLDER_ID, st.STR_NULL+parentDir.getBookmarkFolderId());
 					createBookmark(a.getWebView(), name, parentDir);
 				}
 			}
@@ -535,7 +535,7 @@ public class stat implements IConst {
 			if(TextUtils.isEmpty(name))
 				name = mWebView.getTitle();
 			Bookmark bm = new Bookmark(mWebView.getUrl(), name, System.currentTimeMillis());
-			Utils.log(BOOKMARK, "Add:"+bm.getJSON().toString()+stat.STR_SPACE+parentDir);
+			Utils.log(BOOKMARK, "Add:"+bm.getJSON().toString()+st.STR_SPACE+parentDir);
 			Bitmap preview = null;
 // запись закладки. Создание лого сайта
 			if(c.getTab().mThumbnail!=null)
@@ -807,7 +807,7 @@ public class stat implements IConst {
 			{
 				return Db.getBookmarksTable().deleteFolder(dirId);
 			}
-			String p = stat.STR_NULL+dirId;
+			String p = st.STR_NULL+dirId;
 			int del = c.getContentResolver().delete(BrowserContract.Bookmarks.CONTENT_URI, "_id = ? OR parent = ?", new String[]{p,p});
 			return del;
 		}

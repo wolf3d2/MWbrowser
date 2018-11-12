@@ -221,7 +221,7 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 		return ar;		
 	}
 	// общие настройки
-	public static ArrayList<Bookmark> getSettings(Context c)
+	public static ArrayList<Bookmark> getMainSettings(Context c)
 	{
 		ArrayList<Bookmark> ar = new ArrayList<Bookmark>();
 		ar.add(new SettingsBookmark(c, null, R.string.act_select_theme,null));
@@ -231,6 +231,9 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 //				Prefs.getWWBackgroundColorName(c)
 //				);
 //		ar.add(wwcolor);
+		
+		//ar.add(new SettingsBookmark(c, Prefs.SEARCH_HIDE_KBD, R.string.set_search_search_hide_keyboard, Prefs.isSearchHideKeyboard(),R.string.yes,R.string.no, false));
+		ar.add(new SettingsBookmark(c, Prefs.SET_TWO_COLUMN, R.string.act_two_column, Boolean.valueOf(Prefs.isTwoColumn()),R.string.yes,R.string.no, false));
 		ar.add(new SettingsBookmark(c, Prefs.GRAYICON, R.string.act_gray_pictogram, Boolean.valueOf(Prefs.isColorIcon()),R.string.yes,R.string.no, false));
 		if(Payment.canBuyPro())
 			ar.add(new SettingsBookmark(c, null, R.string.act_buy_pro,null));
@@ -365,7 +368,7 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 	}
 	static String realPagesDesc(Context c)
 	{
-		return new StrBuilder(c).addBrackets(stat.STR_NULL+Prefs.getRealPages()).add('\n').add(R.string.set_real_webpages_desc).toString();
+		return new StrBuilder(c).addBrackets(st.STR_NULL+Prefs.getRealPages()).add('\n').add(R.string.set_real_webpages_desc).toString();
 
 	}
 	public static void dialogPayVersion(Context c,boolean fromFeature)
@@ -423,8 +426,13 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 		{
 			//BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.THEMES_SELECTOR));
 			BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_SETTINGS_CHANGED, STRVAL_MINI_PANEL);
-			if (m_c!=null)
-				CustomPopup.toast(m_c, R.string.restart_app);
+//			if (m_c!=null)
+//				CustomPopup.toast(m_c, R.string.restart_app);
+		}
+		else if(b.id==R.string.act_two_column)
+		{
+			BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.MAIN_SETTINGS));
+			//BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_SETTINGS_CHANGED, STRVAL_MINI_PANEL);
 		}
 		else if(b.id==R.string.act_buy_pro)
 			dialogPayVersion(getContext(), false);

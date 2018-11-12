@@ -59,7 +59,7 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 	public static final int MODE_QUICK_SETTINGS = Action.QUICK_SETTINGS;
 	public static final int MODE_TOOLS_PANEL = Action.MINI_PANEL_SETTINGS;
 	public static final int MODE_MAINMENU_SETTINGS = Action.MAINMENU_SETTING;
-	public static final int MODE_SETTINGS = Action.SETTINGS;
+	public static final int MODE_SETTINGS = Action.MAIN_SETTINGS;
 	public static final int MODE_WINDOWS_PANEL_SETTINGS = Action.TAB_PANEL_SETTINGS;
 	public static int magic_or_navigation = 0;
 	public static final int MODE_LAST_RUNNED = 100000;
@@ -264,7 +264,7 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 		if(mMode==MODE_INTERFACE_SETTINGS)
 			sa = createInterfaceSettingsAdapter(context);
 		else if(mMode==MODE_SETTINGS)
-			sa = createGeneralSettingsAdapter(context);
+			sa = createMainSettingsAdapter(context);
 		else if(mMode==MODE_WINDOWS_PANEL_SETTINGS)
 			sa = createTabPanelAdapter(context);
 		else
@@ -323,14 +323,15 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 				act= actions.get(i);
 				if (act.command !=Action.MODE_MAGIC_BUTTON_ALPHA)
 					continue;
-				act.itemText = getMain().getBaseContext().getString(R.string.magic_button_select_alpha)+stat.STR_SPACE+Prefs.get().getInt(Prefs.MAGIC_KEY_ALPHA, 100)+"%";
+				act.itemText = getMain().getBaseContext().getString(R.string.magic_button_select_alpha)
+						+st.STR_SPACE+Prefs.get().getInt(Prefs.MAGIC_KEY_ALPHA, 100)+"%";
 				break;
 			}
 		}
 		if(mMode==MODE_NAVIGATION_PANEL_POS)
 		{
 			actions.clear();
-			actions.add(Action.SETTINGS);
+			actions.add(Action.MAIN_SETTINGS);
 			actions.add(Action.SIZE_BUTTON_NAVIGATION_PANEL);
 			actions.add(Action.create(Action.MODE_NAVIGATION_PANEL_ALPHA));
 			// пока не сделал
@@ -342,7 +343,8 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 				act= actions.get(i);
 				if (act.command !=Action.MODE_NAVIGATION_PANEL_ALPHA)
 					continue;
-				act.itemText = getMain().getBaseContext().getString(R.string.magic_button_select_alpha)+stat.STR_SPACE+Prefs.get().getInt(Prefs.NAVIGATION_PANEL_ALPHA, 100)+"%";
+				act.itemText = getMain().getBaseContext().getString(R.string.magic_button_select_alpha)
+						+st.STR_SPACE+Prefs.get().getInt(Prefs.NAVIGATION_PANEL_ALPHA, 100)+"%";
 				break;
 			}
 		}
@@ -361,8 +363,8 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 		});
 		return hp;
 	}
-	private SettingsAdapter createGeneralSettingsAdapter(Context context) {
-		return new SettingsAdapter(context, SettingsAdapter.getSettings(context));
+	private SettingsAdapter createMainSettingsAdapter(Context context) {
+		return new SettingsAdapter(context, SettingsAdapter.getMainSettings(context));
 	}
 	public static void checkMagicKeyCanDisabled(MainActivity ma)
 	{
@@ -422,7 +424,7 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 			vkRes = R.string.act_volume_keys_resize;
 		ar.add(new SettingsBookmark(context, Prefs.VOLUME_KEYS_STATE, R.string.act_volume_keys_menu, vkRes));
 		int minFont = Prefs.get().getInt(Prefs.MIN_FONT, 8);
-		String text = stat.STR_NULL+minFont;
+		String text = st.STR_NULL+minFont;
 		ar.add(new SettingsBookmark(context, Prefs.MIN_FONT, R.string.act_min_font, text));
 // клик по настройке в быстрых настройках		
 		SettingsAdapter sa = new SettingsAdapter(context, ar)
@@ -603,12 +605,15 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 		ArrayList<Bookmark>ar = new ArrayList<Bookmark>();
 		SettingsBookmark bookmark=null;
 		int rows = tabPanelSettings.optInt(IConst.MAX_TAB_ROWS, 1);
-		bookmark = new SettingsBookmark(context, IConst.MAX_TAB_ROWS, R.string.tab_rows, stat.STR_NULL+rows);
+		bookmark = new SettingsBookmark(context, IConst.MAX_TAB_ROWS, R.string.tab_rows, 
+				st.STR_NULL+rows);
 		ar.add(bookmark.setParam(ps));
-		bookmark = new SettingsBookmark(context, IConst.MIN_TAB_WIDTH,rows==1?R.string.tab_min_width:R.string.tab_width, stat.STR_NULL+tabPanelSettings.optInt(IConst.MIN_TAB_WIDTH, 0));
+		bookmark = new SettingsBookmark(context, IConst.MIN_TAB_WIDTH,rows==1?R.string.tab_min_width:R.string.tab_width, 
+				st.STR_NULL+tabPanelSettings.optInt(IConst.MIN_TAB_WIDTH, 0));
 		ar.add(bookmark.setParam(ps));
 		if(rows==1)
-			ar.add(new SettingsBookmark(context, IConst.MAX_TAB_WIDTH, R.string.tab_max_width, stat.STR_NULL+tabPanelSettings.optInt(IConst.MAX_TAB_WIDTH,0)).setParam(ps));
+			ar.add(new SettingsBookmark(context, IConst.MAX_TAB_WIDTH, R.string.tab_max_width, 
+					st.STR_NULL+tabPanelSettings.optInt(IConst.MAX_TAB_WIDTH,0)).setParam(ps));
 		ar.add(new SettingsBookmark(context, Prefs.TABS_HEIGTH, R.string.tabs_big, Prefs.isTabsHeight(),R.string.yes,R.string.no, false));
 		int pos = tabPanelSettings.optInt(IConst.PLUS_BUTTON, IConst.RIGHT);
 		bookmark = new SettingsBookmark(context, IConst.PLUS_BUTTON,R.string.plus_button, PLUS_BUTTON_POS.getValueByKey(pos));

@@ -116,7 +116,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			try {
 				res = uri.resolve(url);
 			} catch (Throwable e) {
-				return stat.STR_NULL;
+				return st.STR_NULL;
 	        }
 			return res.toString();
 		}
@@ -141,8 +141,8 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 	{
 		ActArray ar = new ActArray();
 		boolean itemtrans = false;
-		String url=stat.STR_NULL;
-		String turl=stat.STR_NULL;
+		String url=st.STR_NULL;
+		String turl=st.STR_NULL;
 		HitTestResult HitResult = null;
 		switch (Prefs.get().getInt(Prefs.SUPERMENU_BUTTON_SET, 0))
 		{
@@ -416,7 +416,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			break;
 		case Action.SHARE_ELEMENT:
 		case Action.SHARE_URL:
-			getMain().share((String)act.param,stat.STR_NULL);
+			getMain().share((String)act.param,st.STR_NULL);
 			return;
 		case Action.QUICK_SETTINGS:
 			getMain().runAction(act);

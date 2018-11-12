@@ -290,7 +290,7 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 		}
 		else if(mType==TYPE_SETTINGS)
 		{
-			ba = createSettingsAdapter(gSetArray==null?SettingsAdapter.getSettings(this):gSetArray);
+			ba = createSettingsAdapter(gSetArray==null?SettingsAdapter.getMainSettings(this):gSetArray);
 			gSetArray = null;
 		}
 		else if(mType==TYPE_CLEAR_DATA)
@@ -824,7 +824,7 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 		int cnt = 0;
 		c.moveToFirst();
 		while (c.moveToNext()){
-			CustomPopup.toast(inst, stat.STR_NULL+cnt);
+			CustomPopup.toast(inst, st.STR_NULL+cnt);
 			cnt++;
 		}
 //		Bookmark bm = Bookmark.fromManagedCursor(c);

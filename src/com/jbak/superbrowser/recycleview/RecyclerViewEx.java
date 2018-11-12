@@ -7,12 +7,17 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
+
+import com.jbak.superbrowser.Prefs;
 import com.jbak.ui.UIUtils;
 
+/** !!! тут, кроме прочего, задаётся количество колонок в выдаваемых списках! */
 public class RecyclerViewEx extends RecyclerView {
 	
-	/** Если ширина экрана больше этого значения и mSetListTwoColumnsOnWideScreen==true - показывается список в 2 колонки */ 
-	public static final int SCREEN_WIDTH_FOR_TWO_COLUMNS = 1000;
+	/** !!!Если ширина экрана больше этого значения и mSetListTwoColumnsOnWideScreen==true,
+	 *  то показывается список в 2 колонки 
+	 *  (смотри метод setListTwoColumnsOnWideScreen - в нём устанавливается)*/ 
+	public static final int SCREEN_WIDTH_FOR_TWO_COLUMNS = 700;
 	public static final int TYPE_HORZ_LINEAR = 1;
 	public static final int TYPE_GRID =   	  2;
 	/**Вертикальный список. Для использования в качестве списка */
@@ -160,7 +165,8 @@ public class RecyclerViewEx extends RecyclerView {
 		else if(mType==TYPE_VERTICAL_LIST)
 		{
 			int spans = 1;
-			if(mSetListTwoColumnsOnWideScreen&&getWidth()>SCREEN_WIDTH_FOR_TWO_COLUMNS)
+			if(mSetListTwoColumnsOnWideScreen&&getWidth()>SCREEN_WIDTH_FOR_TWO_COLUMNS
+					&&!Prefs.isTwoColumn())
 				spans = 2;
 			layoutManager = createGridLayoutManager(spans, fill);
 		}
@@ -226,6 +232,7 @@ public class RecyclerViewEx extends RecyclerView {
 	{
 		mSetWrapContent = wrapContent;
 	}
+	/** !!! выдавать список в две колонки (зависит от настройки*/
 	public final void setListTwoColumnsOnWideScreen(boolean set)
 	{
 		mSetListTwoColumnsOnWideScreen = set;

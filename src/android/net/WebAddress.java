@@ -24,6 +24,8 @@ import java.util.regex.Pattern;
 
 import com.jbak.superbrowser.stat;
 
+import ru.mail.mailnews.st;
+
 /**
  * {@hide}
  *
@@ -70,11 +72,11 @@ public class WebAddress {
 
         // android.util.Log.d(LOGTAG, "WebAddress: " + address);
 
-        mScheme = stat.STR_NULL;
-        mHost = stat.STR_NULL;
+        mScheme = st.STR_NULL;
+        mHost = st.STR_NULL;
         mPort = -1;
         mPath = "/";
-        mAuthInfo = stat.STR_NULL;
+        mAuthInfo = st.STR_NULL;
 
         Matcher m = sAddressPattern.matcher(address);
         String t;
@@ -112,7 +114,7 @@ public class WebAddress {
 
         /* Get port from scheme or scheme from port, if necessary and
            possible */
-        if (mPort == 443 && mScheme.equals(stat.STR_NULL)) {
+        if (mPort == 443 && mScheme.equals(st.STR_NULL)) {
             mScheme = "https";
         } else if (mPort == -1) {
             if (mScheme.equals("https"))
@@ -120,17 +122,17 @@ public class WebAddress {
             else
                 mPort = 80; // default
         }
-        if (mScheme.equals(stat.STR_NULL)) mScheme = "http";
+        if (mScheme.equals(st.STR_NULL)) mScheme = "http";
     }
 
     @Override
     public String toString() {
-        String port = stat.STR_NULL;
+        String port = st.STR_NULL;
         if ((mPort != 443 && mScheme.equals("https")) ||
             (mPort != 80 && mScheme.equals("http"))) {
             port = ":" + Integer.toString(mPort);
         }
-        String authInfo = stat.STR_NULL;
+        String authInfo = st.STR_NULL;
         if (mAuthInfo.length() > 0) {
             authInfo = mAuthInfo + "@";
         }

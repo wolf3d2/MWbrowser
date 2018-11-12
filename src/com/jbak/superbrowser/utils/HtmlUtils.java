@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import android.content.Context;
 import android.net.Uri;
+import ru.mail.mailnews.st;
 
 import com.jbak.superbrowser.stat;
 import com.jbak.utils.StrBuilder;
@@ -38,7 +39,7 @@ public class HtmlUtils extends StrBuilder{
 	public static String normalizeBaseUrl(String baseUrl)
 	{
 		Uri uri = Uri.parse(baseUrl);
-		return uri.buildUpon().encodedFragment(stat.STR_NULL).encodedQuery(stat.STR_NULL).build().toString();
+		return uri.buildUpon().encodedFragment(st.STR_NULL).encodedQuery(st.STR_NULL).build().toString();
 	}
 	public static String writeBaseUrl(String html,String baseUrl)
 	{

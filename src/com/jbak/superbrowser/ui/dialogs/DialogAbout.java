@@ -34,9 +34,11 @@ public class DialogAbout extends ThemedDialog{
 			//mPanel.setActions(ar);
 		}
 		TextView tv = (TextView)v.findViewById(R.id.description);
-		tv.setMaxHeight(stat.getSizeHeight(context));
+		//tv.setText(text);
+		tv.setMaxLines(20);
+		//tv.setMaxHeight(stat.getSizeHeight(context));
 		if (title == null)
-			setTitleText(getAppNameAndVersion(context));
+			setTitleText(st.getAppNameAndVersion(context));
 		else 
 			setTitleText(title);
 		if (text!=null)
@@ -82,26 +84,44 @@ public class DialogAbout extends ThemedDialog{
 				catch (Throwable e) {
 				}
 			break;
+			case Action.WHATS_NEW:
+				try{
+					BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.WHATS_NEW));
+				}
+				catch (Throwable e) {
+				}
+			break;
 		}
 	}
 	public static void sendFeedback(Context c) {
 		sendFeedback(c, null);
 	}
 	public static void sendFeedback(Context c,File crash) {
-		StringBuilder info = new StringBuilder(String.format(Locale.ENGLISH,
-				"\n\n%s", c.getString(R.string.app_info)));
+		StringBuilder info = new StringBuilder();
 		String delim = ": ";
-		info.append(String.format(Locale.ENGLISH, "%s%s%s%s\n",
-				c.getString(R.string.app_info_os), delim, "Android ",
+		// инфо о девайсе
+		info.append(String.format(Locale.ENGLISH, "%s%s%s%s\n","Application",
+				delim, st.STR_NULL,
+				st.getAppNameAndVersion(c)));
+		info.append(String.format(Locale.ENGLISH, "%s%s%s%s\n","Device locale",
+				delim, st.STR_NULL,
+				Locale.getDefault().getLanguage()));
+		info.append(String.format(Locale.ENGLISH, "%s%s%s%s\n","Os",
+				delim, "Android ",
 				Build.VERSION.RELEASE));
+		info.append(String.format(Locale.ENGLISH, "%s%s%s%s\n","Manufacture",
+				delim, st.STR_NULL,
+				Build.MANUFACTURER));
 		info.append(String.format(Locale.ENGLISH, "%s%s%s\n",
-				c.getString(R.string.app_info_device), delim, Build.MODEL));
-		info.append('\n');
-		info.append("===\n");
+				"Device", delim, Build.MODEL));
+		info.append("\n===\n");
+		
 		if(crash!=null)
 		{
-			info.append(st.strFile(crash));
-			info.append("===\n");
+			info.append(c.getString(R.string.app_info));
+			info.append("\n===\n\n");
+			info.append(st.fileToStr(crash));
+			info.append("\n===\n");
 		}
 		final Intent emailIntent = new Intent(Intent.ACTION_SEND);
 		emailIntent.setType("text/message");
@@ -110,9 +130,9 @@ public class DialogAbout extends ThemedDialog{
 
 		String subj = null;
 		if(crash==null)
-			subj = c.getString(R.string.feedback_subject) + getAppNameAndVersion(c);
+			subj = c.getString(R.string.feedback_subject) + st.getAppNameAndVersion(c);
 		else
-			subj = "Crash report "+getAppNameAndVersion(c);
+			subj = "Crash report "+st.getAppNameAndVersion(c);
 		emailIntent.putExtra(Intent.EXTRA_SUBJECT, subj);
 		emailIntent.putExtra(Intent.EXTRA_TEXT, info.toString());
 		c.startActivity(Intent.createChooser(emailIntent, c.getString(R.string.act_feedback)));

@@ -131,10 +131,10 @@ public class MyWebView extends WebView {
 		eventInfo.isReload = false;
 		checkCacheMode();
 		TempCookieStorage.onStartRequest(this, url);
-		if (url.startsWith(IConst.STR_FILE)){
+		if (url.startsWith(st.STR_FILE)){
 //			if (codepage==null||codepage.isEmpty())
 //				codepage = IConst.UTF8;
-			loadDataWithBaseURL(url, st.strFile(url.substring(6)), "text/html", IConst.UTF8, url);
+			loadDataWithBaseURL(url, st.fileToStr(url.substring(6)), "text/html", IConst.UTF8, url);
 //			codepage = null;
 			return;
 		}

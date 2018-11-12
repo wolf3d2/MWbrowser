@@ -6,6 +6,7 @@ import java.util.Collections;
 
 import org.json.JSONArray;
 
+import ru.mail.mailnews.st;
 import ru.mail.webimage.WebDownload;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -154,7 +155,7 @@ public class SuggestionsAdapter extends ArrayAdapter<SearchItem> implements Filt
 		if(BrowserApp.DB_TYPE==BrowserApp.DB_OWN)
 			sel = Db.getSearchTable().select();
 		else	
-			sel = new Select(stat.STR_NULL);
+			sel = new Select(st.STR_NULL);
 			if(!TextUtils.isEmpty(res))
 				sel.where().like(Browser.SearchColumns.SEARCH, res+"%");
 			sel.orderBy(DATE, false);
@@ -212,7 +213,7 @@ public class SuggestionsAdapter extends ArrayAdapter<SearchItem> implements Filt
 			protected FilterResults performFiltering(CharSequence s) {
 				FilterResults filterResults = new FilterResults();
 				ArrayList<SearchItem> results = null;
-				String search = s==null?stat.STR_NULL:s.toString();
+				String search = s==null?st.STR_NULL:s.toString();
 				if(resultList!=null&&mLastSearch!=null&&mLastSearch.equals(search))
 				{
 					filterResults.values = resultList;

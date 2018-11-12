@@ -1,5 +1,6 @@
 package com.jbak.superbrowser.plugins;
 
+import ru.mail.mailnews.st;
 import ru.mail.webimage.WebDownload;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,6 @@ public class PluginShortener extends PluginClient{
 	@Override
 	public void onClick(InfoClick click) {
 		String url = "http://tinyurl.com/create.php?url="+WebDownload.enc(click.windowText);
-		sendOpen(OPEN_WHAT_URL, url, stat.STR_NULL, true);
+		sendOpen(OPEN_WHAT_URL, url, st.STR_NULL, true);
 	}
 }	

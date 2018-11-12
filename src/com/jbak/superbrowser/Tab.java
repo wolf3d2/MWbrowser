@@ -190,10 +190,10 @@ public class Tab implements IConst,GlobalHandler{
 		if (host==null){
 			if (m_c!=null)
 				st.toast(m_c,"Сперва загрузите страницу");
-			return stat.STR_NULL;
+			return st.STR_NULL;
 		}
 		String parts[] = host.split("\\.");
-		String nhost = stat.STR_NULL;
+		String nhost = st.STR_NULL;
 		int pos = 0;
 		for(String p:parts)
 		{

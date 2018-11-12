@@ -229,7 +229,7 @@ public class MainPanel extends LinearLayoutEx implements OnAction,WebViewEvent,O
 		ar.add(Action.create(Action.BOOKMARKS));
 		if(Prefs.getHome()!=null)
 			ar.add(Action.GO_HOME);
-		ar.add(Action.create(Action.SETTINGS));
+		ar.add(Action.create(Action.MAIN_SETTINGS));
 		ar.add(Action.create(Action.EXIT));
 		ar.add(Action.create(Action.OPENFILE));
 		addVoiceSearch(ar);
@@ -394,8 +394,8 @@ public class MainPanel extends LinearLayoutEx implements OnAction,WebViewEvent,O
 			case Action.QUICK_SETTINGS:
 				arout.add(Action.QUICK_SETTINGS);
 				continue;
-			case Action.SETTINGS:
-				arout.add(Action.SETTINGS);
+			case Action.MAIN_SETTINGS:
+				arout.add(Action.MAIN_SETTINGS);
 				continue;
 			case Action.EXIT:
 				arout.add(Action.EXIT);

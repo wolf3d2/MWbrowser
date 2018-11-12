@@ -4,32 +4,64 @@ import java.io.FileOutputStream;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Scroller;
 import ru.mail.mailnews.st;
 
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
+import com.jbak.superbrowser.Prefs;
 import com.mw.superbrowser.R;
 import com.jbak.superbrowser.stat;
 import com.jbak.superbrowser.stat.DownloadOptions;
 import com.jbak.superbrowser.UrlProcess.DownloadFileInfo;
 import com.jbak.superbrowser.ui.OnAction;
 import com.jbak.utils.Utils;
-
+/** ВНИМАТЕЛЬНО! Второй конструктор позволяет не показывать клавиатуру */
 public class DialogEditor extends ThemedDialog{
 
 	protected EditText mEdit;
 	String mFileNameForSave;
+	/** ВНИМАТЕЛЬНО! Второй конструктор позволяет не показывать клавиатуру */
 	public DialogEditor(Context context,String title,String text)
 	{
 		this(context, title, text, true);
 		View v =  setView(R.layout.dialog_editor);
 		mEdit = (EditText) v.findViewById(R.id.editText);
+		mEdit.setMaxLines(20);
 		mEdit.setText(text);
-		st.showEditKeyboard(mEdit);
+		mEdit.setSelection(0);
+		// время в мс, сколько показывать скролбар
+		//mEdit.setScrollBarFadeDuration(5000);
+		
+		if (cb_showKbd!=null) {
+			cb_showKbd.setVisibility(View.VISIBLE);
+			cb_showKbd.setChecked(Prefs.getBoolean(Prefs.SHOW_KBD_DIALOG_EDITOR, false));
+			if (cb_showKbd.isChecked())
+				st.showEditKeyboard(mEdit);
+			else
+				st.hideEditKeyboard(mEdit);
+			cb_showKbd.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					Prefs.setBoolean(Prefs.SHOW_KBD_DIALOG_EDITOR, cb_showKbd.isChecked());
+					if (cb_showKbd.isChecked())
+						st.showEditKeyboard(mEdit);
+					else
+						st.hideEditKeyboard(mEdit);
+
+				}
+			});
+		}
+		// показываем клавиатуру, иначе курсор не виден
+		//st.showEditKeyboard(mEdit);
 	}
+	/** Этот конструктор позволяет не показывать клавиатуру
+	 * @param hideInput = true - НЕ показываем клавиатуру */
 	public DialogEditor(Context context,String title,String text,boolean hideInput) {
 		super(context,hideInput,R.style.DialogEditText);
 		setDialogMaxWidth(0);
@@ -38,7 +70,8 @@ public class DialogEditor extends ThemedDialog{
 		View v =  setView(R.layout.dialog_editor);
 		setTitleText(title);
 		mEdit = (EditText) v.findViewById(R.id.editText);
-		mEdit.setMaxHeight(stat.getSizeHeight(context));
+		//mEdit.setMaxHeight(stat.getSizeHeight(context));
+		mEdit.setMaxLines(20);
 		mEdit.setText(text);
 //		LinearLayout.LayoutParams lp =  (android.widget.LinearLayout.LayoutParams) mContentFrame.getLayoutParams();
 //		lp.height = 0;
@@ -49,6 +82,26 @@ public class DialogEditor extends ThemedDialog{
 		setButtons(act, 1);
 		mContentFrame.setBackgroundColor(0xffff0000);
 		mContentFrame.setPadding(0, 0, 0, 0);
+		if (cb_showKbd!=null) {
+			cb_showKbd.setVisibility(View.VISIBLE);
+			cb_showKbd.setChecked(Prefs.getBoolean(Prefs.SHOW_KBD_DIALOG_EDITOR, false));
+			if (cb_showKbd.isChecked())
+				st.showEditKeyboard(mEdit);
+			else
+				st.hideEditKeyboard(mEdit);
+			cb_showKbd.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					Prefs.setBoolean(Prefs.SHOW_KBD_DIALOG_EDITOR, cb_showKbd.isChecked());
+					if (cb_showKbd.isChecked())
+						st.showEditKeyboard(mEdit);
+					else
+						st.hideEditKeyboard(mEdit);
+
+				}
+			});
+		}
 	}
 	public void setOnActionListener(OnAction listener)
 	{

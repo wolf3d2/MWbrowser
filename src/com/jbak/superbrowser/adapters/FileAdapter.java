@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.mail.mailnews.st;
 import ru.mail.webimage.DefaultImageLoaders;
 import ru.mail.webimage.DefaultImageLoaders.FileInfo;
 import ru.mail.webimage.FileUtils;
@@ -35,7 +36,7 @@ public abstract class FileAdapter extends ArrayBookmarkAdapter implements OnClic
 	File mDir;
 	public static Bookmark createBookmarkFromSdcard(Context c,File f)
 	{
-		Bookmark bm = new Bookmark(stat.STR_NULL, f.getName(),f.lastModified()).setImageRes(R.drawable.sdcard).setParam(f);
+		Bookmark bm = new Bookmark(st.STR_NULL, f.getName(),f.lastModified()).setImageRes(R.drawable.sdcard).setParam(f);
 		return bm;
 	}
 	public static ArrayList<Bookmark> getHomeDir(Context c)
@@ -94,7 +95,7 @@ public abstract class FileAdapter extends ArrayBookmarkAdapter implements OnClic
 	}
 	public static final Bookmark createDirBookmark(Context c,File f,String name)
 	{
-		return new Bookmark(stat.STR_NULL, TextUtils.isEmpty(name)?f.getName():name, f.lastModified()).setImageRes(R.drawable.folder).setParam(f);
+		return new Bookmark(st.STR_NULL, TextUtils.isEmpty(name)?f.getName():name, f.lastModified()).setImageRes(R.drawable.folder).setParam(f);
 
 	}
 	public static ArrayList<Bookmark> createBookmarksFromFiles(Context c,File dir)
@@ -104,7 +105,7 @@ public abstract class FileAdapter extends ArrayBookmarkAdapter implements OnClic
 		ArrayList<Bookmark> ar = new ArrayList<Bookmark>();
 		File p = dir.getParentFile();
 		if(p!=null)
-			ar.add(new Bookmark(stat.STR_NULL, ".. ["+p.getName()+"]", dir.lastModified()).setImageRes(R.drawable.up));
+			ar.add(new Bookmark(st.STR_NULL, ".. ["+p.getName()+"]", dir.lastModified()).setImageRes(R.drawable.up));
 		File files[] = null;
 		Log.d("FileAdapter", "Try to read "+dir.getAbsolutePath());
 		try{

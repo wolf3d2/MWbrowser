@@ -6,6 +6,7 @@ import java.util.Map;
 import android.net.Uri;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
+import ru.mail.mailnews.st;
 
 import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.TabList;
@@ -80,7 +81,7 @@ public class TempCookieStorage implements WebViewEvent{
 			if(start)
 			{
 				getAnotherMap().put(domain, cookie);
-				cm.setCookie(domain, curCookie==null?stat.STR_NULL:curCookie);
+				cm.setCookie(domain, curCookie==null?st.STR_NULL:curCookie);
 			}
 			else
 			{

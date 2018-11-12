@@ -11,11 +11,6 @@ public abstract interface IConst extends StrConst{
 	public static final String PACKAGE_MWSHARE2SAVE = "com.mw.share2save";
 	public static final String PACKAGE_JBAK2KEYBOARD = "com.jbak2.JbakKeyboard";
 	public static final String TEAM_4PDA= "https://4pda.ru/forum/index.php?showtopic=796215";
-	public static final String STR_COMMENT = "//";
-	public static final String STR_SPACE = " ";
-	public static final String STR_NULL = "";
-	public static final String STR_CR = "\n";
-	public static final String STR_FILE = "file:///";
 	public static final String NAVIGATION_BACK = " ◁ ";
 	public static final String NAVIGATION_FORWARD = " ▷ ";
 

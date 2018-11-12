@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
+import com.jbak.superbrowser.stat;
 import com.mw.superbrowser.R;
 import com.jbak.superbrowser.ui.HorizontalPanel;
 import com.jbak.superbrowser.ui.LinearLayoutEx;
@@ -32,6 +34,7 @@ public class ThemedDialog extends CustomDialog implements OnAction{
 	FrameLayout mContentFrame;
 	protected LinearLayoutEx mContainer;
 	HorizontalPanel mActionPanel;
+	CheckBox cb_showKbd;
 	TextView mTitle;
 	public ThemedDialog(Context context) {
 		super(context);
@@ -59,8 +62,9 @@ public class ThemedDialog extends CustomDialog implements OnAction{
 		 lp.leftMargin = lp.rightMargin = getHorizontalMargins();
 		 inflate(mContainer, lp);
 		 MyTheme.get().setView(mTopContainer, MyTheme.ITEM_DIALOG_SHADOW);
-
 		 mContentFrame = (FrameLayout)mContainer.findViewById(R.id.contentFrame);
+		 cb_showKbd = (CheckBox)mContainer.findViewById(R.id.cb_showkbd);
+		 
 		 mActionPanel = (HorizontalPanel) mContainer.findViewById(R.id.bottomPanel);
 		 mTitle = (TextView)mContainer.findViewById(R.id.title);
 		 MyTheme.get().setViews(MyTheme.ITEM_DIALOG_BACKGROUND, mContainer);
@@ -121,6 +125,7 @@ public class ThemedDialog extends CustomDialog implements OnAction{
 		setTitleText(title);
 		TextView textView = new TextView(context());
 		textView.setTextAppearance(context(), R.style.textView);
+		textView.setMaxHeight(stat.getSizeHeight(context()));
 		textView.setText(text);
 		setView(textView);
 		setButtons(new ActArray(Action.OK), 0);

@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import com.jbak.superbrowser.stat;
 
 import android.util.Log;
+import ru.mail.mailnews.st;
 import ru.mail.webimage.FileUtils.FileProgressInputStream;
 
 
@@ -55,7 +56,7 @@ public class WebDownload {
 	ArrayList<Closeable> mClosables = new ArrayList<Closeable>();
 	HttpResponse httpResponce;
 	public int responceCode = -1;
-	public String responceMessage = stat.STR_NULL;
+	public String responceMessage = st.STR_NULL;
 	public static final int BUF_SIZE = 8192;
 	private byte[] mBuffer;
 	public Throwable error;
@@ -277,7 +278,7 @@ public class WebDownload {
 
 	public String getUrl(String url, boolean useUrlConnection) {
 		error = null;
-		String content = stat.STR_NULL;
+		String content = st.STR_NULL;
 		try {
 			if (useUrlConnection)
 				startGetHttpConnection(url);
@@ -379,7 +380,7 @@ public class WebDownload {
 	 */
 	public static class PostParams {
 		public String contentType = POST_CONTENT_TYPE_FORM_URLENCODED;
-		public String content = stat.STR_NULL;
+		public String content = st.STR_NULL;
 		public File file; 
 		/**
 		 * Конструктор для передачи json-объекта методом POST

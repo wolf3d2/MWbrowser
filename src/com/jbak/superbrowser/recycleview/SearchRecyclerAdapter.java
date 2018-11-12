@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.Browser;
 import android.view.ViewGroup;
+import ru.mail.mailnews.st;
 
 import com.jbak.superbrowser.Action;
 import com.jbak.superbrowser.BrowserApp;
@@ -72,7 +73,7 @@ public class SearchRecyclerAdapter extends PanelButtonRecyclerAdapter {
 		if(BrowserApp.DB_TYPE==BrowserApp.DB_OWN)
 			sel = Db.getSearchTable().select();
 		else	
-			sel = new Select(stat.STR_NULL);
+			sel = new Select(st.STR_NULL);
 		sel.orderBy(IConst.DATE, false);
 		if(BrowserApp.DB_TYPE==BrowserApp.DB_OWN)
 			c = sel.select(Db.getStringTable().getDb());

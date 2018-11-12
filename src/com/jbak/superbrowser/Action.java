@@ -20,12 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.BackgroundColorSpan;
-import android.view.ViewGroup.LayoutParams;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.widget.EditText;
@@ -42,10 +37,10 @@ import com.jbak.superbrowser.ui.MenuPanelButton;
 import com.jbak.superbrowser.ui.MyWebView;
 import com.jbak.superbrowser.ui.OnAction;
 import com.jbak.superbrowser.ui.dialogs.DialogAbout;
-import com.jbak.superbrowser.ui.dialogs.DialogBookmark;
 import com.jbak.superbrowser.ui.dialogs.DialogExport;
 import com.jbak.superbrowser.ui.dialogs.DialogImport;
 import com.jbak.superbrowser.ui.dialogs.DialogDownloadFile;
+import com.jbak.superbrowser.ui.dialogs.DialogEditor;
 import com.jbak.superbrowser.ui.dialogs.DialogMainMenuParagraph;
 import com.jbak.superbrowser.ui.dialogs.DialogThemeSelector;
 import com.jbak.superbrowser.ui.dialogs.DialogToolsPanelSettings;
@@ -126,7 +121,7 @@ public class Action {
 	public static final int EDIT= 70;
 	public static final int MIN_FONT_SIZE= 71;
 	public static final int MIN_FONT= 72;
-	public static final int SETTINGS= 73;
+	public static final int MAIN_SETTINGS= 73;
 	public static final int CLEAR_DATA= 74;
 	public static final int OK= 75;
 	public static final int CANCEL= 76;
@@ -179,8 +174,8 @@ public class Action {
 	public static final int SELECT_WW_BACK_COLOR = 123;
 	public static final int SUPERMENU_BUTTON_SET = 124;
 	public static final int INSTALL_MWSHARE2SAVE = 125;
-	
 	public static final int COPY_TEXT_URL_TO_CLIPBOARD= 126;
+	public static final int WHATS_NEW = 127;
 
 	public static final int MIN_FONT_RANGE[] = new int[]{1,5,6,7,8,9,10,11,12,13,14,16,18,20,22,24,30,32,40,48,60,72};
 	
@@ -302,6 +297,19 @@ public class Action {
 					return true;
 				};
 			};
+		case WHATS_NEW:
+			return new Action(action, action, R.string.act_whatsnew, param,R.drawable.help_blue_button)
+			{
+				@Override
+				public boolean doAction(MainActivity act) {
+					// так будет получше
+					new DialogEditor(act, act.getString(R.string.act_whatsnew), act.getWhatsNew(), true).show();
+					// старый Что нового
+					//st.dialogHelp(act, act.getWhatsNew(), act.getString(R.string.act_whatsnew));
+					return true;
+				}
+			};
+		
 		case ABOUT:
 			return new Action(action,action,R.string.act_about,param,R.drawable.about)
 			{
@@ -312,6 +320,7 @@ public class Action {
 					ar.add(Action.create(Action.FOUR_PDA));
 					ar.add(Action.create(Action.FEEDBACK));
 					ar.add(Action.create(Action.OTHER_APPS));
+					ar.add(Action.create(Action.WHATS_NEW));
 
 					new DialogAbout(act, null,
 							act.getString(R.string.about_text),
@@ -345,7 +354,7 @@ public class Action {
 				public boolean doAction(final MainActivity activity){
 					ActArray ar = new ActArray();
 					for (int i=10;i<101;i+=10){
-						ar.add(Action.create(MODE_MAGIC_BUTTON_ALPHA,i).setText(stat.STR_NULL+i+"%"));
+						ar.add(Action.create(MODE_MAGIC_BUTTON_ALPHA,i).setText(st.STR_NULL+i+"%"));
 						
 					}
 					new MenuPanelButton(activity, ar, new OnAction() 
@@ -372,7 +381,7 @@ public class Action {
 				public boolean doAction(final MainActivity activity){
 					ActArray ar = new ActArray();
 					for (int i=10;i<101;i+=10){
-						ar.add(Action.create(MODE_NAVIGATION_PANEL_ALPHA,i).setText(stat.STR_NULL+i+"%"));
+						ar.add(Action.create(MODE_NAVIGATION_PANEL_ALPHA,i).setText(st.STR_NULL+i+"%"));
 						
 					}
 					new MenuPanelButton(activity, ar, new OnAction() 
@@ -447,7 +456,7 @@ public class Action {
 				public boolean doAction(final MainActivity activity){
 					ActArray ar = new ActArray();
 					for (int i=10;i<71;i+=2){
-						ar.add(Action.create(SIZE_BUTTON_NAVIGATION_PANEL,i).setText(stat.STR_NULL+i));
+						ar.add(Action.create(SIZE_BUTTON_NAVIGATION_PANEL,i).setText(st.STR_NULL+i));
 						
 					}
 					new MenuPanelButton(activity, ar, new OnAction() 
@@ -504,7 +513,7 @@ public class Action {
 					ActArray ar = new ActArray();
 					ar.add(Action.create(IMPORT,"1."+activity.getString(R.string.in_developing)).setText("1."+activity.getString(R.string.in_developing)));
 					ar.add(Action.create(IMPORT,"2."+activity.getString(R.string.app_name)).setText("2."
-							+ stat.STR_NULL+activity.getString(R.string.app_name)));
+							+ st.STR_NULL+activity.getString(R.string.app_name)));
 					new MenuPanelButton(activity, ar, new OnAction() 
 					{
 						@Override
@@ -646,7 +655,7 @@ public class Action {
 			};
 		case QUICK_SETTINGS:
 			return new Action(action,action,R.string.act_view_settings,param,R.drawable.view);
-		case SETTINGS:
+		case MAIN_SETTINGS:
 			return new Action(action,action,R.string.act_settings,param,R.drawable.settings)
 			{
 				@Override
@@ -1043,7 +1052,7 @@ public class Action {
 					if(zoom==10)
 						return "+ 10% ";
 					
-					return stat.STR_NULL+(Integer)param+"%";
+					return st.STR_NULL+(Integer)param+"%";
 				}
 			};
 		case EXIT:
@@ -1064,7 +1073,7 @@ public class Action {
 				{
 					if(param instanceof EditText)
 					{
-						((EditText)param).setText(stat.STR_NULL);
+						((EditText)param).setText(st.STR_NULL);
 						return true;
 					}
 					return false;
@@ -1282,7 +1291,7 @@ public class Action {
 			if(itemText!=null)
 				return itemText;
 			if(getBookMark()==null)
-				return stat.STR_NULL;
+				return st.STR_NULL;
 			return getBookMark().getTitle();
 		};
 		Bookmark getBookMark()

@@ -3,6 +3,7 @@ package com.jbak.superbrowser.ui.dialogs;
 import java.io.File;
 import java.util.ArrayList;
 
+import ru.mail.mailnews.st;
 import ru.mail.webimage.FileUtils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -68,7 +69,7 @@ public abstract class DialogDownloadFile extends ThemedDialog {
 		View v =  setView(R.layout.dialog_download_file);
 		setButtons(true);
 		String tt = getString(R.string.act_savefile);
-		String inf = stat.STR_NULL;
+		String inf = st.STR_NULL;
 		if(mDownloadInfo.fileSize>0)
 			inf+=Formatter.formatFileSize(context(), mDownloadInfo.fileSize);
 		if(!TextUtils.isEmpty(mDownloadInfo.mimeType))

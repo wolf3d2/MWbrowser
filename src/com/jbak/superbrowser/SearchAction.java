@@ -1,5 +1,6 @@
 package com.jbak.superbrowser;
 
+import ru.mail.mailnews.st;
 import ru.mail.webimage.WebDownload;
 import android.provider.Browser;
 import android.text.TextUtils;
@@ -8,7 +9,7 @@ import com.jbak.utils.Utils;
 
 public class SearchAction extends Action
 {
-	static String m_url = stat.STR_NULL;
+	static String m_url = st.STR_NULL;
 	int mSearchCommand;
 	public SearchAction(int searchCommand,int textRes, int imageRes) {
 		super(SEARCH_ACTION, SEARCH_ACTION, textRes, null, imageRes);
@@ -32,7 +33,7 @@ public class SearchAction extends Action
 	}
 	public boolean doAction(MainActivity ma,String text,String url) {
 /////
-		Prefs.translate_lng = stat.STR_NULL;
+		Prefs.translate_lng = st.STR_NULL;
 		int iii =-1;
 		// открытие нескольких урлов, разделённых ентером
 		// должна быть перед условия переводов
@@ -61,7 +62,7 @@ public class SearchAction extends Action
 		}
 		if (stat.url!=null&&stat.url.length()>0){
 			url= stat.url;
-			stat.url = stat.STR_NULL;
+			stat.url = st.STR_NULL;
 		}
 		String link = SearchSystem.getLink(mSearchCommand, WebDownload.enc(text),url);
 		if(!TextUtils.isEmpty(text)&&!TextUtils.isEmpty(link))

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.TextSize;
+import ru.mail.mailnews.st;
 
 import com.jbak.utils.ObjectKeyValues;
 import com.jbak.utils.Utils;
@@ -16,14 +17,17 @@ import com.mw.superbrowser.R;
 
 public class Prefs 
 {
+	/**  ключ, показ панели в две колонки по выбору системы*/
+	public static final String SET_TWO_COLUMN = "set_two_column";
 	// переменные
-	public static String translate_lng = stat.STR_NULL;
+	public static String translate_lng = st.STR_NULL;
 	public static String NAME_SETTING = "settings";
 // ключи для экспорта
 	public static final String EXPORT_SAVE_CHANGE= "export_save_change";
 	public static final String BACKUP_SETTING_FOLDER= "backup_setting_folder";
 // текущая кодировка
 	public static final String SHOW_KBD= "show_kbd";
+	public static final String SHOW_KBD_DIALOG_EDITOR= "show_kbd_dialog_editor";
 // текущая кодировка
 	public static final String codepage = IConst.UTF8;
 // увеличенная высота вкладок
@@ -312,7 +316,7 @@ public class Prefs
 		case 2: return c.getString(R.string.set_navi_gest);
 		
 		}
-		return IConst.STR_NULL;
+		return st.STR_NULL;
 	}
 	public static final boolean getBoolean(String key, boolean def) {
 		return get().getBoolean(key, def);
@@ -385,5 +389,14 @@ public class Prefs
 	}
 	public static void getBookmarkSiteLogoIcon(String key, boolean val) {
 		INSTANCE.mPrefs.edit().putBoolean(HISTORY_MINIATURE, val).commit();
+	}
+	/** показывать списки в одну колонку или по выбору системы */
+	public static final boolean isTwoColumn()
+	{
+		return Prefs.getBoolean(Prefs.SET_TWO_COLUMN,false);
+	}
+	public static final void setTwoColumn(boolean val)
+	{
+		Prefs.setBoolean(SET_TWO_COLUMN, val);
 	}
 }

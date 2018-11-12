@@ -59,7 +59,7 @@ public class ErrorLayout extends LinearLayout implements OnAction{
 	@Override
 	public void onAction(Action act) {
 		MainActivity ma = (MainActivity)getContext();
-		if(act.command==Action.SETTINGS)
+		if(act.command==Action.MAIN_SETTINGS)
 			ma.startActivity(new Intent(Settings.ACTION_SETTINGS));
 		else
 			ma.runAction(act);

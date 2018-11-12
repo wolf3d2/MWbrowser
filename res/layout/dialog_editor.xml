@@ -6,7 +6,8 @@
         android:layout_height="0dp"
         android:background="#ffffff"
         android:gravity="top|start"
-	    android:textCursorDrawable="@null"
         android:inputType="textMultiLine"
-        android:padding="@dimen/magic_padding" />
-
+        android:padding="@dimen/magic_padding"
+        android:scrollbars="vertical"
+        android:textCursorDrawable="@null" />
+    

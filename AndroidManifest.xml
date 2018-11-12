@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mw.superbrowser"
     android:installLocation="auto"
-    android:versionCode="18"
-    android:versionName="*1.01.04.01" 
+    android:versionCode="20"
+    android:versionName="1.02" 
     
     xmlns:tools="http://schemas.android.com/tools">
 
