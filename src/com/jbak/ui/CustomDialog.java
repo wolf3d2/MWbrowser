@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.stat;
 import com.mw.superbrowser.R;
@@ -37,6 +38,7 @@ public class CustomDialog extends Dialog implements OnClickListener{
 	int mBackColor = 0xcc000000;
 	int mWindowAnim = R.style.playerControlAnim;
 	protected int mDefPaddingDp = 10;
+	
 	public CustomDialog(Context context,boolean hideInput,int theme) {
 		super(context ,theme);
 		int si = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
@@ -44,7 +46,6 @@ public class CustomDialog extends Dialog implements OnClickListener{
 			si|=WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
 		getWindow().setSoftInputMode(si);
 		mContextRef = new WeakReference<Context>(context);
-		
 	}
 	public CustomDialog(Context context,int theme) {
 		this(context,true,theme);

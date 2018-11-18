@@ -298,12 +298,18 @@ public class Action {
 				};
 			};
 		case WHATS_NEW:
-			return new Action(action, action, R.string.act_whatsnew, param,R.drawable.help_blue_button)
+			return new Action(action,action,R.string.act_whatsnew,param,R.drawable.edit,R.drawable.help_blue_button)
+//			return new Action(action, , R.string.act_whatsnew, R.string.act_whatsnew, param,R.drawable.help_blue_button)
 			{
 				@Override
 				public boolean doAction(MainActivity act) {
 					// так будет получше
-					new DialogEditor(act, act.getString(R.string.act_whatsnew), act.getWhatsNew(), true).show();
+					ActArray ar = new ActArray();
+					ar.add(Action.create(Action.ABOUT));
+					ar.add(Action.create(Action.HELP));
+					ar.add(Action.create(Action.CANCEL));
+					//ar.add(Action.create(Action));
+					new DialogEditor(act, act.getString(R.string.act_whatsnew), act.getWhatsNew(), ar).show();
 					// старый Что нового
 					//st.dialogHelp(act, act.getWhatsNew(), act.getString(R.string.act_whatsnew));
 					return true;

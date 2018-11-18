@@ -13,6 +13,7 @@ import ru.mail.mailnews.st;
 
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
+import com.jbak.superbrowser.BrowserApp;
 import com.jbak.superbrowser.Prefs;
 import com.mw.superbrowser.R;
 import com.jbak.superbrowser.stat;
@@ -20,12 +21,12 @@ import com.jbak.superbrowser.stat.DownloadOptions;
 import com.jbak.superbrowser.UrlProcess.DownloadFileInfo;
 import com.jbak.superbrowser.ui.OnAction;
 import com.jbak.utils.Utils;
-/** ВНИМАТЕЛЬНО! Второй конструктор позволяет не показывать клавиатуру */
+
 public class DialogEditor extends ThemedDialog{
 
 	protected EditText mEdit;
+	protected ActArray arAct = null;
 	String mFileNameForSave;
-	/** ВНИМАТЕЛЬНО! Второй конструктор позволяет не показывать клавиатуру */
 	public DialogEditor(Context context,String title,String text)
 	{
 		this(context, title, text, true);
@@ -60,10 +61,17 @@ public class DialogEditor extends ThemedDialog{
 		// показываем клавиатуру, иначе курсор не виден
 		//st.showEditKeyboard(mEdit);
 	}
-	/** Этот конструктор позволяет не показывать клавиатуру
-	 * @param hideInput = true - НЕ показываем клавиатуру */
 	public DialogEditor(Context context,String title,String text,boolean hideInput) {
 		super(context,hideInput,R.style.DialogEditText);
+		init(context, title, text);
+	}
+	public DialogEditor(Context context,String title,String text,ActArray act) {
+		this(context, title, text, true);
+		arAct = act;
+		init(context, title, text);
+	}
+	public void init(Context context,String title,String text)
+	{
 		setDialogMaxWidth(0);
 		mDefPaddingDp = 0;
 		mContentFrame.setPadding(0, 0, 0, 0);
@@ -77,9 +85,11 @@ public class DialogEditor extends ThemedDialog{
 //		lp.height = 0;
 //		lp.weight = 1f;
 //		lp.leftMargin = lp.rightMargin = 0;
-		ActArray act = new ActArray();
-		createActions(act);
-		setButtons(act, 1);
+		if (arAct==null) {
+			arAct = new ActArray();
+			createDefaultActions(arAct);
+		}
+		setButtons(arAct, 1);
 		mContentFrame.setBackgroundColor(0xffff0000);
 		mContentFrame.setPadding(0, 0, 0, 0);
 		if (cb_showKbd!=null) {
@@ -108,7 +118,7 @@ public class DialogEditor extends ThemedDialog{
 		mActionPanel.setOnActionListener(listener);
 	}
 	// меню, долгое нажатие на элементе сайта (не ссылке)
-	public void createActions(ActArray act)
+	public void createDefaultActions(ActArray act)
 	{
 		act.add(Action.create(Action.COPY_URL_TO_CLIPBOARD).setText(R.string.act_copy_text));
 		act.add(Action.create(Action.SAVEFILE));
@@ -158,6 +168,20 @@ public class DialogEditor extends ThemedDialog{
 				}
 			}.show();
 			break;
+		case Action.ABOUT:
+			try{
+				BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.ABOUT));
+			}
+			catch (Throwable e) {
+			}
+		break;
+		case Action.HELP:
+			try{
+				BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.HELP));
+			}
+			catch (Throwable e) {
+			}
+		break;
 		case Action.COPY_URL_TO_CLIPBOARD:
 			stat.setClipboardString(context(), text);
 			break;

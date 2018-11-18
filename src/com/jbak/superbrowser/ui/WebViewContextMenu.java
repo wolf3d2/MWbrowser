@@ -303,8 +303,8 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 		final DialogEditor de = new DialogEditor(getMain(), getMain().getString(R.string.act_item_text), mText,false)
 		{
 			@Override
-			public void createActions(ActArray act) {
-				super.createActions(act);
+			public void createDefaultActions(ActArray act) {
+				super.createDefaultActions(act);
 				Action del = act.removeAction(Action.STOP);
 				if(mEdit.length()==0)
 					act.add(0,Action.create(Action.PASTE));
