@@ -168,7 +168,8 @@ public class Prefs
 		String[] ar = c.getResources().getStringArray(R.array.ww_back_color);
 		return ar[col];
 	}
-	// при изменении не забыть откорректировать метов getDefaultTheme в MainActivity
+	/** при изменении не забыть откорректировать метод 
+	 * getDefaultTheme в MainActivity (вроде уже не надо) */
 	public static int getWWBackgroundColor()
 	{
 		switch (getWWBackgroundColorPref())
@@ -186,6 +187,14 @@ public class Prefs
 		case 10: return 0xff00FFFF;
 		case 11: return 0xffFF8C00;
 		case 12: return 0xffFF7F50;
+		case 13: return 0xffD3D3D3;
+		case 14: return 0xff7FFF00;
+		case 15: return 0xff00FA9A;
+		case 16: return 0xffFFD700;
+		case 17: return 0xff191970;
+		case 18: return 0xffBC8F8F;
+		case 19: return 0xff8B4513;
+		case 20: return 0xff2F4F4F;
 		default:return Color.WHITE;
 		
 		}

@@ -71,6 +71,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.jbak.superbrowser.stat.FileUploadInfo;
@@ -104,6 +105,7 @@ import com.jbak.ui.CustomPopup;
 import com.jbak.ui.UIUtils;
 import com.jbak.utils.GlobalHandler;
 import com.jbak.utils.IniFile;
+import com.jbak.utils.SameThreadTimer;
 import com.jbak.utils.StrBuilder;
 import com.jbak.utils.Utils;
 import com.jbak.utils.WeakRefArray;
@@ -135,6 +137,8 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	private TextProgressBar mLoadProgress;
 	ImageView mFavIcon;
 	public Button round_btn;
+	public SeekBar sb_minfont;
+	public static boolean bshowSeekbarMinFontSize = false;
 	ViewGroup mSearchPage;
 	EditText mSearchPageText;
 	TextView mSearchPageTitle;
@@ -215,8 +219,28 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		mNvigationPanelLayout = (RelativeLayout) findViewById(R.id.navigationLayout);
 		round_btn = (Button) findViewById(R.id.round_button);
 		round_btn.setVisibility(View.GONE);
-		round_btn.setOnClickListener(mRoundButtonClk);
+		round_btn.setOnClickListener(mMyButtonClk);
 		
+		sb_minfont = (SeekBar) findViewById(R.id.sb_minfont);
+		sb_minfont.setVisibility(View.GONE);
+		sb_minfont.setOnSeekBarChangeListener(m_seekbarCngListener);
+		bshowSeekbarMinFontSize = false;
+		sb_minfont.setOnTouchListener(new View.OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent me) {
+				switch (me.getAction())
+				{
+				case MotionEvent.ACTION_DOWN:
+					bshowSeekbarMinFontSize = true;
+					break;
+				case MotionEvent.ACTION_UP:
+					bshowSeekbarMinFontSize = false;
+					break;
+				}
+				return false;
+			}
+		});
 		mWebViewFrame = (ViewGroup)findViewById(R.id.webViewFrame);
 		mErrorLayout = (ViewGroup)findViewById(R.id.loadErrorFrame);
 		mMainPanelContainer = (ViewGroup)findViewById(R.id.main_panel_container);
@@ -2157,20 +2181,60 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		c.setTheme(R.style.AppTheme);
 		cur_theme = 0;
     }
-    View.OnClickListener mRoundButtonClk = new View.OnClickListener() {
+    View.OnClickListener mMyButtonClk = new View.OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
-			Button but = (Button)v;
-			String str = but.getText().toString().trim();
-			if (str.compareTo("∆") == 0)
-	        	BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.TO_TOP));
-	        //inst.pageUp(true);
-	        else
-	        	BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.TO_BOTTOM));
-	        //inst.pageUp(true);
-			round_btn.setVisibility(View.GONE);
-			MyWebView.m_tm.cancel();
+			switch (v.getId())
+			{
+				case R.id.round_button:
+					Button but = (Button)v;
+					String str = but.getText().toString().trim();
+					if (str.compareTo("∆") == 0)
+			        	BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.TO_TOP));
+			        //inst.pageUp(true);
+			        else
+			        	BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.TO_BOTTOM));
+			        //inst.pageUp(true);
+					round_btn.setVisibility(View.GONE);
+					MyWebView.m_tm_round.cancel();
+					break;
+			}
+		}
+	};
+    int tempint = 0;
+    SameThreadTimer m_tm_minfontsize;
+    SeekBar.OnSeekBarChangeListener m_seekbarCngListener = new SeekBar.OnSeekBarChangeListener() {
+		
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			m_tm_minfontsize = new SameThreadTimer(2000,0)
+			{
+			    @Override
+			    public void onTimer(SameThreadTimer timer)
+			    {
+			        if (sb_minfont!=null
+				        	&&!bshowSeekbarMinFontSize
+				           )
+			        	sb_minfont.setVisibility(View.GONE);
+			        m_tm_minfontsize.cancel();
+			    }
+			};
+			m_tm_minfontsize.start();
+		}
+		
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+			tempint = sb_minfont.getProgress();
+			Prefs.get().edit().putInt(Prefs.MIN_FONT, tempint).commit();
+			getWebView().getSettings().setMinimumFontSize(tempint);
+			
 		}
 	};
 	// скрывает круглую кнопку для жестов свайп вверх/вниз

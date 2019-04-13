@@ -170,6 +170,7 @@ public class BrowserApp extends Application {
 //		return GooglePlayServicesUtil.isGooglePlayServicesAvailable(INSTANCE)==ConnectionResult.SUCCESS;
 		return false;
 	}
+	/** чекаем использовать общие закладки в браузере или свои */
 	public static int checkBookmarks(ContentResolver cr)
 	{
 		int stor = Prefs.get().getInt(Prefs.BOOKMARK_STORAGE, Prefs.BOOKMARK_STORAGE_UNDEFINED);

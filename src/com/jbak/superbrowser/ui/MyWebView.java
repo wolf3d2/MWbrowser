@@ -15,6 +15,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.SeekBar;
 import ru.mail.mailnews.st;
 
 import com.jbak.superbrowser.Action;
@@ -30,8 +31,11 @@ import com.mw.superbrowser.R;
 
 public class MyWebView extends WebView {
 //	String codepage = null;
+	/** прогресс бар вызываемый для массштабирования страницы */
+	SeekBar sb_mashtab = null;
 	boolean page_boundary = false;
-	public static SameThreadTimer m_tm = null;
+	public static SameThreadTimer m_tm_round = null;
+	public static SameThreadTimer m_tm_minfont = null;
 	Context m_c = null;
 	MyWebView inst = null;
 	GestureDetector gestureDetector = null; 
@@ -240,6 +244,12 @@ public class MyWebView extends WebView {
 	   SimpleOnGestureListener simpleongesturelistener = new SimpleOnGestureListener() {
 			@Override
 			public boolean onDoubleTap(MotionEvent e) {
+				showFontSizeProgress();
+//				MainActivity ma = (MainActivity)m_c;
+//				int sz = (Integer)act.param;
+//				Prefs.get().edit().putInt(Prefs.MIN_FONT, sz).commit();
+//				ma.getWebView().getSettings().setMinimumFontSize(sz);
+
 				return super.onDoubleTap(e);
 			}
 
@@ -310,40 +320,72 @@ public class MyWebView extends WebView {
 				return super.onSingleTapConfirmed(e);
 			}
 		};
-	public void showNavigationButton(final boolean updown)
-	{
-		if (m_c==null)
-			return;
-		final MainActivity ma = (MainActivity)m_c;
-		if (ma.round_btn == null)
-			return;
-		if (updown){
-			ma.round_btn.setText(" ∆ ");
-		} else {
-			ma.round_btn.setText(" ∇ ");
-		}
-		ma.round_btn.setTextSize(25);
-		if (Prefs.getWWDarkWhiteTheme()==0){
-			ma.round_btn.setTextColor(Color.WHITE);
-			ma.round_btn.setBackgroundResource(R.drawable.round_button_cyan);
-		} else {
-			ma.round_btn.setTextColor(Color.WHITE);
-			ma.round_btn.setBackgroundResource(R.drawable.round_button_dark_gray);
-		}
-		if(m_tm!=null)
-		    m_tm.cancel();
-		m_tm = new SameThreadTimer(2000,0)
+		public void showNavigationButton(final boolean updown)
 		{
-		    @Override
-		    public void onTimer(SameThreadTimer timer)
-		    {
-		        if (ma.round_btn!=null)
-		        	ma.round_btn.setVisibility(View.GONE);
-		        m_tm.cancel();
-		    }
-		};
-		m_tm.start();
-		ma.round_btn.setVisibility(View.VISIBLE);
-	}
+			if (m_c==null)
+				return;
+			final MainActivity ma = (MainActivity)m_c;
+			if (ma.round_btn == null)
+				return;
+			if (updown){
+				ma.round_btn.setText(" ∆ ");
+			} else {
+				ma.round_btn.setText(" ∇ ");
+			}
+			ma.round_btn.setTextSize(25);
+			if (Prefs.getWWDarkWhiteTheme()==0){
+				ma.round_btn.setTextColor(Color.WHITE);
+				ma.round_btn.setBackgroundResource(R.drawable.round_button_cyan);
+			} else {
+				ma.round_btn.setTextColor(Color.WHITE);
+				ma.round_btn.setBackgroundResource(R.drawable.round_button_dark_gray);
+			}
+			if(m_tm_round!=null)
+				m_tm_round.cancel();
+			m_tm_round = new SameThreadTimer(2000,0)
+			{
+			    @Override
+			    public void onTimer(SameThreadTimer timer)
+			    {
+			        if (ma.round_btn!=null)
+			        	ma.round_btn.setVisibility(View.GONE);
+			        m_tm_round.cancel();
+			    }
+			};
+			m_tm_round.start();
+			ma.round_btn.setVisibility(View.VISIBLE);
+			//ma.sb_minfont.setVisibility(View.VISIBLE);
+		}
+		public void showFontSizeProgress()
+		{
+			if (m_c==null)
+				return;
+			final MainActivity ma = (MainActivity)m_c;
+			if (ma.sb_minfont == null)
+				return;
+			ma.sb_minfont.setMax(72);
+			int sz = ma.getWebView().getSettings().getDefaultFontSize();
+			ma.sb_minfont.setProgress(sz);
+			
+//			Prefs.get().edit().putInt(Prefs.MIN_FONT, sz).commit();
+//			ma.getWebView().getSettings().setMinimumFontSize(sz);
+			ma.sb_minfont.setBackgroundColor(Color.WHITE);
+			if(m_tm_minfont!=null)
+				m_tm_minfont.cancel();
+			m_tm_minfont = new SameThreadTimer(3000,0)
+			{
+			    @Override
+			    public void onTimer(SameThreadTimer timer)
+			    {
+			        if (ma.sb_minfont!=null
+			        	&&!ma.bshowSeekbarMinFontSize
+			           )
+			        	ma.sb_minfont.setVisibility(View.GONE);
+			        m_tm_minfont.cancel();
+			    }
+			};
+			m_tm_minfont.start();
+			ma.sb_minfont.setVisibility(View.VISIBLE);
+		}
 
 }

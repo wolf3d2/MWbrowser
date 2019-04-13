@@ -32,6 +32,7 @@ import com.jbak.superbrowser.ui.MainPanel;
 import com.jbak.superbrowser.ui.OnAction;
 import com.jbak.superbrowser.ui.PanelSetting;
 import com.jbak.superbrowser.ui.dialogs.DialogDownloadFile;
+import com.jbak.superbrowser.ui.dialogs.DialogEditor;
 import com.jbak.superbrowser.ui.dialogs.MenuSettingBookmarks;
 import com.jbak.superbrowser.ui.dialogs.ThemedDialog;
 import com.jbak.superbrowser.ui.themes.MyTheme;
@@ -491,6 +492,8 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 					int val = (Integer)settingsSelected.param;
 					if(val==Prefs.START_APP_HOMEPAGE)
 					{
+//						new DialogEditor(getContext(), getContext().getString(R.string.act_item_text), mText).show();	
+
 						new ThemedDialog(getContext()).setInput(getContext().getString(R.string.act_startAppHomePage), Prefs.get().getString(Prefs.HOME_PAGE, null),new OnUserInput() {
 							
 							@Override

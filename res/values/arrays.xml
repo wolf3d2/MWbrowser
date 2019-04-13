@@ -15,6 +15,14 @@
         <item>@string/ww_back10</item>
         <item>@string/ww_back11</item>
         <item>@string/ww_back12</item>
+        <item>@string/ww_back13</item>
+        <item>@string/ww_back14</item>
+        <item>@string/ww_back15</item>
+        <item>@string/ww_back16</item>
+        <item>@string/ww_back17</item>
+        <item>@string/ww_back18</item>
+        <item>@string/ww_back19</item>
+        <item>@string/ww_back20</item>
         </string-array>
     
 </resources>

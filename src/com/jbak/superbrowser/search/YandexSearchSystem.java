@@ -1,6 +1,9 @@
 package com.jbak.superbrowser.search;
 
 import ru.mail.webimage.WebDownload;
+
+import com.mw.superbrowser.R;
+
 import android.net.Uri;
 
 public class YandexSearchSystem extends SearchSystem {
@@ -37,6 +40,9 @@ public class YandexSearchSystem extends SearchSystem {
 	@Override
 	public String getName() {
 		return "Yandex";
+	}
+	public int getIconId() {
+		return R.drawable.yandex;
 	}
 
 }

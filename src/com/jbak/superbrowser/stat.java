@@ -65,6 +65,7 @@ import android.webkit.WebView;
 
 import com.jbak.reverseEngine.BrowserContract;
 import com.jbak.superbrowser.Db.TableBookmarks;
+import com.jbak.superbrowser.adapters.BookmarkFolderAdapter;
 import com.jbak.superbrowser.search.SearchSystem;
 import com.jbak.superbrowser.ui.BookmarkView;
 import com.jbak.superbrowser.ui.LoadBitmapInfo;
@@ -558,6 +559,39 @@ public class stat implements IConst {
 			Utils.log(e);
 		}
 	}
+	public static void createBookmark(MainActivity con, String url,String name,long parentDir, Bitmap preview)
+	{
+		try{
+//			MainActivity c = (MainActivity) mWebView.getContext();
+//			if(TextUtils.isEmpty(name))
+//				name = mWebView.getTitle();
+			WebView mww = (WebView)con.getWebView();
+			Bookmark bm = new Bookmark(url, name, System.currentTimeMillis());
+			Utils.log(BOOKMARK, "Add:"+bm.getJSON().toString()+st.STR_SPACE+parentDir);
+//			Bitmap preview = null;
+//// запись закладки. Создание лого сайта
+//			if(c.getTab().mThumbnail!=null)
+//				preview = c.getTab().mThumbnail;
+//			else
+//				preview = createWebViewThumbnail(mWebView);
+
+// создание миниатюры закладки			
+// если превью истории отключено
+// закомментировано мной			
+//			if (!Prefs.isHistoryMiniature()){
+//				Resources res = c.getResources();
+//				BitmapDrawable bd = (BitmapDrawable) res.getDrawable(R.drawable.close);
+//				preview = null;
+//				preview = bd.getBitmap();
+//			}
+			
+			stat.saveHistory(con, bm, mww.getFavicon(),false,preview,parentDir);
+		}
+		catch(Throwable e)
+		{
+			Utils.log(e);
+		}
+	}
 	public static class FileUploadInfo
 	{
 		public FileUploadInfo(ValueCallback<Uri> uploadMsg,String acceptType,String capture)
@@ -650,6 +684,22 @@ public class stat implements IConst {
 			}
 		}.show();
 		return true;
+	}
+	/** добавил я - удаляем все закладки */
+	public static void deleteAllBookmark(Context con) {
+		ContentResolver cr = con.getContentResolver();
+		Cursor c = BookmarkFolderAdapter.getBookmarkCursorWithFolder(cr, 0); 
+//				getCursorByType(inst, TYPE_BOOKMARKS);
+		int cnt = 0;
+		c.moveToFirst();
+		while (c.moveToNext()){
+			CustomPopup.toast(con, st.STR_NULL+cnt);
+			cnt++;
+		}
+//		Bookmark bm = Bookmark.fromManagedCursor(c);
+//		
+//		BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_BOOKMARKS_CHANGED, bm);
+		
 	}
 	public static boolean deleteBookmark(Context c,Bookmark bm,int type)
 	{

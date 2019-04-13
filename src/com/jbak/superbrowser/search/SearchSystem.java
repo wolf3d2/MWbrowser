@@ -16,15 +16,17 @@ public abstract class SearchSystem {
 	public static final int CMD_TRANSLATE_TEXT = 10;
 	
 	public static final String SEARCH_SYSTEM_GOOGLE = "Google";
-	static SearchSystem SEARCH_SYSTEMS[] = new SearchSystem[]{
+	public static SearchSystem SEARCH_SYSTEMS[] = new SearchSystem[]{
 		new GoogleSearchSystem(),
 		new BingSearchSystem(),
-		new YandexSearchSystem()
+		new YandexSearchSystem(),
+		new DuckDuckGoSearchSystem()
 	}; 
 	static SearchSystem DEFAULT_SEARCH_SYSTEM; 
 	static SearchSystem CURRENT_SEARCH_SYSTEM; 
 	public abstract String getSearchLink(int command,String searchEncodedText,String url);
 	public abstract String getName();
+	public abstract int getIconId();
 	
 	public static SearchSystem getCurrent()
 	{
@@ -56,6 +58,13 @@ public abstract class SearchSystem {
 		String ret[] = new String[SEARCH_SYSTEMS.length];
 		for(int i=0;i<SEARCH_SYSTEMS.length;i++)
 			ret[i] = SEARCH_SYSTEMS[i].getName();
+		return ret;
+	}
+	public static int[] getSearchSystemsIconId()
+	{
+		int ret[] = new int[SEARCH_SYSTEMS.length];
+		for(int i=0;i<SEARCH_SYSTEMS.length;i++)
+			ret[i] = SEARCH_SYSTEMS[i].getIconId();
 		return ret;
 	}
 	public static String getLink(int command,String searchEncodedText,String url)

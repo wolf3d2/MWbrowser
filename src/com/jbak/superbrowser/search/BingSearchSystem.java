@@ -1,6 +1,9 @@
 package com.jbak.superbrowser.search;
 
 import ru.mail.webimage.WebDownload;
+
+import com.mw.superbrowser.R;
+
 import android.net.Uri;
 
 public class BingSearchSystem extends SearchSystem {
@@ -36,6 +39,9 @@ public class BingSearchSystem extends SearchSystem {
 	@Override
 	public String getName() {
 		return "Bing";
+	}
+	public int getIconId() {
+		return R.drawable.bing;
 	}
 
 }

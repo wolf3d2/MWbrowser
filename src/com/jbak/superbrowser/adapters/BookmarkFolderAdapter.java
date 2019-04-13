@@ -97,7 +97,7 @@ public abstract class BookmarkFolderAdapter extends CursorBookmarkAdapter implem
 			id = folderBookmark.getBookmarkFolderId();
 		return getBookmarkCursorWithFolder(context.getContentResolver(), id);
 	}
-	// определяет и выдаёт cursor откуда читать - из системмных закладок или из базы.
+	/** определяет и выдаёт cursor откуда читать - из системмных закладок или из базы */
 	public static Cursor getBookmarkCursorWithFolder(ContentResolver cr, long folderId)
 	{
 		if(BrowserApp.DB_TYPE==BrowserApp.DB_BROWSER_CONTRACT)
@@ -107,8 +107,9 @@ public abstract class BookmarkFolderAdapter extends CursorBookmarkAdapter implem
 		else //if(BrowserApp.DB_TYPE==BrowserApp.DB_OWN)
 			return Db.getBookmarksTable().getBookmarkCursor(null, folderId);
 	}
-	private static final String PROJ_CUR[] = new String[]{BrowserContract.Bookmarks.PARENT}; 
-	// читает текущую папку закладок из системных закладок
+	private static final String PROJ_CUR[] = new String[]{BrowserContract.Bookmarks.PARENT};
+	
+	/** читает текущую папку закладок из системных закладок */
 	public static Bookmark getFolder(ContentResolver cr, long id)
 	{
 		Cursor c = cr.query(BrowserContract.Bookmarks.CONTENT_URI, null , "_id="+id, null, null);
@@ -123,7 +124,7 @@ public abstract class BookmarkFolderAdapter extends CursorBookmarkAdapter implem
 		c.close();
 		return ret;
 	}
-	// читает текущую папку закладок из системных закладок
+	/** читает текущую папку закладок из системных закладок */
 	public static Bookmark getParentFolder(ContentResolver cr, long id)
 	{
 		// content://com.android.browser/bookmarks

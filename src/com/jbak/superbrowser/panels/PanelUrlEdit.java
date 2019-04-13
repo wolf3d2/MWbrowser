@@ -6,22 +6,34 @@ import ru.mail.mailnews.st;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.speech.RecognizerIntent;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
+import com.jbak.superbrowser.Bookmark;
 import com.jbak.superbrowser.BrowserApp;
 import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.Prefs;
 import com.mw.superbrowser.R;
 import com.jbak.superbrowser.SearchAction;
 import com.jbak.superbrowser.stat;
+import com.jbak.superbrowser.adapters.SettingsBookmark;
 import com.jbak.superbrowser.WebViewEvent;
 import com.jbak.superbrowser.Tab;
 import com.jbak.superbrowser.pluginapi.Plugin;
@@ -35,6 +47,7 @@ import com.jbak.ui.SuggestionEdit;
 import com.jbak.ui.SuggestionEdit.OnAutoCompleteAction;
 
 public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
+	
 	public PanelUrlEdit(Context c)
 	{
 		super(c);
@@ -46,8 +59,8 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		mStyles = styles;
 		init();
 	}
-	public PanelUrlEdit(Context context, AttributeSet attrs) {
-		super(context, attrs);
+	public PanelUrlEdit(Context c, AttributeSet attrs) {
+		super(c, attrs);
 		init();
 	}
 	boolean mUserEditText = false;
@@ -60,6 +73,8 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 	/** Юзер вводит в поле поиска url */
 	public static final int STATE_ADDR_URL = 3;
 	SuggestionEdit mEditUrl;
+	/** ПОКА НЕ ИСПОЛЬЗУЕТСЯ! кнопка для быстрой смены поисковой системы. */
+	ImageView mImageSearch;
 	HorizontalPanel mToolsPanel;
 	String mUrl;
 	int mMaxLinesExpanded;
@@ -70,8 +85,23 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 	OnAction mActionListener;
 	private void init() {
 		setOrientation(VERTICAL);
+//		setOrientation(HORIZONTAL);
+//		mImageSearch = new ImageView(getContext());
+//		Drawable dr = null;
+//		try {
+//			dr = getContext().getResources().getDrawable(R.drawable.ic_launcher);
+//			dr.setBounds(0, 0, 32, 32);
+//			
+//		} catch (Throwable e) {
+//		}
+//		if (dr!=null) {
+//			mImageSearch.setImageDrawable(dr);
+//			addView(mImageSearch);
+//		}
 		mEditUrl = (SuggestionEdit) LayoutInflater.from(getContext()).inflate(R.layout.url_edit, null);
-		addView(mEditUrl);
+		//addView(mEditUrl);
+		// пока не используется
+		addView(createUrlEditPanel());
 		mToolsPanel = new HorizontalPanel(getContext());
 		mToolsPanel.setButtonsType(PanelButton.TYPE_BUTTON_MEDIUM_ONE_LINE);
 		mToolsPanel.setCheckWidthWhileNotAutoFill(false);
@@ -427,4 +457,105 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 	{
 		return mUserText;
 	}
+/** Создание панели адреса со спиннером быстрой смены
+ * поисковой системы (не доделано!) */
+	public RelativeLayout createUrlEditPanel()
+	{
+		RelativeLayout rl = new RelativeLayout(getContext());
+		rl.setLayoutParams(new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.MATCH_PARENT, 
+				RelativeLayout.LayoutParams.WRAP_CONTENT));
+		rl.setBackgroundColor(0xffffffff);
+		RelativeLayout.LayoutParams splp = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT, 
+				RelativeLayout.LayoutParams.MATCH_PARENT);
+		splp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+		//splp.addRule(RelativeLayout.LEFT_OF, 1001);
+		String cur_name = SearchSystem.getCurrent().getName();
+		/** индекс текущей поисковой системы */
+		int cur_ind = 0;
+		Integer ar[] = new Integer[SearchSystem.SEARCH_SYSTEMS.length];
+		for(int i=0;i<SearchSystem.SEARCH_SYSTEMS.length;i++)//  id:SearchSystem.getSearchSystemsIconId())
+		{
+			ar[i]= SearchSystem.SEARCH_SYSTEMS[i].getIconId();
+			if (cur_name.equals(SearchSystem.SEARCH_SYSTEMS[i].getName()))
+				cur_ind = i;
+		}
+		Spinner sp = new Spinner(getContext());
+		SpinnerImageArrayAdapter adapter = new SpinnerImageArrayAdapter(getContext(), 
+		        ar);
+//		ArrayAdapter<?> adapter = 
+//		ArrayAdapter.createFromResource(getContext(), R.array.ww_back_color, android.R.layout.simple_spinner_item);
+//		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mEditUrl.measure(0, 0);
+		int hh = mEditUrl.getMeasuredHeight();
+		splp.height = hh;
+		splp.width = hh;
+		sp.setLayoutParams(splp);
+		sp.setBackgroundColor(0xffffffff);
+		sp.setAdapter(adapter);
+		sp.setId(1000);
+		sp.setOnItemSelectedListener(m_itemSelection);
+		
+		sp.setSelection(cur_ind);
+		rl.addView(sp);
+		
+		RelativeLayout.LayoutParams etlp = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.MATCH_PARENT, 
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		etlp.addRule(RelativeLayout.RIGHT_OF, sp.getId());
+
+		mEditUrl.setLayoutParams(etlp);
+		rl.addView(mEditUrl);
+		return rl;
+	}
+	public class SpinnerImageArrayAdapter extends ArrayAdapter<Integer> {
+		private Integer[] images;
+		private ImageView imageView;
+		private Drawable dr;
+		public SpinnerImageArrayAdapter(Context context, Integer[] images) {
+		    super(context, android.R.layout.simple_spinner_item, images);
+		    this.images = images;
+		}
+
+		@Override
+		public View getDropDownView(int position, View convertView, ViewGroup parent) {
+			parent.setBackgroundColor(0xffffffff);
+		    return getImageForPosition(convertView, position, true);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+		    return getImageForPosition(convertView, position, false);
+		}
+
+		private View getImageForPosition(View v,int position, boolean bigImageSize) {
+			if (v==null) {
+				imageView = new ImageView(getContext());
+		        imageView.setLayoutParams(new AbsListView.LayoutParams(
+		        		ViewGroup.LayoutParams.WRAP_CONTENT, 
+		        		ViewGroup.LayoutParams.MATCH_PARENT));
+			} else 
+				imageView = (ImageView)v;
+			if (bigImageSize) {
+				imageView.setMinimumHeight(75);
+				imageView.setMinimumWidth(75);
+			}
+	        imageView.setBackgroundResource(images[position]);
+	        return imageView;
+		}
+	}
+    AdapterView.OnItemSelectedListener m_itemSelection = new AdapterView.OnItemSelectedListener()
+    {
+    	public void onItemSelected(AdapterView<?> parent,
+    			View itemSelected, int selectedItemPosition, long selectedId) 
+    	{
+    		String ss = SearchSystem.SEARCH_SYSTEMS[selectedItemPosition].getName();
+    		SearchSystem.setSearchSystem(ss);
+    		//st.toast(ss);
+    	}
+    	public void onNothingSelected(AdapterView<?> parent) {
+    	}
+    ;};		    
+
 }

@@ -344,6 +344,14 @@
     <string name="ww_back10">Cyan</string>
     <string name="ww_back11">DarkOrange</string>
     <string name="ww_back12">Coral</string>
+    <string name="ww_back13">LightGray</string>
+    <string name="ww_back14">Chartreuse</string>
+    <string name="ww_back15">MediumSpringGreen</string>
+    <string name="ww_back16">Gold</string>
+    <string name="ww_back17">MidnightBlue</string>
+    <string name="ww_back18">RosyBrown</string>
+    <string name="ww_back19">SaddleBrown</string>
+    <string name="ww_back20">DarkSlateGray</string>
         
     
 </resources>

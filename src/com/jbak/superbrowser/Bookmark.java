@@ -92,6 +92,7 @@ public class Bookmark implements IConst
 		{
 			return (Long)param;
 		}
+		/** возвращает bookmark из текущей позиции курсора */
 		public static Bookmark fromManagedCursor(Cursor c)
 		{
 			//[_id, url, visits, date, bookmark, title, favicon, thumbnail, touch_icon, user_entered]

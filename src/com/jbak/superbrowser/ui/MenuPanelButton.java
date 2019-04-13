@@ -3,8 +3,10 @@ package com.jbak.superbrowser.ui;
 import ru.mail.mailnews.st;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
@@ -35,6 +37,8 @@ public class MenuPanelButton extends CustomDialog {
 		grid.setWrapContent(true);
 		grid.setType(RecyclerViewEx.TYPE_GRID);
 		grid.setMaxHeight(Integer.MAX_VALUE);
+        if (Build.VERSION.SDK_INT >= 24) // android7
+    		grid.setMaxHeight(st.getDisplayHeight(context)/2);//я закоментил Integer.MAX_VALUE);
 		grid.setOnActionListener(new OnAction() {
 			
 			@Override

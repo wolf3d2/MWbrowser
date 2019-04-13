@@ -584,14 +584,6 @@ public class Db extends SQLiteOpenHelper implements StrConst,IConst{
 			sel.orderBy(orderBy);
 			return sel.selectOrNull(getDb());
 		}
-		public static boolean isUnique(int type)
-		{
-			return type == TYPE_HISTORY;
-		}
-		public boolean insertBookmark(boolean history,Bookmark bm,Bitmap favicon,Bitmap thumbnail, long parent)
-		{
-			return insertBookmark(history?TYPE_HISTORY:TYPE_BOOKMARK, bm, favicon, thumbnail, parent)>=0;
-		}
 		public int deleteFolder(long folderId)
 		{
 			int ret = select().where().eq(_ID, folderId).or().eq(PARENT, folderId).deleteOpt(getDb());
@@ -603,6 +595,14 @@ public class Db extends SQLiteOpenHelper implements StrConst,IConst{
 			int ret = getDb().update(getTableName(), cv, "_id=?", new String[]{Long.toString(id)});
 			BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_BOOKMARKS_CHANGED, null);
 			return ret;
+		}
+		public static boolean isUnique(int type)
+		{
+			return type == TYPE_HISTORY;
+		}
+		public boolean insertBookmark(boolean history,Bookmark bm,Bitmap favicon,Bitmap thumbnail, long parent)
+		{
+			return insertBookmark(history?TYPE_HISTORY:TYPE_BOOKMARK, bm, favicon, thumbnail, parent)>=0;
 		}
 		public long insertBookmark(int type,Bookmark bm,Bitmap favicon,Bitmap thumbnail, long parent)
 		{

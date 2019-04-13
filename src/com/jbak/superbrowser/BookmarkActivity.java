@@ -817,20 +817,5 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 	void setMain(MainActivity main) {
 		this.mMain = new WeakReference<MainActivity>(main);
 	}
-	public static void deleteAllBookmark() {
-		ContentResolver cr = inst.getContentResolver();
-		Cursor c = BookmarkFolderAdapter.getBookmarkCursorWithFolder(cr, 0); 
-//				getCursorByType(inst, TYPE_BOOKMARKS);
-		int cnt = 0;
-		c.moveToFirst();
-		while (c.moveToNext()){
-			CustomPopup.toast(inst, st.STR_NULL+cnt);
-			cnt++;
-		}
-//		Bookmark bm = Bookmark.fromManagedCursor(c);
-//		
-//		BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_BOOKMARKS_CHANGED, bm);
-		
-	}
 	
 }
