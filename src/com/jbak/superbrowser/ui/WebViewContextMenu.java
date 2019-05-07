@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Handler;
@@ -49,6 +50,8 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 	public static final String ATT_DATA_SRC = "data-src";
 	public static final String ATT_DATA_HREF = "data-href";
 	public static final String ATT_TEXT_LINK= "\">";
+	/** url играющего видео потока */
+	String vUrl = null;
 	int mType = TYPE_DEFAULT;
 	String mHtmlText;
 	String mText;
@@ -88,22 +91,51 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			}
 			if(TextUtils.isEmpty(mHtmlText))
 				return false;
+			vUrl = null;
 			Document doc = Jsoup.parse(mHtmlText, mBaseUrl);
 			if(!TextUtils.isEmpty(mText))
 				mText = mText.trim();
+			String tname= null;
+			Elements el;
 			Elements allTags = doc.getAllElements();
 			for(Element t:allTags)
 			{
+				tname = t.tagName();
 				if(TAG_A.equalsIgnoreCase(t.tagName()))
 					mLink = t;
 				else if(TAG_IMG.equalsIgnoreCase(t.tagName()))
 					mImg = t;
+				else if("video".equalsIgnoreCase(t.tagName())) {
+					el = t.getElementsByAttribute("src");
+					vUrl = el.attr("src");
+				}
+				else if("iframe".equalsIgnoreCase(t.tagName())) {
+					el = t.getElementsByAttribute("src");
+					vUrl = el.attr("src");
+				}
 			}
 			return true;
 		}
 		catch (Throwable e) {
 		}
 		return false;
+	}
+	/** запуск внешнего видеоплеера для воспроизведения видео */
+	public void startExternalVideoPlayer() {
+		if (vUrl==null)
+			return;
+        Uri uri = Uri.parse(vUrl);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "video/*");
+        try {
+            getMain().startActivity(intent);
+    		getMain().getWebView().reload();
+			
+		} catch (Throwable e) {
+			st.toastLong(R.string.error_start_ext_player);
+		}
+		
 	}
 	public String normalizeUrl(String url)
 	{
@@ -122,8 +154,8 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 		}
 		return url;
 	}
-	// меню при долгом тапе на ссылке
-	public boolean showMenu(MainActivity a)
+	/** суперменю при долгом тапе на ссылке */
+	public boolean showSuperMenu(MainActivity a)
 	{
 		setMain(a);
 		if(mType==TYPE_INPUT)
@@ -219,8 +251,10 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			ar.add(Action.create(Action.TRANSLATE_LINK));
 			ar.add(Action.create(Action.SELECT_TEXT));
 			ar.add(Action.create(Action.SOURCE_CODE));
-//			if(mImg==null)
-//				ar.add(Action.create(Action.SELECT_TEXT));
+			if(vUrl!=null) {
+				ar.add(Action.create(Action.EXTERNAL_VIDEO_PLAYER));
+				ar.add(Action.create(Action.COPY_NET_STRIMING_URL));
+			}
 			break;
 		default:
 			if(mLink==null&&mImg==null)
@@ -256,6 +290,10 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 					ar.add(Action.create(Action.SHARE_ELEMENT,url));
 					ar.add(Action.create(Action.SAVEFILE,url).setText(R.string.act_save_link));
 					ar.add(Action.create(Action.SEARCH_ON_PAGE));
+					if(vUrl!=null) {
+						ar.add(Action.create(Action.EXTERNAL_VIDEO_PLAYER));
+						ar.add(Action.create(Action.COPY_NET_STRIMING_URL));
+					}
 //					ar.add(Action.create(Action.SELECT_TEXT));
 //					Stat.url = url;
 //					ar.add(new SearchAction(SearchSystem.CMD_TRANSLATE_URL, R.string.act_translate, R.drawable.translate));
@@ -295,6 +333,10 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			ar.add(Action.create(Action.SELECT_TEXT));
 //			if(mImg==null)
 //				ar.add(Action.create(Action.SELECT_TEXT));
+			if(vUrl!=null) {
+				ar.add(Action.create(Action.EXTERNAL_VIDEO_PLAYER));
+				ar.add(Action.create(Action.COPY_NET_STRIMING_URL));
+			}
 		}
 		
 		return ar;
@@ -359,9 +401,12 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 	@Override
 	public void onAction(Action act) {
 		switch (act.command) {
-		// пока нигде не светится, но обработка уже есть
-		case Action.CODEPAGE:
-			getMain().runAction(act);
+		case Action.EXTERNAL_VIDEO_PLAYER:
+			startExternalVideoPlayer();
+			return;
+		case Action.COPY_NET_STRIMING_URL:
+			if(vUrl!=null)
+				stat.setClipboardString(getMain(), (String)vUrl);	
 			return;
 		case Action.TRANSLATE_LINK:
 			getMain().runAction(act);
@@ -483,6 +528,9 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			ar.add(aa);
 			ar.add(Action.create(Action.SHARE_URL,url));
 		}
+		if(vUrl!=null)
+			ar.add(Action.create(Action.EXTERNAL_VIDEO_PLAYER));
+
 		new MenuPanelButton(getMain(), ar, this).show();
 	}
 	@SuppressLint("HandlerLeak")

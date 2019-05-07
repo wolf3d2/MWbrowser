@@ -45,6 +45,7 @@ public abstract class MyTheme {
 		new BlueTheme(),
 //		new DefaultThemeTransparent(),
 		new DesktopTheme(),
+		new DarkTheme(),
 	};
 
 	public static final int COLOR_TRANSPARENT = 0x00000000;

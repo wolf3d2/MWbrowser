@@ -491,6 +491,7 @@ public class st
 	            is.close();
 	        } catch (IOException e) {
 	            e.printStackTrace();
+	            
 	        }
 	        
 	        return new String(buffer).toString();

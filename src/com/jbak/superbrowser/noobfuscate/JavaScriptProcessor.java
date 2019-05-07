@@ -234,7 +234,7 @@ public class JavaScriptProcessor {
 				@Override
 				public void run() {
 					if(cm.processHtml(info1,getMain().getWebView().getUrl())){
-						cm.showMenu(getMain());
+						cm.showSuperMenu(getMain());
 					} else
 						CustomPopup.toast(getMain(), R.string.context_menu_error);
 				}

@@ -142,9 +142,18 @@
     <string name="dir_create_error">Ошибка создания папки</string>
     <string name="device_root">Корневая папка</string>
     <string name="do_you_want_to_delete">Вы хотите удалить</string>
+
     <string name="theme_default">Психоделическая</string>
     <string name="theme_transparent">Прозрачная</string>
     <string name="theme_desktop">Рабочий стол</string>
+    <string name="theme_grayscale">Серая</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_pastel">Пастель</string>
+    <string name="theme_blue">Синяя</string>
+    <string name="theme_green">Зеленая</string>
+    <string name="theme_red">Красная</string>
+    <string name="theme_dark">Темная</string>
+    
     <string name="magic_button_select_pos">Нажмите на один из значков для выбора позиции волшебной кнопки</string>
     <string name="navigation_panel_select_pos">Нажмите на один из значков для выбора позиции панели навигации.\nКнопки панели поддерживают длинное нажатие.</string>
     <string name="navigation_panel_size">Размер кнопок</string>
@@ -158,8 +167,6 @@
     <string name="hint_search_page">Текст для поиска на странице</string>
     <string name="experimental_feature">Это экспериментальная возможность, сделанная из уличной магии, волшебных костылей и недокументированных возможностей. Она может не работать на вашем устройстве, либо наоборот принесет много радости. Хотите включить и попробовать?</string>
     <string name="context_menu_error">Не удалось открыть контекстное меню. Попробуйте обновить страницу</string>
-    <string name="theme_grayscale">Серая</string>
-    <string name="theme_light">Светлая</string>
     <string name="four_pda_team">Тема на 4pda.ru</string>
     <string name="act_search">Поиск</string>
     <string name="act_restore_windows">Прошлая сессия</string>
@@ -193,7 +200,6 @@
     <string name="set_bookmarksMainMenu">Закладки в главном меню</string>
     <string name="clear_kill_process">Завершить процесс</string>
     <string name="clear_on_exit">Очистка при выходе</string>
-    <string name="theme_pastel">Пастель</string>
     <string name="main_menu_settings">Настройки главного меню</string>
     <string name="set_main_menu_layout">Расположение элементов</string>
     <string name="set_main_menu_layout_normal">Обычное</string>
@@ -301,9 +307,9 @@
        <string name="act_saved_pages_history">Сохр. страницы</string>
        <string name="clear_confirm">Вы хотите очистить данные?</string>
        <string name="delete_confirm">Удалить всё?</string>
-       <string name="theme_blue">Синяя</string>
-       <string name="theme_green">Зеленая</string>
-       <string name="theme_red">Красная</string>
+       <string name="act_copy_striming_url">Копировать ссылку потока</string>
+       <string name="act_external_player">Внешний плеер</string>
+       <string name="error_start_ext_player">Данный тип ссылки не поддерживается</string>
        
 <!-- Цвета панели навигации -->
     <string name="pn_color_r">1.Красный</string>

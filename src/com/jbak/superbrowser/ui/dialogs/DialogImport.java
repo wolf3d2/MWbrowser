@@ -64,7 +64,8 @@ public abstract class DialogImport extends ThemedDialog
 		setView();
 
 		v.findViewById(R.id.dirSelector).setOnClickListener(this);
-		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT, 1);
+		TextView tv = (TextView)v.findViewById(R.id.tv_dir_import);
+		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT, tv,tv_empty,cb_set,cb_bm,tv_dirname);
 	}
 	public void setView() {
 		int iii = 0;

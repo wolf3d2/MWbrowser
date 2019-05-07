@@ -5,6 +5,7 @@ import com.mw.superbrowser.R;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat.Field;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -73,6 +74,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.jbak.superbrowser.stat.FileUploadInfo;
 import com.jbak.superbrowser.UrlProcess.DownloadFileInfo;
@@ -586,7 +588,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 					}).show();
 				}
 				else
-					openUrl(url, WINDOW_OPEN_SAME);
+					openUrl(url, activeInstance.WINDOW_OPEN_SAME);
 			}
 			return;
 			case Action.MAGIC_BUTTON_POS:
@@ -1166,7 +1168,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 //			((MyWebView)mWebView).setLongClickHandler(this);
 		ww.setOnLongClickListener(this);
 	}
-	private void closeEmptyWindow() {
+	public void closeEmptyWindow() {
 		Tab ww = getTab();
 		if(ww==null)
 			return;
@@ -1849,6 +1851,24 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			{
 				Utils.log(e);
 			}
+			if (view!=null) {
+			    if (view instanceof FrameLayout) {
+			        final FrameLayout frame = (FrameLayout) view;
+			        int iii = frame.getChildCount();
+			        if (frame.getChildAt(0) instanceof VideoView) {
+			            // get video view
+
+			        	VideoView vv = (VideoView) frame.getFocusedChild();
+			        	Uri mUri = null;
+			        	try {
+			        	    java.lang.reflect.Field mUriField = VideoView.class.getDeclaredField("mUri");
+			        	    mUriField.setAccessible(true);
+			        	    mUri = (Uri)mUriField.get(vv);
+			        	} catch(Exception e) {}
+			        }
+			    }
+
+			}
 			setFullscreen(true, false);
 			mCustomLayoutFrame.setBackgroundColor(0xff000000);
 	        mCustomLayoutFrame.addView(view);
@@ -1979,6 +1999,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		if(ww.isError())
 			GlobalHandler.command.sendDelayed(WHAT_UPDATE_PROGRESS, this, 1);
 	}
+	/** обновление прогроесса загрузки */
 	public void updateCurTab()
 	{
 		Tab t = getTab();

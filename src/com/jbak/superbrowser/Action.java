@@ -176,6 +176,9 @@ public class Action {
 	public static final int INSTALL_MWSHARE2SAVE = 125;
 	public static final int COPY_TEXT_URL_TO_CLIPBOARD= 126;
 	public static final int WHATS_NEW = 127;
+	public static final int EXTERNAL_VIDEO_PLAYER = 128;
+	/** Копировать ссылку сетевого потока */
+	public static final int COPY_NET_STRIMING_URL = 129;
 
 	public static final int MIN_FONT_RANGE[] = new int[]{1,5,6,7,8,9,10,11,12,13,14,16,18,20,22,24,30,32,40,48,60,72};
 	
@@ -340,17 +343,27 @@ public class Action {
 			{
 				@Override
 				public boolean doAction(MainActivity act) {
-					ActArray ar = new ActArray();
-					ar.add(Action.create(Action.ABOUT));
-					ar.add(Action.create(Action.FOUR_PDA));
-					ar.add(Action.create(Action.FEEDBACK));
-					ar.add(Action.create(Action.OTHER_APPS));
+					String help = st.getTextAssets(act, "_help.htm");
+					if (help!=null) {
+						Tab ww = new Tab(act.activeInstance, act.getTabList().getNewTabId(),act.getTabList());
+						act.tabStart(ww, null);
+						act.closeEmptyWindow();
+						act.tabStart(ww,"helpToBrowser",false);
 
-					new DialogAbout(act,
-							act.getString(R.string.act_help),
-							st.getTextAssets(act, "_help.txt"),
-							ar)
-					.show();
+						ww.getWebView().loadDataWithBaseURL(null, help, "text/html", "utf-8", null);//.loadUrl(help);//.openUrl((String)act.param,act.command);
+					}
+//					открываем help в окне
+//					ActArray ar = new ActArray();
+//					ar.add(Action.create(Action.ABOUT));
+//					ar.add(Action.create(Action.FOUR_PDA));
+//					ar.add(Action.create(Action.FEEDBACK));
+//					ar.add(Action.create(Action.OTHER_APPS));
+//
+//					new DialogAbout(act,
+//							act.getString(R.string.act_help),
+//							st.getTextAssets(act, "_help.txt"),
+//							ar)
+//					.show();
 					return true;
 				}
 			};
@@ -791,6 +804,10 @@ public class Action {
 					return true;
 				}
 			};
+		case COPY_NET_STRIMING_URL:
+			return new Action(action,action, R.string.act_copy_striming_url, param,R.drawable.search_videos,R.drawable.copy);
+		case EXTERNAL_VIDEO_PLAYER:
+			return new Action(action,action,R.string.act_external_player,param,R.drawable.search_videos);
 		case HISTORY_VIDEO:
 			return new Action(action,action,R.string.act_video_history,param,R.drawable.search_videos,R.drawable.history)
 			{

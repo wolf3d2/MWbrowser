@@ -159,9 +159,18 @@
     <string name="dir_create_error">Folder creation error</string>
     <string name="device_root">Root folder</string>
     <string name="do_you_want_to_delete">Do you want to delete</string>
+    
     <string name="theme_default">Psychodelic</string>
     <string name="theme_transparent">Transparent</string>
     <string name="theme_desktop">Desktop</string>
+    <string name="theme_grayscale">Gray</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_pastel">Pastel</string>
+    <string name="theme_blue">Blue</string>
+    <string name="theme_green">Green</string>
+    <string name="theme_red">Red</string>
+    <string name="theme_dark">Dark</string>
+    
     <string name="magic_button_select_pos">Press one of icons for setting new position of magic button</string>
     <string name="navigation_panel_select_pos">Нажмите на один из значков для выбора позиции панели навигации.\nКнопки панели поддерживают длинное нажатие.</string>
     <string name="navigation_panel_size">Size button</string>
@@ -175,8 +184,6 @@
     <string name="hint_search_page">Text for serch on page</string>
     <string name="experimental_feature">This is experimental feature. It can be very cool, or it can not work at all. Do you want to try it?</string>
     <string name="context_menu_error">Can\'t open context menu. Try to refresh page</string>
-    <string name="theme_grayscale">Gray</string>
-    <string name="theme_light">Light</string>
     <string name="four_pda_team">Team on 4pda.ru</string>
     <string name="act_restore_windows">Last tabs</string>
     <string name="act_search">Search</string>
@@ -216,7 +223,6 @@
     <string name="set_bookmarksMainMenu">Bookmarks in main menu</string>
     <string name="clear_kill_process">Kill process</string>
     <string name="clear_on_exit">Clear data on exit</string>
-    <string name="theme_pastel">Pastel</string>
     <string name="main_menu_settings">Main menu settings</string>
     <string name="set_main_menu_layout">Main panel layout</string>
     <string name="set_main_menu_layout_normal">Normal</string>
@@ -317,10 +323,10 @@
        <string name="act_saved_pages_history">Saved pages</string>
        <string name="clear_confirm">Do you want to clear data?</string>
        <string name="delete_confirm">Delete all?</string>
-       <string name="theme_blue">Blue</string>
-       <string name="theme_green">Green</string>
-       <string name="theme_red">Red</string>
-
+       <string name="act_copy_striming_url">Копировать ссылку потока</string>
+       <string name="act_external_player">External player</string>
+       <string name="error_start_ext_player">Данный тип ссылки не поддерживается</string>
+       
 <!-- Цвета панели навигации -->
     <string name="pn_color_r">1.Red</string>
     <string name="pn_color_g">2.Green</string>

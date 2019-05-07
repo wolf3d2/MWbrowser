@@ -59,15 +59,18 @@ public class UrlProcess implements IConst{
 		}
 		return false;
 	}
+	static String tmp_url;
 	public static final boolean isPlayMarketUri(Uri uri)
 	{
-		if(!PLAY_MARKET_DOMAIN.equals(uri))
+		tmp_url = uri.toString();
+		if(!tmp_url.contains(PLAY_MARKET_DOMAIN))
 			return false;
 		List<String>path = uri.getPathSegments();
 		if(path.size()>0&&PLAY_MARKET_STORE.equals(path.get(0)))
 			return true;
 		return false;
 	}
+	/** проверяем урл и запускаем плей маркет */
 	public static boolean overrideUrlLoading(MainActivity a,String url)
 	{
 		Uri uri = Uri.parse(url);

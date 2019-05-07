@@ -93,7 +93,7 @@ public abstract class DialogBookmark extends ThemedDialog {
 			mUrl.setVisibility(View.GONE);
 		}
 		v.findViewById(R.id.dirSelector).setOnClickListener(this);
-		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT, mDir);
+		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT, mDir, cb_show_kbd);
 	}
 	@Override
 	public void onClick(View v) {

@@ -58,7 +58,8 @@ public abstract class DialogExport extends ThemedDialog {
 		tv_dirname.setText(folder);
 		tv_dirname.setOnClickListener(this);
 		v.findViewById(R.id.dirSelector).setOnClickListener(this);
-		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT, 1);
+		TextView tv = (TextView)v.findViewById(R.id.tv_dir_export);
+		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT, tv,cb_change,tv_dirname);
 	}
 	@Override
 	protected void onOk(boolean ok) {

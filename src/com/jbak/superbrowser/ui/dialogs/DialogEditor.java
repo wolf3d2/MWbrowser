@@ -20,6 +20,7 @@ import com.jbak.superbrowser.stat;
 import com.jbak.superbrowser.stat.DownloadOptions;
 import com.jbak.superbrowser.UrlProcess.DownloadFileInfo;
 import com.jbak.superbrowser.ui.OnAction;
+import com.jbak.superbrowser.ui.themes.MyTheme;
 import com.jbak.utils.Utils;
 
 public class DialogEditor extends ThemedDialog{
@@ -93,6 +94,7 @@ public class DialogEditor extends ThemedDialog{
 		mContentFrame.setBackgroundColor(0xffff0000);
 		mContentFrame.setPadding(0, 0, 0, 0);
 		if (cb_showKbd!=null) {
+			MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT, cb_showKbd);
 			cb_showKbd.setVisibility(View.VISIBLE);
 			cb_showKbd.setChecked(Prefs.getBoolean(Prefs.SHOW_KBD_DIALOG_EDITOR, false));
 			if (cb_showKbd.isChecked())
