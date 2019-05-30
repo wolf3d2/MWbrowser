@@ -83,7 +83,7 @@ public class IniFile {
 					return false;
 				
 			FileWriter wr = new FileWriter(m_fn, false);
-			wr.write(VERSION_CODE+st.STR_EQALLY+st.getAppVersionCode(m_c)+st.STR_CR);
+			wr.write(VERSION_CODE+st.STR_EQALLY+st.getAppVersionCode(m_c)+st.STR_LF);
 			wr.flush();
 			wr.close();
 		} catch (IOException ex) {
@@ -149,10 +149,10 @@ public class IniFile {
 					p.val = value;
 					fl = true;
 				}
-				wr.write(p.par+"="+p.val+st.STR_CR);
+				wr.write(p.par+"="+p.val+st.STR_LF);
 			}
 			if (!fl)
-				wr.write(param+"="+value+st.STR_CR);
+				wr.write(param+"="+value+st.STR_LF);
 				
 			wr.flush();
 			wr.close();

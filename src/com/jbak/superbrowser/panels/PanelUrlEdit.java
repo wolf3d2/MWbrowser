@@ -112,6 +112,16 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		sa.setStackFromBottom(layoutType==Prefs.TYPE_LAYOUT_BOTTOM);
 		mEditUrl.setAdapter(sa);
 		mEditUrl.setOnAutoCompleteAction(getEditUrlListener());
+		// нажимаем enter, когда кликнули на позицию из выпадающего списка
+		mEditUrl.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) 
+			{
+				runAction(Action.create(Action.GO));
+			}
+		});
+		
 		mToolsPanel.setOnActionListener(new OnAction() {
 			
 			@Override
@@ -482,7 +492,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 				cur_ind = i;
 		}
 		Spinner sp = new Spinner(getContext());
-		SpinnerImageArrayAdapter adapter = new SpinnerImageArrayAdapter(getContext(), 
+		AdapterSpinnerImageArray adapter = new AdapterSpinnerImageArray(getContext(), 
 		        ar);
 //		ArrayAdapter<?> adapter = 
 //		ArrayAdapter.createFromResource(getContext(), R.array.ww_back_color, android.R.layout.simple_spinner_item);
@@ -509,11 +519,12 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		rl.addView(mEditUrl);
 		return rl;
 	}
-	public class SpinnerImageArrayAdapter extends ArrayAdapter<Integer> {
+	public class AdapterSpinnerImageArray extends ArrayAdapter<Integer> {
 		private Integer[] images;
 		private ImageView imageView;
 		private Drawable dr;
-		public SpinnerImageArrayAdapter(Context context, Integer[] images) {
+		
+		public AdapterSpinnerImageArray(Context context, Integer[] images) {
 		    super(context, android.R.layout.simple_spinner_item, images);
 		    this.images = images;
 		}
@@ -526,7 +537,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-		    return getImageForPosition(convertView, position, false);
+		    return getImageForPosition(convertView, position, true);
 		}
 
 		private View getImageForPosition(View v,int position, boolean bigImageSize) {
@@ -552,7 +563,6 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
     	{
     		String ss = SearchSystem.SEARCH_SYSTEMS[selectedItemPosition].getName();
     		SearchSystem.setSearchSystem(ss);
-    		//st.toast(ss);
     	}
     	public void onNothingSelected(AdapterView<?> parent) {
     	}

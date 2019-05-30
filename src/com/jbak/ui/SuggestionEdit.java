@@ -169,7 +169,6 @@ public class SuggestionEdit extends AutoCompleteTextView implements OnClickListe
 	@Override
 	public void onItemClick(AdapterView<?> adapt, View v, int pos, long id) {
 		
-		
 	}
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs)

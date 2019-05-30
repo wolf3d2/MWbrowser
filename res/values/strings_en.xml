@@ -12,7 +12,7 @@
     <string name="supermenu_button_def">Default</string>
     <string name="supermenu_button_vert8inch">Tab 8\"</string>
 
-    
+    <string name="first_start_msg">Это первый запуск браузера, хотите ознакомиться с помошью по работе? </string>
 <!-- импорт/экспорт -->
     <string name="act_export">Export</string>
     <string name="act_export_path">Save folder:</string>
@@ -87,6 +87,7 @@
     <string name="act_save_image">Save image</string>
     <string name="act_font_scale">Font</string>
     <string name="act_close_windows">Close all tabs</string>
+    <string name="act_close_windows_setting_msg">При включенной данной настройке, не будет работать режим запуска браузера с последними открытыми вкладками!</string>
     <string name="act_closed_windows">Closed tabs</string>
     <string name="act_delete_bookmark">Delete bookmark</string>
     <string name="act_delete_all_bookmark">Delete all</string>
@@ -189,6 +190,7 @@
     <string name="act_search">Search</string>
     <string name="act_startApp">Start browser</string>
     <string name="act_startAppRestoreWindows">Last tabs</string>
+    <string name="act_startAppRestoreWindows_setting_msg">При данном режиме запуска браузера, в Очистке при выходе, не должна быть включена настройка Закрыть все вкладки\nНе забудьте её выключить!</string>
     <string name="act_startAppHomeScreen">Home screen</string>
     <string name="select_homescreen_folder">Set as default folder for home screen</string>
     <string name="act_edit">Edit</string>
@@ -295,6 +297,10 @@
        <string name="plus_button">Button \"Add new tab\"</string>
        <string name="left">Left</string>
        <string name="right">Right</string>
+       <string name="close_tab_last_page">Закрывать текущую вкладку, если история вкладки пуста</string>
+       <string name="close_tab_last_page_toast">Запрет на закрытие в настройках браузера</string>
+       <string name="close_tab_last_page_title">Закрытие текущей вкладки</string>
+       <string name="close_tab_last_page_text">Закрывать вкладку можно или через кнопку закрытия вкладки из включенной панели инструментов, или долгое нажатие на имени вкладки и нажать кнопку Закрыть вкладку, или такая же кнопка из меню по нажатию волшебной кнопки (эта кнопка должна быть включена в настройках главного меню).\n\nДля выхода из браузера, воспользуйтесь кнопками Выход в тех-же менюю</string>
        <string name="set_real_webpages">Number of real web-pages</string>
        <string name="set_real_webpages_desc">More web-pages - higher speed with many tabs and greater memory consumption</string>
        

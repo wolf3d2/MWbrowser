@@ -26,7 +26,9 @@ import com.jbak.superbrowser.stat;
 import com.mw.superbrowser.R;
 
 public class CustomDialog extends Dialog implements OnClickListener{
+	
 	OnButtonClick mButtonListener;
+	protected String mDefaultValueText = null;;
 	protected RelativeLayout mTopContainer;
 	WeakReference<Context> mContextRef;
 	protected TextView mDialogTitle;
@@ -242,10 +244,15 @@ public class CustomDialog extends Dialog implements OnClickListener{
 			boolean ok = id==R.id.buttonYes||id==R.id.buttonOk;
 			if(mText!=null&&mInputListener!=null)
 			{
-				if(ok&&mText.getText().length()<1)
-				{
-					CustomPopup.toast(context(), R.string.empty_edit);
-					return;
+				if (ok) {
+					if (mText.getText().length()<1) {
+						if (mDefaultValueText==null) {
+							CustomPopup.toast(context(), R.string.empty_edit);
+							return;
+						} else {
+							mText.setText(mDefaultValueText);
+						}
+					}
 				}
 				dismiss();
 				mInputListener.onUserInput(ok, mText.getText().toString());
@@ -270,6 +277,7 @@ public class CustomDialog extends Dialog implements OnClickListener{
 	}
 	@Override
 	public void dismiss() {
+		mDefaultValueText = null;
 		try{
 		super.dismiss();
 		}

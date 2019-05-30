@@ -405,8 +405,10 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			startExternalVideoPlayer();
 			return;
 		case Action.COPY_NET_STRIMING_URL:
-			if(vUrl!=null)
-				stat.setClipboardString(getMain(), (String)vUrl);	
+			if(vUrl!=null) {
+				stat.setClipboardString(getMain(), (String)vUrl);
+				st.toast(getMain().getString(R.string.сopied)+st.STR_COLON+st.STR_LF+vUrl);
+			}
 			return;
 		case Action.TRANSLATE_LINK:
 			getMain().runAction(act);

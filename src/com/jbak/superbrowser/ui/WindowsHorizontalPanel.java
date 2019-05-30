@@ -77,7 +77,7 @@ public class WindowsHorizontalPanel extends HorizontalPanel implements OnGlobalE
 // высота вкладоки
 		int height = 0;
 		if (Prefs.isTabsHeight())
-			height = 25;
+			height = IConst.BIG_HEIGHT_TAB;
 		int h = getMaxHeight()+height;
 		calcCurrentRows(getMeasuredWidth());
 		if(h!=getMaxHeight())

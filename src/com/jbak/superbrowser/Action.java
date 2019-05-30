@@ -347,10 +347,13 @@ public class Action {
 					if (help!=null) {
 						Tab ww = new Tab(act.activeInstance, act.getTabList().getNewTabId(),act.getTabList());
 						act.tabStart(ww, null);
+						
 						act.closeEmptyWindow();
 						act.tabStart(ww,"helpToBrowser",false);
-
-						ww.getWebView().loadDataWithBaseURL(null, help, "text/html", "utf-8", null);//.loadUrl(help);//.openUrl((String)act.param,act.command);
+						ww.getWebView().loadDataWithBaseURL(null, help, "text/html", "utf-8", null);
+						//ww.getWebView().loadUrl(help);//.openUrl((String)act.param,act.command);
+						//PanelUrlEdit purl = act.getMainPanel().findViewById(id);
+						
 					}
 //					открываем help в окне
 //					ActArray ar = new ActArray();

@@ -148,21 +148,28 @@ public class PanelLayout extends MainActivityRef implements WebViewEvent,OnGloba
 	{
 		return getPanelSettings().getPanelSetting(panelId);
 	}
+	/** тут-же задаются дефолтные значения панелей браузера */
 	public static PanelSettings getPanelSettings()
 	{
 		if(mPanelSettings==null)
+			// дефолтные установки панедей браузера
 			mPanelSettings = new PanelSettings(Prefs.PANEL_SETTINGS,PANEL_STRINGS,new PanelSettings.SetDefaultPanelSetting() {
 			
 			@Override
 			public void setDefaultPanelSetting(PanelSetting ps) {
-				if(ps.id==PANEL_QUICK_TOOLS&&(Prefs.getInterface()==Prefs.INTERFACE_PANEL||BrowserApp.deviceType==BrowserApp.DEVICE_TYPE_XLARGE))
+				if(ps.id==PANEL_QUICK_TOOLS) {//&&(Prefs.getInterface()==Prefs.INTERFACE_PANEL||BrowserApp.deviceType==BrowserApp.DEVICE_TYPE_XLARGE)){
 					ps.visible = true;
-				if(ps.id==PANEL_MAINMENU_TOOLS&&(Prefs.getInterface()==Prefs.INTERFACE_PANEL||BrowserApp.deviceType==BrowserApp.DEVICE_TYPE_XLARGE))
+				}
+				else if(ps.id==PANEL_MAINMENU_TOOLS&&(Prefs.getInterface()==Prefs.INTERFACE_PANEL||BrowserApp.deviceType==BrowserApp.DEVICE_TYPE_XLARGE))
 					ps.visible = true;
-				else if(ps.id==PANEL_URL&&(BrowserApp.deviceType==BrowserApp.DEVICE_TYPE_XLARGE||BrowserApp.deviceType==BrowserApp.DEVICE_TYPE_LARGE))
+				else if(ps.id==PANEL_URL) {//&&(BrowserApp.deviceType==BrowserApp.DEVICE_TYPE_XLARGE||BrowserApp.deviceType==BrowserApp.DEVICE_TYPE_LARGE))
 					ps.visible = true;
-				else if(ps.id==PANEL_TABS)
+					ps.top = true;
+				}
+				else if(ps.id==PANEL_TABS) {
 					ps.visible = true;
+					ps.top = true;
+				}
 				else 
 					ps.visible = false;
 				if(ps.id==PANEL_QUICK_TOOLS||ps.id==PANEL_TABS)

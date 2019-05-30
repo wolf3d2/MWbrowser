@@ -43,6 +43,7 @@ import com.jbak.superbrowser.ui.HorizontalPanel;
 import com.jbak.superbrowser.ui.LoadBitmapInfo;
 import com.jbak.superbrowser.ui.MenuPanelButton;
 import com.jbak.superbrowser.ui.MenuPanelButton.MenuBookmark;
+import com.jbak.superbrowser.ui.MyWebView;
 import com.jbak.superbrowser.ui.OnAction;
 import com.jbak.superbrowser.ui.PanelButton;
 import com.jbak.superbrowser.ui.dialogs.DialogImport;
@@ -213,8 +214,22 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 						if(runBookmark)
 							BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.ACTION_BOOKMARK, v.getTag()));
 					}
-					else if(v.getTag() instanceof Tab)
-						BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.OPEN_TAB, ((Tab)v.getTag()).windowId));
+					else if(v.getTag() instanceof Tab) {
+						Tab tt = (Tab)v.getTag();
+						if (tt!=null) {
+							if (mShowCloseTab) {
+								// недавно закрытые вкладки - открывает только последний
+								// урл закрытой вкладки
+								String url = tt.getUrl();
+								if (url!=null) {
+									Action act = Action.create(Action.NEW_TAB, url);
+									getMain().openUrl((String)act.param,act.command);
+								}
+							} else
+								BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.OPEN_TAB, ((Tab)v.getTag()).windowId));
+								
+						}
+					}
 					finish();
 				}
 			});
@@ -743,7 +758,12 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 		case Action.TAB_LIST:
 			mShowOpenedWindows = act.command==Action.TAB_LIST;
 			mShowCloseTab = !mShowOpenedWindows;
-			initListView();
+			if (mShowCloseTab) {
+				Intent in = getIntent();
+				in.putExtra(EXTRA_CLOSED_TAB, 1);
+				createAndSetAdapter();
+			} else
+				initListView();
 			break;
 		case Action.HISTORY_VIDEO:
 			mType=TYPE_VIDEO_HISTORY;

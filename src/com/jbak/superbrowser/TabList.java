@@ -142,6 +142,8 @@ public class TabList extends MainActivityRef implements IConst,WebViewEvent{
 	}
 	public final int getIdAt(int pos)
 	{
+		if (pos<0)
+			return -1;
 		return mIds.get(pos);
 	}
 	public final int getPosById(int id)

@@ -774,7 +774,8 @@ public class stat implements IConst {
             catch(Throwable e)
             {
 // сохранение файла
-            	new ThemedDialog(c).setConfirm(c.getString(R.string.downloadFolderError), opt, new ConfirmOper() {
+            	new ThemedDialog(c).setConfirm(c.getString(R.string.downloadFolderError), opt, new ConfirmOper()
+            	{
 					
 					@Override
 					public void onConfirm(Object userParam) {

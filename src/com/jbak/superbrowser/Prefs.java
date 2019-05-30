@@ -17,6 +17,8 @@ import com.mw.superbrowser.R;
 
 public class Prefs 
 {
+	/**  ключ, самый первый запуск браузера*/
+	public static final String FIRST_START_BROWSER = "first_start_browser";
 	/**  ключ, показ панели в две колонки по выбору системы*/
 	public static final String SET_TWO_COLUMN = "set_two_column";
 	// переменные
@@ -34,6 +36,8 @@ public class Prefs
 	public static final String TABS_HEIGTH = "tabs_heigth";
 	// наборы расположения кнопок в суперменю
 	public static final String SUPERMENU_BUTTON_SET= "supermenu_button_set";
+	/** Закрывать ли текущую вкладку, если открытых страниц больше нет в этой вкладке */
+	public static final String CLOSE_CURRENT_LAST_TAB= "close__current_last_tab";
 	public static final String CLOSE_LAST_PAGE_ON_TAB= "close_last_page_on_tab";
 	public static final String GRAYICON = "graycolor_pictogram";
 	public static final String FULLSCREEN = "fullscreen";
@@ -246,7 +250,9 @@ public class Prefs
 	}
 	public static int getStartApp()
 	{
-		return INSTANCE.mPrefs.getInt(START_APP, START_RESTORE_WINDOWS);
+// старое значение		
+//		return INSTANCE.mPrefs.getInt(START_APP, START_RESTORE_WINDOWS);
+		return INSTANCE.mPrefs.getInt(START_APP, START_APP_HOMEPAGE);
 	}
 	public static void setStartApp(int startApp)
 	{
@@ -338,6 +344,10 @@ public class Prefs
 	{
 		return Prefs.getBoolean(Prefs.CLOSE_LAST_PAGE_ON_TAB,true);
 	}
+	public static final boolean isCloseCurrentLastTab()
+	{
+		return Prefs.getBoolean(Prefs.CLOSE_CURRENT_LAST_TAB,true);
+	}
 	public static final boolean isTabsHeight()
 	{
 		return Prefs.getBoolean(Prefs.TABS_HEIGTH,false);
@@ -352,7 +362,7 @@ public class Prefs
 	}
 	public static final boolean isExitPanel()
 	{
-		return Prefs.getBoolean(Prefs.EXIT_PANEL,true);
+		return Prefs.getBoolean(Prefs.EXIT_PANEL,false);
 	}
 	public static final boolean isSearchHideKeyboard()
 	{
@@ -402,7 +412,7 @@ public class Prefs
 	/** показывать списки в одну колонку или по выбору системы */
 	public static final boolean isTwoColumn()
 	{
-		return Prefs.getBoolean(Prefs.SET_TWO_COLUMN,false);
+		return Prefs.getBoolean(Prefs.SET_TWO_COLUMN,true);
 	}
 	public static final void setTwoColumn(boolean val)
 	{

@@ -618,6 +618,7 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 		int pos = tabPanelSettings.optInt(IConst.PLUS_BUTTON, IConst.RIGHT);
 		bookmark = new SettingsBookmark(context, IConst.PLUS_BUTTON,R.string.plus_button, PLUS_BUTTON_POS.getValueByKey(pos));
 		ar.add(bookmark.setParam(ps));
+		ar.add(new SettingsBookmark(context, Prefs.CLOSE_CURRENT_LAST_TAB, R.string.close_tab_last_page, Prefs.isCloseCurrentLastTab(),R.string.yes,R.string.no, false));
 		SettingsAdapter sa = new SettingsAdapter(context, ar)
 		{
 			int mOldRows = 1;

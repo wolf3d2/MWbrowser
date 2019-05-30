@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -32,6 +33,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
 import android.speech.RecognizerIntent;
 import android.text.Editable;
@@ -76,6 +78,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.jbak.superbrowser.stat.DownloadOptions;
 import com.jbak.superbrowser.stat.FileUploadInfo;
 import com.jbak.superbrowser.UrlProcess.DownloadFileInfo;
 import com.jbak.superbrowser.WebViewEvent.EventInfo;
@@ -130,8 +133,6 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	boolean last_tab_forward = false;
 	public static final int WHAT_UPDATE_PROGRESS = 400;
 	public static final int WHAT_RELOAD_FROM_CACHE = 20;
-	public static final String ABOUT_NULL = "about:null";
-	public static final String ABOUT_BLANK = "about:blank";
 	MyWebView mWebView;
 	View mButtonViewType;
 	View mMagicButton;
@@ -302,12 +303,30 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		mWebView = new MyWebView(this);
 		mWebView.setBackgroundColor(Color.TRANSPARENT);
 		mWebViewFrame.addView(mWebView);
+		// первый запуск браузера
+		boolean bool = false;
 		if(!openViewIntent(getIntent()))
 		{
+			bool = firstStartBrowser();
+			if (bool) {
+				setDefaultSetting();
+				Prefs.setBoolean(Prefs.FIRST_START_BROWSER, false);
+			}
 			tabFirstStart();
 		}
 		onThemeChanged(MyTheme.get());
-		if (isNewVersion(this)) {
+		if (bool) {
+        	new ThemedDialog(this).setConfirm(this.getString(R.string.first_start_msg), null, new ConfirmOper()
+        	{
+				
+				@Override
+				public void onConfirm(Object userParam) {
+					BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.HELP));
+
+				}
+			});
+		}
+		else if (isNewVersion(this)) {
 			st.dialogHelp(this, getWhatsNew(), this.getString(R.string.act_whatsnew));
 		}
 
@@ -335,6 +354,19 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			}
 		});
 	}
+/** записываем настройки по умолчанию */	
+	void setDefaultSetting()
+	{
+		Prefs.setInt(Prefs.START_APP, Prefs.START_APP_HOMEPAGE);
+		Prefs.setString(Prefs.HOME_PAGE, IConst.ABOUT_BLANK);
+		
+	}
+	/** самое первое открытие браузера */
+	boolean firstStartBrowser()
+	{
+		boolean ret = Prefs.getBoolean(Prefs.FIRST_START_BROWSER, true);
+		return Prefs.getBoolean(Prefs.FIRST_START_BROWSER, true);
+	}
 	boolean isNewVersion(Context c)
 	{
 		try {
@@ -344,7 +376,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			ini.setFilename(path + ini.PAR_INI);
 			if (!ini.isFileExist()) {
 				ini.create(path, ini.PAR_INI);
-				newvers = true;
+				newvers = false;
 			}
 			if (!ini.isFileExist())
 				return false;
@@ -637,7 +669,17 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 				mJsProcessor.runJavaScript(JavaScriptProcessor.JS_GET_SOURCE_CODE, null,getWebView());
 				return;
 			case Action.CLOSE_ALL_TABS:
-				closeAllWindows();
+            	new ThemedDialog(activeInstance).setConfirm(
+            			activeInstance.getString(R.string.act_close_windows)+"?", 
+            			null, 
+            			new ConfirmOper() {
+					
+					@Override
+					public void onConfirm(Object userParam) {
+						closeAllWindows();
+					}
+				});
+
 				return;
 			case Action.ADD_BOOKMARK:
 				showPanel(false);
@@ -815,7 +857,6 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		finish();
 	}
 	int mWindowsState = MainPanel.STATE_WINDOWS_SHOW;
-	// самое первое открытие браузера
 	void tabFirstStart()
 	{
 		int fs = Prefs.getStartApp();
@@ -830,7 +871,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		else if(fs==Prefs.START_APP_HOMEPAGE)
 		{
 			getTabList().closeAllTabs(false);
-			openUrl(Prefs.get().getString(Prefs.HOME_PAGE, IConst.TEAM_4PDA), Action.NEW_TAB);
+			openUrl(Prefs.get().getString(Prefs.HOME_PAGE, IConst.ABOUT_BLANK), Action.NEW_TAB);
 		}
 		else
 			tabRestoreLast();
@@ -851,7 +892,11 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		if(getTab().windowId==windowId)
 			return;
 		Tab ww = getTabList().getTabById(windowId, true);
-		if(ww.isClosed())
+//		if (ww==null) {
+//			ww = new Tab(activeInstance, getTabList().getNewTabId(),getTabList());
+//			//act.tabStart(ww, null);
+//		}
+		if(ww!=null&&ww.isClosed())
 			ww.setClosed(false);
 		tabStart(ww,null);
 	}
@@ -916,7 +961,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		}
 		else if(url!=null)
 		{
-			if(!ABOUT_NULL.equals(url))
+			if(!IConst.ABOUT_NULL.equals(url))
 			{
 				tab.setUrl(url);
 				tab.getWebView().loadUrl(url);
@@ -1046,6 +1091,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			showMagickAndNavigation();
 			st.fl_temp_hide_navigationpanel= false;
 		}
+		int www = mTabList.getCurrent().getWebView().getChildCount();
 		if(clearCustomViews())
 			return;
 		if(isPanelShown()&&mPanel.getMode()!=MainPanel.MODE_START_PAGE)
@@ -1054,13 +1100,22 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		}
 		else if(mWebView.canGoBack())
 			mWebView.goBack();
+		else if(!Prefs.isCloseCurrentLastTab()
+				&&mTabList.getCurrent().getWebView().getChildCount() == 0
+				&&!isPanelShown())
+		{
+			www = mTabList.getCurrent().getWebView().getChildCount();
+			st.toast(R.string.close_tab_last_page_toast);
+			return;
+		}
 		else if(mTabList.closeCurrent())
 		{
-//			int tablist = mTabList.getCount();
+			int tablist = mTabList.getCount();
 //			int www = mTabList.getCurrent().getWebView().getChildCount();
-			if (mTabList.getCount() > 0)
+			if (mTabList.getCount() > 0) {
 				if (!checkMainPanelStartMode())
 					return;
+			}
 			if (Prefs.isExitPanel()) {
 				if(isPanelShown()&&!checkMainPanelStartMode())
 					showPanel(false);
@@ -1243,7 +1298,16 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		}
 		else
 		{
-			getTab().setCurrentBookmark(bm);
+			Tab tab = getTab();
+			if (tab==null) {
+				//tab = new Tab;
+				tabStart(null,null);
+				showPanel(false);
+				tab = getTab();
+
+			}
+			tab.setCurrentBookmark(bm);
+//			getTab().setCurrentBookmark(bm);
 			mWebView.loadUrl(url);
 		}
 		PanelWindows pw = (PanelWindows) mPanelLayout.getPanel(PanelLayout.PANEL_TABS);
@@ -1330,7 +1394,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			settingsMode = InterfaceSettingsLayout.MODE_INTERFACE_SETTINGS;
 		if(mPanel.getMode()==MainPanel.MODE_START_PAGE)
 		{
-			openUrl(ABOUT_BLANK, WINDOW_OPEN_SAME);
+			openUrl(IConst.ABOUT_BLANK, WINDOW_OPEN_SAME);
 		}
 		new InterfaceSettingsLayout((RelativeLayout)mMagicButton.getParent(),settingsMode);
 	}

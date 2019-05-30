@@ -52,15 +52,19 @@ import android.widget.Toast;
 
 public class st
 {
+	 // строковые константы для уменьшения объёма занимаемой памяти
 	public static final String STR_COMMENT = "//";
 	public static final String STR_SPACE = " ";
     public static final String STR_ZERO = "0";
     public static final String STR_ONE = "1";
 	public static final String STR_NULL = "";
-	public static final String STR_CR = "\n";
+	public static final String STR_LF = "\n";
 	public static final String STR_FILE = "file:///";
     public static final String STR_EQALLY = "=";
     public static final String STR_SLASH= "/";
+    public static final String STR_COLON= ":";
+    public static final String STR_COMMA = ",";
+    public static final String STR_POINT = ".";
 
     // текущая навигация. По умолчанию - жестами
     public static int pref_navigation = 2;

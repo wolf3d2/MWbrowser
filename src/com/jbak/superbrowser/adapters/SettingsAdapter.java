@@ -120,6 +120,12 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 			if (sb.prefKey.compareToIgnoreCase(Prefs.TABS_HEIGTH)==0){
 				BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_SETTINGS_CHANGED, IConst.PANEL_WINDOWS);
 			}
+			if (sb.prefKey.compareToIgnoreCase(Prefs.CLOSE_CURRENT_LAST_TAB)==0
+					&&!sb.checkBox
+					) {
+				st.dialogHelp(m_c, R.string.close_tab_last_page_text, R.string.close_tab_last_page_title);
+
+			}
 		}
 		setCheckbox(bv, sb);
 		notifyDataSetChanged();
@@ -483,7 +489,6 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 			if (Prefs.get().getString(Prefs.HOME_PAGE, null)==null){
 				Prefs.setString(Prefs.HOME_PAGE, MainActivity.ABOUT_BLANK);
 			}
-
 			ar.add(new SettingsBookmark(getContext(), null, R.string.act_startAppHomePage, Prefs.get().getString(Prefs.HOME_PAGE, null)).setParam(Prefs.START_APP_HOMEPAGE));
 			showMenuTextIds(b, new OnMenuItemSelected() {
 				
@@ -494,7 +499,12 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 					{
 //						new DialogEditor(getContext(), getContext().getString(R.string.act_item_text), mText).show();	
 
-						new ThemedDialog(getContext()).setInput(getContext().getString(R.string.act_startAppHomePage), Prefs.get().getString(Prefs.HOME_PAGE, null),new OnUserInput() {
+						new ThemedDialog(getContext()).setInput(
+								getContext().getString(R.string.act_startAppHomePage), 
+								Prefs.get().getString(Prefs.HOME_PAGE, null),
+								IConst.ABOUT_BLANK,
+								new OnUserInput() 
+								{
 							
 							@Override
 							public void onUserInput(boolean ok, String newText) {
@@ -510,6 +520,8 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 					}
 					else
 					{
+						if(val==Prefs.START_RESTORE_WINDOWS)
+							st.dialogHelp(getContext(), R.string.act_startAppRestoreWindows_setting_msg, 0);
 						Prefs.setInt(Prefs.START_APP, val);
 						settingsEdit.setDesc(settingsSelected.getTitle());
 						onSettingChanged(settingsEdit);
@@ -617,6 +629,9 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 			BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_SETTINGS_CHANGED, set.panelSettings.getPrefName());
 		}
 		else if(!TextUtils.isEmpty(set.prefKey))
+			if(set.id==R.string.act_close_windows&&set.checkBox) {
+				st.dialogHelp(getContext(), R.string.act_close_windows_setting_msg, 0);
+			}
 			BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_SETTINGS_CHANGED, set.prefKey);
 		notifyDataSetChanged();
 	}

@@ -59,6 +59,7 @@ public class MyWebView extends WebView {
 	void init(Context c)
 	{
 		m_c = c;
+		m_gesture_count = 0;
 		eventInfo = new EventInfo();
 		eventInfo.setWebView(this);
 		mDensity = c.getResources().getDisplayMetrics().density;
@@ -138,6 +139,11 @@ public class MyWebView extends WebView {
 		if (url.startsWith(st.STR_FILE)){
 //			if (codepage==null||codepage.isEmpty())
 //				codepage = IConst.UTF8;
+			loadDataWithBaseURL(url, st.fileToStr(url.substring(6)), "text/html", IConst.UTF8, url);
+//			codepage = null;
+			return;
+		}
+		if (url.startsWith("ASSETS_FILE:")){
 			loadDataWithBaseURL(url, st.fileToStr(url.substring(6)), "text/html", IConst.UTF8, url);
 //			codepage = null;
 			return;
@@ -240,6 +246,8 @@ public class MyWebView extends WebView {
 		catch(Throwable e)
 		{}
 	}
+	/** счётчик одинаковых жестов - если больше 2, по тогда выводим "первая/последняя вкладка" */
+	int m_gesture_count = 0;
 	// обработка жестов
 	   SimpleOnGestureListener simpleongesturelistener = new SimpleOnGestureListener() {
 			@Override
@@ -283,18 +291,26 @@ public class MyWebView extends WebView {
 	            		
 	                	inst.clearView();//.loadUrl(MainActivity.ABOUT_BLANK);
 	                	inst.goBack();
+	                	m_gesture_count = 0;
 	            	}
-	            	else
-	            		st.toast(R.string.page_tab_first);
+	            	else {
+	            		m_gesture_count++;
+	            		if (m_gesture_count>1)
+	            			st.toast(R.string.page_tab_first);
+	            	}
 	            	//page_boundary=false;
 	            }
 	            // от правого к левому
 	            else if (begX > ar_r&&mdy<150&&Math.abs(velX)>700&&!page_boundary){
 //	            else if (!canScrollHorizontally(1)){
-	            	if (inst.canGoForward())
+	            	if (inst.canGoForward()) {
 	            		inst.goForward();
-	            	else
+	                	m_gesture_count = 0;
+	            	} else {
+	            		m_gesture_count++;
+	            		if (m_gesture_count>1)
 	            		st.toast(R.string.page_tab_last);
+	            	}
 	            	//page_boundary=false;
 	            }
 	            // снизу вверх

@@ -4,6 +4,7 @@ import ru.mail.mailnews.st;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -183,10 +184,19 @@ public class ThemedDialog extends CustomDialog implements OnAction{
 		else
 			mContainer.setMaxWidth(Integer.MAX_VALUE);
 	}
+	/** устанавливает текст для редактирования - если конечная строка пустая, 
+	 * то устанавливается defText */
+	public CustomDialog setInput(String title, String text, String defText, final OnUserInput listener)
+	{
+		mDefaultValueText = defText;
+		return setInput(title, text, listener);
+	}
 	public CustomDialog setInput(String title, String text, final OnUserInput listener)
 	{
 		setTitleText(title);
 		EditText et = new EditText(context());
+		// если откоментить, тогда не виден кусор
+		//et.setBackgroundColor(Color.WHITE);
 		et.setTextAppearance(context(), R.style.textEdit);
 		et.setText(text);
 		st.showEditKeyboard(et);

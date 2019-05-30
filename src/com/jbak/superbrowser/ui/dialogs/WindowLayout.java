@@ -87,6 +87,7 @@ public class WindowLayout extends RelativeLayout  implements OnAction,WebViewEve
 		else
 			ar.add(Action.OPEN_TAB);
 		ar.add(Action.TAB_PANEL_SETTINGS);
+		ar.add(Action.EXIT);
 		mToolsGrid.setActions(ar);
 		mToolsGrid.getRealAdapter().setTransparentButtons(true);
 	}

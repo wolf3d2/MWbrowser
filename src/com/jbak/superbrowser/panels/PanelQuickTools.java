@@ -104,8 +104,8 @@ public class PanelQuickTools extends FrameLayout implements WebViewEvent,OnGloba
 	{
 		PanelSetting ps = PanelLayout.getPanelSetting(PanelLayout.PANEL_QUICK_TOOLS);
 		if(ps!=null&&ps.extraSettings!=null)
-			return ps.extraSettings.optInt(IConst.BUTTON_TYPE, IConst.BUTTONS_SMALL);
-		return IConst.BUTTONS_SMALL;
+			return ps.extraSettings.optInt(IConst.BUTTON_TYPE, IConst.BUTTONS_MEDIUM);
+		return IConst.BUTTONS_MEDIUM;
 	}
 	public static ActArray getMinipanelActions()
 	{
@@ -115,14 +115,14 @@ public class PanelQuickTools extends FrameLayout implements WebViewEvent,OnGloba
 		if(TextUtils.isEmpty(actions))
 		{
 			return new ActArray(
-					Action.REFRESH,
-					Action.TO_TOP,
-					Action.TO_BOTTOM,
 					Action.MINI_PANEL_SETTINGS,
+					Action.QUICK_SETTINGS,
+					Action.EXIT,
+					Action.HISTORY,
+					Action.REFRESH,
 					Action.CLOSE_TAB,
 					Action.NEW_TAB,
 					Action.BOOKMARKS,
-					Action.EXIT,
 					Action.SEARCH_ON_PAGE
 					);
 		}

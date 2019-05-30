@@ -267,8 +267,12 @@ public class PanelButton extends FrameLayout {
 		return mButtonType;
 	}
 	public final void setTabDecoration(int resId) {
-		if(mTabDecoration!=null)
+		if(mTabDecoration!=null) {
+			mTabDecoration.measure(0, 0);
+			int hh = mTabDecoration.getMeasuredHeight()+25;
+			mTabDecoration.setMinimumHeight(hh);
 			mTabDecoration.setBackgroundResource(resId);
+		}
 	}
 	public final void setMinAndMaxWidth(int min,int max)
 	{

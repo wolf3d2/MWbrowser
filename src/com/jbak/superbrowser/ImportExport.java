@@ -104,8 +104,8 @@ public class ImportExport
 			String out = null;
 	        if (c.moveToFirst()) {
 		        out = st.STR_COMMENT+st.STR_SPACE+st.getAppName(m_c)
-	        		+st.STR_SPACE+BOOKMARK+st.STR_SPACE+st.STR_CR;
-		        out+=VERSION+"="+VERSION_NUM_BOOKMARK+st.STR_CR+st.STR_CR;
+	        		+st.STR_SPACE+BOOKMARK+st.STR_SPACE+st.STR_LF;
+		        out+=VERSION+"="+VERSION_NUM_BOOKMARK+st.STR_LF+st.STR_LF;
 	        	fw.write(out);
 	        	fl=true;
 	        }
@@ -117,14 +117,14 @@ public class ImportExport
 	        	type = c.getLong(3);
 	        	parent = c.getLong(5);
 	        	if (type!=0&parent!=0) {
-			        out = BOOKMARK.toUpperCase()+st.STR_CR;
-			        out+=c.getColumnName(0)+"="+c.getLong(0)+st.STR_CR;
-			        out+=c.getColumnName(1)+"="+c.getString(1)+st.STR_CR;
-			        out+=c.getColumnName(2)+"="+c.getString(2)+st.STR_CR;
-			        out+=c.getColumnName(3)+"="+type+st.STR_CR;
-			        out+=c.getColumnName(4)+"="+c.getLong(4)+st.STR_CR;
-			        out+=c.getColumnName(5)+"="+parent+st.STR_CR;
-			        out+=END_BOOKMARK+st.STR_CR+st.STR_CR;
+			        out = BOOKMARK.toUpperCase()+st.STR_LF;
+			        out+=c.getColumnName(0)+"="+c.getLong(0)+st.STR_LF;
+			        out+=c.getColumnName(1)+"="+c.getString(1)+st.STR_LF;
+			        out+=c.getColumnName(2)+"="+c.getString(2)+st.STR_LF;
+			        out+=c.getColumnName(3)+"="+type+st.STR_LF;
+			        out+=c.getColumnName(4)+"="+c.getLong(4)+st.STR_LF;
+			        out+=c.getColumnName(5)+"="+parent+st.STR_LF;
+			        out+=END_BOOKMARK+st.STR_LF+st.STR_LF;
 			        fw.write(out);
 		        	count_bm++;
 	        	}

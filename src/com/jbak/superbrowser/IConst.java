@@ -7,6 +7,8 @@ import com.jbak.utils.ObjectKeyValues;
 import com.jbak.utils.DbUtils.StrConst;
 
 public abstract interface IConst extends StrConst{
+	public static final String ABOUT_NULL = "about:null";
+	public static final String ABOUT_BLANK = "about:blank";
 	public static final String PACKAGE_MWCOSTS = "com.mwcorp.costs";
 	public static final String PACKAGE_MWSHARE2SAVE = "com.mw.share2save";
 	public static final String PACKAGE_JBAK2KEYBOARD = "com.jbak2.JbakKeyboard";
@@ -102,6 +104,8 @@ public abstract interface IConst extends StrConst{
 			BUTTONS_SMALL,R.string.buttons_small
 	);
 	public static final String HISTORY_PROJECTION[] = new String[]{_ID,TITLE,URL,DATE};
+	/** значение на которое увеличиваем высоту вкладки */
+	public static final int BIG_HEIGHT_TAB = 25;
 
 
 }

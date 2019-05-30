@@ -8,6 +8,7 @@
     <string name="supermenu_button_def">По умолчанию</string>
     <string name="supermenu_button_vert8inch">Планшет 8\"</string>
     
+    <string name="first_start_msg">Это первый запуск браузера, хотите ознакомиться с помошью по работе? </string>
 <!-- импорт/экспорт -->
     <string name="act_export">Экспорт</string>
     <string name="act_export_path">Папка сохранения:</string>
@@ -76,6 +77,7 @@
     <string name="act_save_image">Сохранить картинку</string>
     <string name="act_font_scale">Шрифт</string>
     <string name="act_close_windows">Закрыть все вкладки</string>
+    <string name="act_close_windows_setting_msg">При включенной данной настройке, не будет работать режим запуска браузера с последними открытыми вкладками!</string>
     <string name="act_closed_windows">Недавно закрытые вкладки</string>
     <string name="act_delete_bookmark">Удалить закладку</string>
     <string name="act_delete_all_bookmark">Удалить всё</string>
@@ -172,6 +174,7 @@
     <string name="act_restore_windows">Прошлая сессия</string>
     <string name="act_startApp">Запуск браузера</string>
     <string name="act_startAppRestoreWindows">Последние вкладки</string>
+    <string name="act_startAppRestoreWindows_setting_msg">При данном режиме запуска браузера, в Очистке при выходе, не должна быть включена настройка Закрыть все вкладки\nНе забудьте её выключить!</string>
     <string name="act_startAppHomeScreen">Домашний экран</string>
     <string name="select_homescreen_folder">Установить эту папку стартовой для домашнего экрана</string>
     <string name="act_edit">Изменить</string>
@@ -282,6 +285,10 @@
        <string name="plus_button">Кнопка \"Новая вкладка\"</string>
        <string name="left">Слева</string>
        <string name="right">Справа</string>
+       <string name="close_tab_last_page">Закрывать текущую вкладку, если история вкладки пуста</string>
+       <string name="close_tab_last_page_toast">Запрет на закрытие в настройках браузера</string>
+       <string name="close_tab_last_page_title">Закрытие текущей вкладки</string>
+       <string name="close_tab_last_page_text">Закрывать вкладку можно или через кнопку закрытия вкладки из включенной панели инструментов, или долгое нажатие на имени вкладки и нажать кнопку Закрыть вкладку, или такая же кнопка из меню по нажатию волшебной кнопки (эта кнопка должна быть включена в настройках главного меню).\n\nДля выхода из браузера, воспользуйтесь кнопками Выход в тех-же менюю</string>
        <string name="set_real_webpages">Количество реальных веб-страниц</string>
        <string name="set_real_webpages_desc">Чем больше страниц - тем быстрее работа с большим количеством вкладок и больше расход памяти</string>
        <string name="act_buy_pro_desc">Покупая платную версию, вы отключаете рекламу, включаете некоторые дополнительные возможности и помогаете развитию программы.\n\nПлатная версия будет работать на всех устройствах, где используется ваш аккаунт Google\n\nХотите приобрести платную версию?</string>
