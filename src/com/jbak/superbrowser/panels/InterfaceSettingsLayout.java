@@ -38,6 +38,8 @@ import com.jbak.superbrowser.recycleview.RecyclerViewEx;
 import com.jbak.superbrowser.search.SearchSystem;
 import com.jbak.superbrowser.ui.BookmarkView;
 import com.jbak.superbrowser.ui.HorizontalPanel;
+import com.jbak.superbrowser.ui.MenuPanelButton;
+import com.jbak.superbrowser.ui.OnAction;
 import com.jbak.superbrowser.ui.PanelButton;
 import com.jbak.superbrowser.ui.PanelLayout;
 import com.jbak.superbrowser.ui.PanelSetting;
@@ -97,6 +99,7 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 	RecyclerViewEx mPanelSettings;
 	HorizontalPanel mActionPanel;
 	int mMode = MODE_INTERFACE_SETTINGS;
+	
 	public InterfaceSettingsLayout(RelativeLayout parent,int mode) {
 		set(parent,mode);
 
@@ -721,11 +724,48 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 		};
 		return sa;
 	}
+	/** возвращает текст цвета индикатора загрузки
+	 * @param colorResId - если равен -1, то читаем цвет из настроек */
+	public String getColorExtendedProgressString(int colorResId)
+	{
+		Context cc = getMain();
+		String ret = st.STR_NULL;
+		if (colorResId==-1)
+			colorResId = Prefs.getColorExtendedProgress();
+		switch (colorResId)
+		{
+		case R.color.blue_color:
+			ret = cc.getString(R.string.color_blue);
+			break;
+		case R.color.blue_violet_color:
+			ret = cc.getString(R.string.color_blueViolet);
+			break;
+		case R.color.gray_color:
+			ret = cc.getString(R.string.color_gray);
+			break;
+		case R.color.green_color:
+			ret = cc.getString(R.string.color_green);
+			break;
+		case R.color.orange_color:
+			ret = cc.getString(R.string.color_orange);
+			break;
+		case R.color.red_color:
+			ret = cc.getString(R.string.color_red);
+			break;
+		case R.color.yellow_color:
+			ret = cc.getString(R.string.color_yellow);
+			break;
+		}
+
+		return ret;
+	}
+	
 // окно настроек интерфейса
 	public SettingsAdapter createInterfaceSettingsAdapter(Context context)
 	{
 		ArrayList<Bookmark>ar = new ArrayList<Bookmark>();
 		ar.add(new SettingsBookmark(context, Prefs.EXTENDED_PROGRESS, R.string.loading_indicator, Prefs.isExtendedProgress()?R.string.big:R.string.small));
+		ar.add(new SettingsBookmark(context, Prefs.EXTENDED_PROGRESS_COLOR, R.string.color_loading_indicator, getColorExtendedProgressString(-1)));
 		SettingsBookmark nav = new SettingsBookmark(context, Prefs.SET_NAVIGATION, R.string.set_navi_page, 
 				Prefs.getNavigationName(context)
 				);
@@ -762,18 +802,66 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 				}
 			};
 			@Override
-			public void onSettingClick(SettingsBookmark b) {
+			public void onSettingClick(final SettingsBookmark b) {
 				if(b.prefKey==Prefs.EXTENDED_PROGRESS)
 				{
 					showMenuTextIds(b, new OnMenuItemSelected() {
 						@Override
-						public void onMenuItemSelected(int selectedIndex,SettingsBookmark settingsEdit, SettingsBookmark settingsSelected) {
+						public void onMenuItemSelected(int selectedIndex,
+								SettingsBookmark settingsEdit, 
+								SettingsBookmark settingsSelected) {
 							Prefs.setBoolean(Prefs.EXTENDED_PROGRESS, selectedIndex==1);
 							if(mParent.getContext() instanceof MainActivity)
 								((MainActivity)mParent.getContext()).setProgressType();
 							settingsEdit.setDesc(settingsSelected.getTitle());
 						}
 					}, R.string.small,R.string.big);
+					return;
+				}
+				else if(b.prefKey==Prefs.EXTENDED_PROGRESS_COLOR)
+				{
+					final Context cc = getMain();
+					ActArray ar = new ActArray();
+					ar.add(Action.create(Action.OK,R.color.blue_color)
+							.setText(getColorExtendedProgressString(R.color.blue_color))
+							.setImageRes(R.color.blue_color)
+							);
+					ar.add(Action.create(Action.OK,R.color.blue_violet_color)
+							.setText(getColorExtendedProgressString(R.color.blue_violet_color))
+							.setImageRes(R.color.blue_violet_color)
+							);
+					ar.add(Action.create(Action.OK,R.color.gray_color)
+							.setText(getColorExtendedProgressString(R.color.gray_color))
+							.setImageRes(R.color.gray_color)
+							);
+					ar.add(Action.create(Action.OK,R.color.green_color)
+							.setText(getColorExtendedProgressString(R.color.green_color))
+							.setImageRes(R.color.green_color)
+							);
+					ar.add(Action.create(Action.OK,R.color.red_color)
+							.setText(getColorExtendedProgressString(R.color.red_color))
+							.setImageRes(R.color.red_color)
+							);
+					ar.add(Action.create(Action.OK,R.color.orange_color)
+							.setText(getColorExtendedProgressString(R.color.orange_color))
+							.setImageRes(R.color.orange_color)
+							);
+					ar.add(Action.create(Action.OK,R.color.yellow_color)
+							.setText(getColorExtendedProgressString(R.color.yellow_color))
+							.setImageRes(R.color.yellow_color)
+							);
+					new MenuPanelButton(getMain(), ar, new OnAction() 
+					{
+						@Override
+						public void onAction(Action act) 
+						{
+							Prefs.get().edit().putInt(Prefs.EXTENDED_PROGRESS_COLOR, 
+									(Integer)act.param).commit();
+							MainActivity.activeInstance.seColorLoadProgress();;
+							b.setDesc(getColorExtendedProgressString(-1));
+							notifyDataSetChanged();
+						}
+					}).show();
 					return;
 				}
 				else if(b.prefKey==Prefs.SET_NAVIGATION)

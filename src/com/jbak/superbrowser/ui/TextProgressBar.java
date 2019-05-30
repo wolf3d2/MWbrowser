@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 
 public class TextProgressBar extends ProgressBar {  
     private String mExistText=st.STR_NULL;
-    private TextPaint mTextPaint;
+    public TextPaint mTextPaint;
     boolean enableText = false;
     int mTextPadding;
     String mDraw;
@@ -43,7 +43,8 @@ public class TextProgressBar extends ProgressBar {
         mTextPaint.setAntiAlias(true);
         mTextPaint.setTextSize(st.dp2px(getContext(), 12));
         mTextPaint.setColor(Color.WHITE);
-        mTextPaint.setShadowLayer(3, 2, 2, 0xff0000ff);
+        // тень
+        //mTextPaint.setShadowLayer(3, 2, 2, 0xff0000ff);
     	
     }
     @Override

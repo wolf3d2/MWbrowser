@@ -226,6 +226,15 @@
     <string name="search_on">На:</string>
     <string name="searchPage_results">Найдено:</string>
     <string name="loading_indicator">Индикатор загрузки</string>
+    <string name="color_loading_indicator">Цвет индикатора загрузки</string>
+    <string name="color_gray">Серый</string>
+    <string name="color_red">Красный</string>
+    <string name="color_orange">Оранжевый</string>
+    <string name="color_green">Зелёный</string>
+    <string name="color_blue">Синий</string>
+    <string name="color_blueViolet">Фиолетовый</string>
+    <string name="color_yellow">Жёлтый</string>
+    
     <string name="big">Большой</string>
     <string name="small">Маленький</string>
     <string name="act_translate">Перевести страницу</string>

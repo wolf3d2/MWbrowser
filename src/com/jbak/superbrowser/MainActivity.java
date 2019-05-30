@@ -26,9 +26,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -252,6 +254,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		mMainPanelContainer.addView(mPanel);
 //		mButtonContainer.setBackgroundResource(R.drawable.background);
 		mLoadProgress = (TextProgressBar) findViewById(R.id.progressLoad);
+		seColorLoadProgress();
 		setProgressType();
 		mFavIcon = (ImageView)findViewById(R.id.favicon);
 		mSearchPage = (ViewGroup)findViewById(R.id.searchPage);
@@ -2327,6 +2330,26 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
     {
 		if (round_btn!=null)
 			round_btn.setVisibility(View.GONE);
+  	}
+    public void seColorLoadProgress()
+    {
+    	if (mLoadProgress!=null) {
+    		int col = Prefs.getColorExtendedProgress();
+    		Drawable dr = getResources().getDrawable(col, getResources().newTheme());
+    		int tcol = Color.WHITE;
+    		switch (col)
+    		{
+    		case R.color.gray_color:
+    		case R.color.green_color:
+    		case R.color.orange_color:
+    		case R.color.red_color:
+    		case R.color.yellow_color:
+    			tcol = Color.BLACK;
+    			break;
+    		}
+    		mLoadProgress.setProgressDrawable(dr);
+    		mLoadProgress.mTextPaint.setColor(tcol);
+    	}
   	}
 
 }

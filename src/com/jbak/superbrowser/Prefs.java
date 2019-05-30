@@ -81,6 +81,7 @@ public class Prefs
 	public static final String PANEL_SETTINGS_START = "panelSettingsStart";
 	public static final String SET_NAVIGATION = "setNavigation";
 	public static final String EXTENDED_PROGRESS = "extendedProgress";
+	public static final String EXTENDED_PROGRESS_COLOR = "extendedProgress_color";
 	public static final String MAGIC_BUTTON_LONG_PRESS_START = "MAGIC_BUTTON_LONG_PRESS_START";
 	public static final String EXIT_CONFIRM = "exitConfirm";
 	public static final String HISTORY_CONVERTED = "historyConverted";
@@ -115,6 +116,7 @@ public class Prefs
 	private static Prefs INSTANCE;
 	SharedPreferences mPrefs;
 	int mVolumeKeysState = VOLUME_KEYS_NONE;
+	
 	public static void init(Context c)
 	{
 		INSTANCE = new Prefs();
@@ -316,6 +318,14 @@ public class Prefs
 	public static final boolean isExtendedProgress()
 	{
 		return Prefs.getBoolean(EXTENDED_PROGRESS, false);
+	}
+	public static final int getColorExtendedProgress()
+	{
+		return Prefs.getInt(EXTENDED_PROGRESS_COLOR, R.color.gray_color);
+	}
+	public static final void setColorExtendedProgress(int val)
+	{
+		Prefs.setInt(EXTENDED_PROGRESS_COLOR, val);
 	}
 	// способ навигации на странице
 	public static final int getNavigationMethod()

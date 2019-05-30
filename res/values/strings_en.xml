@@ -252,6 +252,15 @@
     <string name="panelQuickTools_settings">Here you can set Quick tools panel. Just drag and drop buttons. On left side - current panel buttons, on right side - new buttons for adding</string>
     <string name="panel_mainmenu_settings">Настройте отображаемые пункты главного меню, перетаскивая кнопки.\nСлева - отображаемые пункты, справа - те, которые можно добавить</string>
     <string name="loading_indicator">Loading indicator</string>
+    <string name="color_loading_indicator">Loading indicator color</string>
+    <string name="color_gray">Gray</string>
+    <string name="color_red">Red</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_green">Green</string>
+    <string name="color_blue">Blue</string>
+    <string name="color_blueViolet">Violet</string>
+    <string name="color_yellow">Yellow</string>
+    
     <string name="big">Big</string>
     <string name="small">Small</string>
     <string name="sdcard_not_default">File not on default sd-card</string>
