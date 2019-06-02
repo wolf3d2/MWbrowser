@@ -30,7 +30,9 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -2336,18 +2338,25 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
     	if (mLoadProgress!=null) {
     		int col = Prefs.getColorExtendedProgress();
     		Drawable dr = getResources().getDrawable(col, getResources().newTheme());
+    		LayerDrawable progressDrawable = (LayerDrawable)mLoadProgress.getProgressDrawable();
+    		ClipDrawable cd = new ClipDrawable(dr, Gravity.LEFT,ClipDrawable.HORIZONTAL);
+    		progressDrawable.setDrawableByLayerId(android.R.id.progress, cd);
+    		// если откоментить, то фон рисуется сразу полный!!!
+    		//mLoadProgress.setProgressDrawable(dr);
+    		
     		int tcol = Color.WHITE;
     		switch (col)
     		{
     		case R.color.gray_color:
+        		tcol = Color.GREEN;
+    			break;
     		case R.color.green_color:
-    		case R.color.orange_color:
-    		case R.color.red_color:
+        		tcol = Color.MAGENTA;
+    			break;
     		case R.color.yellow_color:
-    			tcol = Color.BLACK;
+        		tcol = Color.MAGENTA;
     			break;
     		}
-    		mLoadProgress.setProgressDrawable(dr);
     		mLoadProgress.mTextPaint.setColor(tcol);
     	}
   	}
