@@ -396,8 +396,8 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 		final Tab ww = getMain().getTab();
 		ArrayList<Bookmark>ar = new ArrayList<Bookmark>();
 		ar.add(new SettingsBookmark(context, Prefs.FULLSCREEN, R.string.act_fullscreen, Boolean.valueOf(Prefs.getFullscreen()),R.string.yes,R.string.no, false));
-		SettingsBookmark wwcolor =  new SettingsBookmark(context, Prefs.WEBWIEW_BACKGROUND_COLOR, R.string.act_ww_back, 
-				Prefs.getWWBackgroundColorName(context)
+		SettingsBookmark wwcolor =  new SettingsBookmark(context, Prefs.WEBVIEW_BACKGROUND_COLOR_NEW, R.string.act_ww_back, 
+				st.getColorName(context, -2)
 				);
 		ar.add(wwcolor);
 		ar.add(new SettingsBookmark(context, IConst.VIEW_TYPE, R.string.act_full_view, Boolean.valueOf(ww.getViewType()==Tab.VIEW_TYPE_FULL),R.string.yes,R.string.no, true));
@@ -724,48 +724,13 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 		};
 		return sa;
 	}
-	/** возвращает текст цвета индикатора загрузки
-	 * @param colorResId - если равен -1, то читаем цвет из настроек */
-	public String getColorExtendedProgressString(int colorResId)
-	{
-		Context cc = getMain();
-		String ret = st.STR_NULL;
-		if (colorResId==-1)
-			colorResId = Prefs.getColorExtendedProgress();
-		switch (colorResId)
-		{
-		case R.color.blue_color:
-			ret = cc.getString(R.string.color_blue);
-			break;
-		case R.color.blue_violet_color:
-			ret = cc.getString(R.string.color_blueViolet);
-			break;
-		case R.color.gray_color:
-			ret = cc.getString(R.string.color_gray);
-			break;
-		case R.color.green_color:
-			ret = cc.getString(R.string.color_green);
-			break;
-		case R.color.orange_color:
-			ret = cc.getString(R.string.color_orange);
-			break;
-		case R.color.red_color:
-			ret = cc.getString(R.string.color_red);
-			break;
-		case R.color.yellow_color:
-			ret = cc.getString(R.string.color_yellow);
-			break;
-		}
-
-		return ret;
-	}
 	
 // окно настроек интерфейса
 	public SettingsAdapter createInterfaceSettingsAdapter(Context context)
 	{
 		ArrayList<Bookmark>ar = new ArrayList<Bookmark>();
 		ar.add(new SettingsBookmark(context, Prefs.EXTENDED_PROGRESS, R.string.loading_indicator, Prefs.isExtendedProgress()?R.string.big:R.string.small));
-		ar.add(new SettingsBookmark(context, Prefs.EXTENDED_PROGRESS_COLOR, R.string.color_loading_indicator, getColorExtendedProgressString(-1)));
+		ar.add(new SettingsBookmark(context, Prefs.EXTENDED_PROGRESS_COLOR, R.string.color_loading_indicator, st.getColorName(getMain(),-1)));
 		SettingsBookmark nav = new SettingsBookmark(context, Prefs.SET_NAVIGATION, R.string.set_navi_page, 
 				Prefs.getNavigationName(context)
 				);
@@ -822,34 +787,14 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 				{
 					final Context cc = getMain();
 					ActArray ar = new ActArray();
-					ar.add(Action.create(Action.OK,R.color.blue_color)
-							.setText(getColorExtendedProgressString(R.color.blue_color))
-							.setImageRes(R.color.blue_color)
-							);
-					ar.add(Action.create(Action.OK,R.color.blue_violet_color)
-							.setText(getColorExtendedProgressString(R.color.blue_violet_color))
-							.setImageRes(R.color.blue_violet_color)
-							);
-					ar.add(Action.create(Action.OK,R.color.gray_color)
-							.setText(getColorExtendedProgressString(R.color.gray_color))
-							.setImageRes(R.color.gray_color)
-							);
-					ar.add(Action.create(Action.OK,R.color.green_color)
-							.setText(getColorExtendedProgressString(R.color.green_color))
-							.setImageRes(R.color.green_color)
-							);
-					ar.add(Action.create(Action.OK,R.color.red_color)
-							.setText(getColorExtendedProgressString(R.color.red_color))
-							.setImageRes(R.color.red_color)
-							);
-					ar.add(Action.create(Action.OK,R.color.orange_color)
-							.setText(getColorExtendedProgressString(R.color.orange_color))
-							.setImageRes(R.color.orange_color)
-							);
-					ar.add(Action.create(Action.OK,R.color.yellow_color)
-							.setText(getColorExtendedProgressString(R.color.yellow_color))
-							.setImageRes(R.color.yellow_color)
-							);
+					ar.add(st.createActionColor(cc, R.color.blue_color));
+					ar.add(st.createActionColor(cc, R.color.blue_violet_color));
+					ar.add(st.createActionColor(cc, R.color.gray_color));
+					ar.add(st.createActionColor(cc, R.color.green_color));
+					ar.add(st.createActionColor(cc, R.color.red_color));
+					ar.add(st.createActionColor(cc, R.color.orange_color));
+					ar.add(st.createActionColor(cc, R.color.yellow_color));
+
 					new MenuPanelButton(getMain(), ar, new OnAction() 
 					{
 						@Override
@@ -857,8 +802,8 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 						{
 							Prefs.get().edit().putInt(Prefs.EXTENDED_PROGRESS_COLOR, 
 									(Integer)act.param).commit();
-							MainActivity.activeInstance.seColorLoadProgress();;
-							b.setDesc(getColorExtendedProgressString(-1));
+							MainActivity.activeInstance.setLoadProgressColor();;
+							b.setDesc(st.getColorName(cc, -1));
 							notifyDataSetChanged();
 						}
 					}).show();

@@ -15,6 +15,7 @@ import android.webkit.WebSettings;
 import android.widget.ImageView;
 import ru.mail.mailnews.st;
 
+import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
 import com.jbak.superbrowser.Bookmark;
 import com.jbak.superbrowser.BookmarkActivity;
@@ -29,6 +30,7 @@ import com.jbak.superbrowser.panels.PanelSettings;
 import com.jbak.superbrowser.search.SearchSystem;
 import com.jbak.superbrowser.ui.BookmarkView;
 import com.jbak.superbrowser.ui.MainPanel;
+import com.jbak.superbrowser.ui.MenuPanelButton;
 import com.jbak.superbrowser.ui.OnAction;
 import com.jbak.superbrowser.ui.PanelSetting;
 import com.jbak.superbrowser.ui.dialogs.DialogDownloadFile;
@@ -577,24 +579,66 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 		}
 		else if(b.id==R.string.act_ww_back)
 		{
-			ArrayList<Bookmark>ar = new ArrayList<Bookmark>();
-			String[] arname = m_c.getResources().getStringArray(R.array.ww_back_color); 
-			for(String name:arname)
-			{
-				ar.add(new SettingsBookmark(name, null));
-			}
-			MenuSettingBookmarks menu = new MenuSettingBookmarks(getContext(),b.getTitle(),ar) {
-				
-				@Override
-				public void onBookmarkSelected(int pos,SettingsBookmark set) {
-					b.setDesc(set.getTitle());
-					Prefs.setInt(Prefs.WEBWIEW_BACKGROUND_COLOR, pos);
-					onSettingChanged(set);
-					BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.SELECT_WW_BACK_COLOR));
+			final Context cc = m_c;
+			ActArray ar = new ActArray();
+			ar.add(st.createActionColor(cc, R.color.blue_color));
+			ar.add(st.createActionColor(cc, R.color.blue_midnight_color));
+			ar.add(st.createActionColor(cc, R.color.blue_violet_color));
+			ar.add(st.createActionColor(cc, R.color.black_color));
+			ar.add(st.createActionColor(cc, R.color.yellow_color));
+			ar.add(st.createActionColor(cc, R.color.white_color));
+			ar.add(st.createActionColor(cc, R.color.gray_dark_color));
+			ar.add(st.createActionColor(cc, R.color.gray_dark_slate_color));
+			ar.add(st.createActionColor(cc, R.color.brown_rosy_color));
+			ar.add(st.createActionColor(cc, R.color.brown_saddle_color));
+			ar.add(st.createActionColor(cc, R.color.gray_light_color));
+			ar.add(st.createActionColor(cc, R.color.gray_color));
+			ar.add(st.createActionColor(cc, R.color.green_color));
+			ar.add(st.createActionColor(cc, R.color.green_dark_color));
+			ar.add(st.createActionColor(cc, R.color.green_medium_spring_color));
+			ar.add(st.createActionColor(cc, R.color.chartreuse_color));
+			ar.add(st.createActionColor(cc, R.color.coral_color));
+			ar.add(st.createActionColor(cc, R.color.cyan_color));
+			ar.add(st.createActionColor(cc, R.color.gold_color));
+			ar.add(st.createActionColor(cc, R.color.navy_color));
+			ar.add(st.createActionColor(cc, R.color.orange_color));
+			ar.add(st.createActionColor(cc, R.color.orange_dark_color));
+			ar.add(st.createActionColor(cc, R.color.purple_color));
+			ar.add(st.createActionColor(cc, R.color.red_color));
 
+			new MenuPanelButton(cc, ar, new OnAction() 
+			{
+				@Override
+				public void onAction(Action act) 
+				{
+					Prefs.get().edit().putInt(Prefs.WEBVIEW_BACKGROUND_COLOR_NEW, 
+							(Integer)act.param).commit();
+					MainActivity.activeInstance.setLoadProgressColor();;
+					b.setDesc(st.getColorName(cc, -2));
+					//notifyDataSetChanged();
+					BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.SELECT_WW_BACK_COLOR));
 				}
-			};
-			menu.show();
+			}).show();
+
+			
+//			ArrayList<Bookmark>ar = new ArrayList<Bookmark>();
+//			String[] arname = m_c.getResources().getStringArray(R.array.ww_back_color); 
+//			for(String name:arname)
+//			{
+//				ar.add(new SettingsBookmark(name, null));
+//			}
+//			MenuSettingBookmarks menu = new MenuSettingBookmarks(getContext(),b.getTitle(),ar) {
+//				
+//				@Override
+//				public void onBookmarkSelected(int pos,SettingsBookmark set) {
+//					b.setDesc(set.getTitle());
+//					Prefs.setInt(Prefs.WEBWIEW_BACKGROUND_COLOR, pos);
+//					onSettingChanged(set);
+//					BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.SELECT_WW_BACK_COLOR));
+//
+//				}
+//			};
+//			menu.show();
 		}
 	}
 	public void showCacheModeMenu(SettingsBookmark set)

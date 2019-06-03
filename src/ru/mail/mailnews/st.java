@@ -15,6 +15,7 @@ import java.util.TimeZone;
 
 import org.json.JSONArray;
 
+import com.jbak.superbrowser.Action;
 import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.Prefs;
 import com.jbak.superbrowser.ui.dialogs.DialogHelp;
@@ -529,6 +530,112 @@ public class st
 			return st.STR_NULL+st.getAppName(c)
 					+st.STR_SPACE+st.getAppVersionName(c)
 					+st.STR_SPACE+"("+st.getAppVersionCode(c)+")";
+		}
+		/** возвращает название цвета из ресурсов
+		 * @param colorResId - если равен: 
+		 * -1, то читаем цвет индикатора загрузки, 
+		 * -2, то цвет фона webview*/
+		public static String getColorName(Context con, int colorResId)
+		{
+			String ret = st.STR_NULL;
+			if (colorResId==-1)
+				colorResId = Prefs.getColorExtendedProgress();
+			else if (colorResId==-2)
+				colorResId = Prefs.getWVBackgroundResourse();
+			switch (colorResId)
+			{
+			case R.color.blue_color:
+				ret = con.getString(R.string.color_blue);
+				break;
+			case R.color.blue_violet_color:
+				ret = con.getString(R.string.color_blueViolet);
+				break;
+			case R.color.gray_color:
+				ret = con.getString(R.string.color_gray);
+				break;
+			case R.color.green_color:
+				ret = con.getString(R.string.color_green);
+				break;
+			case R.color.orange_color:
+				ret = con.getString(R.string.color_orange);
+				break;
+			case R.color.red_color:
+				ret = con.getString(R.string.color_red);
+				break;
+			case R.color.white_color:
+				ret = con.getString(R.string.color_white);
+				break;
+			case R.color.black_color:
+				ret = con.getString(R.string.color_black);
+				break;
+			case R.color.gray_dark_color:
+				ret = con.getString(R.string.color_dark_gray);
+				break;
+			case R.color.green_dark_color:
+				ret = con.getString(R.string.color_dark_green);
+				break;
+			case R.color.navy_color:
+				ret = con.getString(R.string.color_navy);
+				break;
+			case R.color.purple_color:
+				ret = con.getString(R.string.color_purple);
+				break;
+			case R.color.orange_dark_color:
+				ret = con.getString(R.string.color_dark_orange);
+				break;
+			case R.color.coral_color:
+				ret = con.getString(R.string.color_coral);
+				break;
+			case R.color.gray_light_color:
+				ret = con.getString(R.string.color_light_gray);
+				break;
+			case R.color.chartreuse_color:
+				ret = con.getString(R.string.color_chartreuse);
+				break;
+			case R.color.green_medium_spring_color:
+				ret = con.getString(R.string.color_medium_spring_green);
+				break;
+			case R.color.gold_color:
+				ret = con.getString(R.string.color_gold);
+				break;
+			case R.color.blue_midnight_color:
+				ret = con.getString(R.string.color_mdnight_blue);
+				break;
+			case R.color.brown_rosy_color:
+				ret = con.getString(R.string.color_rosy_brown);
+				break;
+			case R.color.brown_saddle_color:
+				ret = con.getString(R.string.color_saddle_brown);
+				break;
+			case R.color.gray_dark_slate_color:
+				ret = con.getString(R.string.color_dark_slate_gray);
+				break;
+			case R.color.yellow_color:
+				ret = con.getString(R.string.color_yellow);
+				break;
+			case R.color.cyan_color:
+				ret = con.getString(R.string.color_cyan);
+				break;
+			default: 
+				ret = con.getString(R.string.empty);
+			}
+
+			return ret;
+		}
+		/** создаем аа для менюшек выбора цвета */
+		public static Action createActionColor(Context con, int colorResId)
+		{
+			// берём любой Action который рисуется без дополнительной обработки 
+			Action act = Action.create(Action.OK,colorResId)
+				.setText(getColorName(con, colorResId))
+				.setImageRes(colorResId);
+					
+			
+			return act;
+		}
+		public static int getColorFromResourse(Context con, int resColorId)
+		{
+			return con.getResources().getColor(resColorId);
 		}
 	    
 }

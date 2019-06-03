@@ -64,7 +64,7 @@ public class MyWebView extends WebView {
 		eventInfo.setWebView(this);
 		mDensity = c.getResources().getDisplayMetrics().density;
 		inst = this;
-		inst.setBackgroundColor(Prefs.getWWBackgroundColor());
+		inst.setBackgroundColor(st.getColorFromResourse(c,Prefs.getWVBackgroundResourse()));
 		gestureDetector =  new GestureDetector(c, simpleongesturelistener);
 
 	}
@@ -349,7 +349,7 @@ public class MyWebView extends WebView {
 				ma.round_btn.setText(" ∇ ");
 			}
 			ma.round_btn.setTextSize(25);
-			if (Prefs.getWWDarkWhiteTheme()==0){
+			if (Prefs.getWVDarkWhiteTheme()==0){
 				ma.round_btn.setTextColor(Color.WHITE);
 				ma.round_btn.setBackgroundResource(R.drawable.round_button_cyan);
 			} else {

@@ -871,10 +871,11 @@ public class Action {
 					act.setMainTheme(act);
 					TabList tlist = act.getTabList();
 					MyWebView mww = null;
+					int col = st.getColorFromResourse(act,Prefs.getWVBackgroundResourse());
 					for(int i=0;i<tlist.getCount();i++){
 						if (i<tlist.getOpenedSize()){
 							mww = tlist.getOpenedTabByPos(i).getWebView();
-							mww.setBackgroundColor(Prefs.getWWBackgroundColor());
+							mww.setBackgroundColor(col);
 						}
 					}
 					return true;

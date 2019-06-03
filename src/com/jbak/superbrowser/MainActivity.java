@@ -256,7 +256,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		mMainPanelContainer.addView(mPanel);
 //		mButtonContainer.setBackgroundResource(R.drawable.background);
 		mLoadProgress = (TextProgressBar) findViewById(R.id.progressLoad);
-		seColorLoadProgress();
+		setLoadProgressColor();
 		setProgressType();
 		mFavIcon = (ImageView)findViewById(R.id.favicon);
 		mSearchPage = (ViewGroup)findViewById(R.id.searchPage);
@@ -2255,15 +2255,9 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
     // устанавливает  системную схему приложения
     public void setMainTheme(Activity c)
     {
-    	switch (Prefs.getWWBackgroundColorPref())
+    	switch (Prefs.getWVBackgroundResourse())
     	{
-    	case 1:
-    	case 3:
-    	case 4:
-    	case 6:
-    	case 7:
-    	case 8:
-    	case 9:
+    	case R.color.black_color:
     		c.setTheme(android.R.style.Theme_Holo_NoActionBar);
     		cur_theme = 1;
     		return;
@@ -2333,7 +2327,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		if (round_btn!=null)
 			round_btn.setVisibility(View.GONE);
   	}
-    public void seColorLoadProgress()
+    public void setLoadProgressColor()
     {
     	if (mLoadProgress!=null) {
     		int col = Prefs.getColorExtendedProgress();
@@ -2357,6 +2351,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
         		tcol = Color.MAGENTA;
     			break;
     		}
+    		
     		mLoadProgress.mTextPaint.setColor(tcol);
     	}
   	}

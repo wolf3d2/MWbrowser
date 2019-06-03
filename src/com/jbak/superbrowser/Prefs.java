@@ -52,7 +52,9 @@ public class Prefs
 	public static final String NAVIGATION_PANEL_ALPHA = "navigation_panel_alpha";
 	public static final String NAVIGATION_PANEL_SIZE = "navigation_panel_size";
 	public static final String NAVIGATION_PANEL_COLOR = "navigation_panel_color";
+	/** @deprecated Не используется с 02.06.19. Удалить через полгода */    
 	public static final String WEBWIEW_BACKGROUND_COLOR = "ww_back_color";
+	public static final String WEBVIEW_BACKGROUND_COLOR_NEW = "ww_back_color_new";
 	public static final String LONGCLICK = "longclick";
 	public static final String THEME = "theme";
 	public static final String START_APP = "startApp";
@@ -122,6 +124,11 @@ public class Prefs
 		INSTANCE = new Prefs();
 		INSTANCE.mPrefs = c.getSharedPreferences(NAME_SETTING, Context.MODE_PRIVATE);
 		INSTANCE.mVolumeKeysState = INSTANCE.mPrefs.getInt(VOLUME_KEYS_STATE, VOLUME_KEYS_NONE);
+		remove();
+	}
+	private static void remove()
+	{
+		INSTANCE.mPrefs.edit().remove(WEBWIEW_BACKGROUND_COLOR);
 	}
 	public static boolean getFullscreen()
 	{
@@ -164,60 +171,21 @@ public class Prefs
 	{
 		return INSTANCE.mPrefs.getInt(NAVIGATION_PANEL_POS, 2);
 	}
-	public static int getWWBackgroundColorPref()
+	public static int getWVBackgroundResourse()
 	{
-		return INSTANCE.mPrefs.getInt(WEBWIEW_BACKGROUND_COLOR, 0);
+		return INSTANCE.mPrefs.getInt(WEBVIEW_BACKGROUND_COLOR_NEW, R.color.white_color);
 	}
-	public static String getWWBackgroundColorName(Context c)
-	{
-		int col = getWWBackgroundColorPref();
-		String[] ar = c.getResources().getStringArray(R.array.ww_back_color);
-		return ar[col];
-	}
-	/** при изменении не забыть откорректировать метод 
-	 * getDefaultTheme в MainActivity (вроде уже не надо) */
-	public static int getWWBackgroundColor()
-	{
-		switch (getWWBackgroundColorPref())
-		{
-		case 0: return Color.WHITE;
-		case 1: return Color.BLACK;
-		case 2: return Color.BLUE;
-		case 3: return Color.GRAY;
-		case 4: return Color.DKGRAY;
-		case 5: return Color.GREEN;
-		case 6: return 0xff006400;
-		case 7: return Color.RED;
-		case 8: return 0xff000080;
-		case 9: return 0xff800080;
-		case 10: return 0xff00FFFF;
-		case 11: return 0xffFF8C00;
-		case 12: return 0xffFF7F50;
-		case 13: return 0xffD3D3D3;
-		case 14: return 0xff7FFF00;
-		case 15: return 0xff00FA9A;
-		case 16: return 0xffFFD700;
-		case 17: return 0xff191970;
-		case 18: return 0xffBC8F8F;
-		case 19: return 0xff8B4513;
-		case 20: return 0xff2F4F4F;
-		default:return Color.WHITE;
-		
-		}
-	}
+//	public static int getWWBackgroundColor(Context context)
+//	{
+//		return context.getResources().getColor(getWWBackgroundResourse());
+//	}
 	// 0 - светлая тема
 	// 1 - тёмная
-    public static int getWWDarkWhiteTheme()
+    public static int getWVDarkWhiteTheme()
     {
-    	switch (Prefs.getWWBackgroundColorPref())
+    	switch (Prefs.getWVBackgroundResourse())
     	{
-    	case 1:
-    	case 3:
-    	case 4:
-    	case 6:
-    	case 7:
-    	case 8:
-    	case 9:
+    	case R.color.black_color:
     		return 1;
     	}
 		return 0;

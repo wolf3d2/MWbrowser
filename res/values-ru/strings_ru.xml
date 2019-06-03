@@ -121,6 +121,7 @@
     <string name="bYes">Да</string>
     <string name="bNo">Нет</string>
     <string name="сopied">Скопировано</string>
+    <string name="empty">Пусто</string>
     <string name="empty_edit">Введите хоть что-нибудь!</string>
     <string name="open_new_window">Открыто новую вкладку</string>
     <string name="save_photo">Сохранить кадр</string>
@@ -227,13 +228,6 @@
     <string name="searchPage_results">Найдено:</string>
     <string name="loading_indicator">Индикатор загрузки</string>
     <string name="color_loading_indicator">Цвет индикатора загрузки</string>
-    <string name="color_gray">Серый</string>
-    <string name="color_red">Красный</string>
-    <string name="color_orange">Оранжевый</string>
-    <string name="color_green">Зелёный</string>
-    <string name="color_blue">Синий</string>
-    <string name="color_blueViolet">Фиолетовый</string>
-    <string name="color_yellow">Жёлтый</string>
     
     <string name="big">Большой</string>
     <string name="small">Маленький</string>
@@ -337,14 +331,24 @@
     
 <!-- Цве фона окна webview-->
     <string name="act_ww_back">Цвет фона главного окна браузера</string>
-    <string name="ww_back0">Белый</string>
-    <string name="ww_back1">Чёрный</string>
-    <string name="ww_back2">Синий</string>
-    <string name="ww_back3">Серый</string>
-    <string name="ww_back4">Тёмно-серый</string>
-    <string name="ww_back5">Зелёный</string>
-    <string name="ww_back6">Тёмно-зелёный</string>
-    <string name="ww_back7">Красный</string>
-    <string name="ww_back13">Светло-серый</string>
+
+<!--     названия цветов из ресурсов -->
+    <string name="color_light_gray">Светло-серый</string>
+    <string name="color_gray">Серый</string>
+    <string name="color_dark_gray">Тёмно-серый</string>
+    <string name="color_red">Красный</string>
+    <string name="color_orange">Оранжевый</string>
+    <string name="color_dark_orange">Темно-оранжевый</string>
+    <string name="color_green">Зелёный</string>
+    <string name="color_dark_green">Тёмно-зелёный</string>
+    <string name="color_blue">Синий</string>
+    <string name="color_blueViolet">Фиолетовый</string>
+    <string name="color_yellow">Жёлтый</string>
+    <string name="color_white">Белый</string>
+    <string name="color_black">Чёрный</string>
+    <string name="color_rosy_brown">Светло-коричневый</string>
+    <string name="color_saddle_brown">Коричневый</string>
+    <string name="color_coral">Коралловый</string>
+    <string name="color_gold">Золотой</string>
     
 </resources>

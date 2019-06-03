@@ -2,27 +2,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string-array name="ww_back_color">
-        <item>@string/ww_back0</item>
-        <item>@string/ww_back1</item>
-        <item>@string/ww_back2</item>
-        <item>@string/ww_back3</item>
-        <item>@string/ww_back4</item>
-        <item>@string/ww_back5</item>
-        <item>@string/ww_back6</item>
-        <item>@string/ww_back7</item>
-        <item>@string/ww_back8</item>
-        <item>@string/ww_back9</item>
-        <item>@string/ww_back10</item>
-        <item>@string/ww_back11</item>
-        <item>@string/ww_back12</item>
-        <item>@string/ww_back13</item>
-        <item>@string/ww_back14</item>
-        <item>@string/ww_back15</item>
-        <item>@string/ww_back16</item>
-        <item>@string/ww_back17</item>
-        <item>@string/ww_back18</item>
-        <item>@string/ww_back19</item>
-        <item>@string/ww_back20</item>
+        <item>@string/color_white</item>
+<!--         <item>@string/ww_back1</item> -->
+<!--         <item>@string/ww_back2</item> -->
+<!--         <item>@string/ww_back3</item> -->
+<!--         <item>@string/ww_back4</item> -->
+<!--         <item>@string/ww_back5</item> -->
+<!--         <item>@string/ww_back6</item> -->
+<!--         <item>@string/ww_back7</item> -->
+<!--         <item>@string/ww_back8</item> -->
+<!--         <item>@string/ww_back9</item> -->
+<!--         <item>@string/ww_back10</item> -->
+<!--         <item>@string/ww_back11</item> -->
+<!--         <item>@string/ww_back12</item> -->
+<!--         <item>@string/ww_back13</item> -->
+<!--         <item>@string/ww_back14</item> -->
+<!--         <item>@string/ww_back15</item> -->
+<!--         <item>@string/ww_back16</item> -->
+<!--         <item>@string/ww_back17</item> -->
+<!--         <item>@string/ww_back18</item> -->
+<!--         <item>@string/ww_back19</item> -->
+<!--         <item>@string/ww_back20</item> -->
         </string-array>
     
 </resources>
