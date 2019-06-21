@@ -13,6 +13,9 @@
     <string name="supermenu_button_vert8inch">Tab 8\"</string>
 
     <string name="first_start_msg">Это первый запуск браузера, хотите ознакомиться с помошью по работе? </string>
+    
+    <string name="act_save_html">Save html only</string>
+    <string name="act_search_by_image">Search by picture</string>
 <!-- импорт/экспорт -->
     <string name="act_export">Export</string>
     <string name="act_export_path">Save folder:</string>
@@ -139,6 +142,7 @@
     <string name="сopied">Copied</string>
     <string name="empty">Empty</string>
     <string name="empty_edit">Enter something, please!</string>
+    <string name="empty_clipboard">Clipboard is empty</string>
     <string name="open_new_window">New tab opened</string>
     <string name="save_photo">Save photo</string>
     <string name="save_photo_success">Photo saved successful</string>
@@ -260,6 +264,7 @@
     <string name="sdcard_not_default">File not on default sd-card</string>
     <string name="change_sdcard">Select default sd-card</string>
     <string name="act_translate">Translate page</string>
+    <string name="act_translate_copying_text">Перевести скопированное</string>
     <string name="act_translate_system">Какой системой переводить?</string>
     
     <!-- List of default translate directions -->
@@ -360,7 +365,6 @@
     <string name="color_dark_gray">DarkGray</string>
     <string name="color_dark_green">DarkGreen</string>
     <string name="color_navy">Navy</string>
-    <string name="color_purple">Purple</string>
     <string name="color_cyan">Cyan</string>
     <string name="color_dark_orange">DarkOrange</string>
     <string name="color_coral">Coral</string>
@@ -370,7 +374,7 @@
     <string name="color_gold">Gold</string>
     <string name="color_mdnight_blue">MidnightBlue</string>
     <string name="color_rosy_brown">RosyBrown</string>
-    <string name="color_saddle_brown">SaddleBrown</string>
+    <string name="color_brown">SaddleBrown</string>
     <string name="color_dark_slate_gray">DarkSlateGray</string>
     
 </resources>

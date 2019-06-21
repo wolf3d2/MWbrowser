@@ -9,7 +9,7 @@
 	<color name="green_color">#00ff00</color>    
 	<color name="green_dark_color">#006400</color>    
 	<color name="green_medium_spring_color">#00FA9A</color>    
-	<color name="gray_color">#aaaaaa</color>    
+	<color name="gray_color">#888888</color>    
 	<color name="gray_dark_color">#444444</color>    
 	<color name="gray_light_color">#D3D3D3</color>    
 	<color name="gray_dark_slate_color">#2F4F4F</color>    
@@ -18,14 +18,13 @@
 	<color name="blue_midnight_color">#191970</color>    
 	<color name="yellow_color">#FFFF00</color>
 	<color name="brown_rosy_color">#BC8F8F</color>    
-	<color name="brown_saddle_color">#8B4513</color>    
+	<color name="brown_color">#8B4513</color>    
 	<color name="white_color">#ffffff</color>    
 	<color name="black_color">#000000</color>    
 	<color name="navy_color">#000080</color>    
-	<color name="purple_color">#800080</color>    
-	<color name="cyan_color">#7FFF00</color>    
+	<color name="cyan_color">#00FFFF</color>    
 	<color name="coral_color">#FF7F50</color>    
-	<color name="chartreuse_color">#7FFF00</color>    
+	<color name="green_chartreuse_color">#7FFF00</color>    
 	<color name="gold_color">#FFD700</color>    
 
 </resources>

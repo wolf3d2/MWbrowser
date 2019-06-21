@@ -46,7 +46,7 @@ public class PanelButton extends FrameLayout {
 	public static final int TYPE_BUTTON_BOOKMARK = 3;
 	public static final int TYPE_BUTTON_TEXT_ONELINE = 4;
 	public static final int TYPE_BUTTON_ROW = 5;
-	public static final int TYPE_BUTTON_MEDIUM = 6;
+	public static final int TYPE_BUTTON_MEDIUM_TWO_LINE = 6;
 	public static final int TYPE_BUTTON_MEDIUM_ONE_LINE = 7;
 	public static final int TYPE_BUTTON_TEXT_ONLY = 8;
 	public static final int TYPE_BUTTON_MEDIUM_BIG_WIDTH = 9;
@@ -77,7 +77,7 @@ public class PanelButton extends FrameLayout {
 		case TYPE_BUTTON_BOOKMARK:
 			layoutId = R.layout.panelbutton_bookmark;
 			break;
-		case TYPE_BUTTON_MEDIUM:
+		case TYPE_BUTTON_MEDIUM_TWO_LINE:
 		case TYPE_BUTTON_MEDIUM_BIG_WIDTH:
 		case TYPE_BUTTON_MEDIUM_ONE_LINE:
 			layoutId = R.layout.panelbutton_medium;
@@ -130,7 +130,7 @@ public class PanelButton extends FrameLayout {
 		case TYPE_BUTTON_NORMAL:
 		case TYPE_BUTTON_TEXT_ONELINE:
 			return mMinWidthNormal;
-		case TYPE_BUTTON_MEDIUM:
+		case TYPE_BUTTON_MEDIUM_TWO_LINE:
 		case TYPE_BUTTON_MEDIUM_BIG_WIDTH:	
 		case TYPE_BUTTON_MEDIUM_ONE_LINE:	
 			return Integer.MAX_VALUE;
@@ -154,7 +154,7 @@ public class PanelButton extends FrameLayout {
 			return 0;
 		case TYPE_BUTTON_SMALL:
 			return mMinWidthSmall;
-		case TYPE_BUTTON_MEDIUM:
+		case TYPE_BUTTON_MEDIUM_TWO_LINE:
 		case TYPE_BUTTON_MEDIUM_ONE_LINE:	
 			return mMinWidthMedium;
 		case TYPE_BUTTON_MEDIUM_BIG_WIDTH:

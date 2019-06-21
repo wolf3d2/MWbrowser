@@ -590,20 +590,19 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 			ar.add(st.createActionColor(cc, R.color.gray_dark_color));
 			ar.add(st.createActionColor(cc, R.color.gray_dark_slate_color));
 			ar.add(st.createActionColor(cc, R.color.brown_rosy_color));
-			ar.add(st.createActionColor(cc, R.color.brown_saddle_color));
+			ar.add(st.createActionColor(cc, R.color.brown_color));
 			ar.add(st.createActionColor(cc, R.color.gray_light_color));
 			ar.add(st.createActionColor(cc, R.color.gray_color));
 			ar.add(st.createActionColor(cc, R.color.green_color));
 			ar.add(st.createActionColor(cc, R.color.green_dark_color));
 			ar.add(st.createActionColor(cc, R.color.green_medium_spring_color));
-			ar.add(st.createActionColor(cc, R.color.chartreuse_color));
+			ar.add(st.createActionColor(cc, R.color.green_chartreuse_color));
 			ar.add(st.createActionColor(cc, R.color.coral_color));
 			ar.add(st.createActionColor(cc, R.color.cyan_color));
 			ar.add(st.createActionColor(cc, R.color.gold_color));
 			ar.add(st.createActionColor(cc, R.color.navy_color));
 			ar.add(st.createActionColor(cc, R.color.orange_color));
 			ar.add(st.createActionColor(cc, R.color.orange_dark_color));
-			ar.add(st.createActionColor(cc, R.color.purple_color));
 			ar.add(st.createActionColor(cc, R.color.red_color));
 
 			new MenuPanelButton(cc, ar, new OnAction() 
@@ -613,9 +612,10 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 				{
 					Prefs.get().edit().putInt(Prefs.WEBVIEW_BACKGROUND_COLOR_NEW, 
 							(Integer)act.param).commit();
-					MainActivity.activeInstance.setLoadProgressColor();;
+					MainActivity.activeInstance.setLoadProgressColor();
+					//MainActivity.activeInstance.setMainTheme(MainActivity.activeInstance);
 					b.setDesc(st.getColorName(cc, -2));
-					//notifyDataSetChanged();
+					notifyDataSetChanged();
 					BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.SELECT_WW_BACK_COLOR));
 				}
 			}).show();

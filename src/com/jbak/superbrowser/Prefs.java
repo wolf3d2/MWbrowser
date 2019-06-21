@@ -175,21 +175,6 @@ public class Prefs
 	{
 		return INSTANCE.mPrefs.getInt(WEBVIEW_BACKGROUND_COLOR_NEW, R.color.white_color);
 	}
-//	public static int getWWBackgroundColor(Context context)
-//	{
-//		return context.getResources().getColor(getWWBackgroundResourse());
-//	}
-	// 0 - светлая тема
-	// 1 - тёмная
-    public static int getWVDarkWhiteTheme()
-    {
-    	switch (Prefs.getWVBackgroundResourse())
-    	{
-    	case R.color.black_color:
-    		return 1;
-    	}
-		return 0;
-    }
 	public static void setNavigationPanelPos(int pos)
 	{
 		INSTANCE.mPrefs.edit().putInt(NAVIGATION_PANEL_POS, pos).commit();

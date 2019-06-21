@@ -304,7 +304,7 @@ public class MainPanel extends LinearLayoutEx implements OnAction,WebViewEvent,O
 		if(stat.isVoiceSearchExist(getMain()))
 			ar.add(Action.create(Action.VOICE_SEARCH,mUrlEdit));
 	}
-	// пункты главного меню
+	/** пункты главного меню */
 	@SuppressLint("NewApi")
 	public void createActionsToolsGrid()
 	{

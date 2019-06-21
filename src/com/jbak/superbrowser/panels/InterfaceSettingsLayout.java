@@ -298,7 +298,7 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 			}
 		};
 		hp.setId(R.id.action_panel);
-		hp.setButtonsType(PanelButton.TYPE_BUTTON_MEDIUM);
+		hp.setButtonsType(PanelButton.TYPE_BUTTON_MEDIUM_TWO_LINE);
 		ActArray actions = new ActArray(MODES.getKeys());
 		if(mMode!=MODE_MAGIC_BUTTON_POS)
 		{
@@ -730,7 +730,8 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 	{
 		ArrayList<Bookmark>ar = new ArrayList<Bookmark>();
 		ar.add(new SettingsBookmark(context, Prefs.EXTENDED_PROGRESS, R.string.loading_indicator, Prefs.isExtendedProgress()?R.string.big:R.string.small));
-		ar.add(new SettingsBookmark(context, Prefs.EXTENDED_PROGRESS_COLOR, R.string.color_loading_indicator, st.getColorName(getMain(),-1)));
+		if (!st.load_progress_color_error)
+			ar.add(new SettingsBookmark(context, Prefs.EXTENDED_PROGRESS_COLOR, R.string.color_loading_indicator, st.getColorName(getMain(),-1)));
 		SettingsBookmark nav = new SettingsBookmark(context, Prefs.SET_NAVIGATION, R.string.set_navi_page, 
 				Prefs.getNavigationName(context)
 				);

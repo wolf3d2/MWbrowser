@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.webkit.WebView.HitTestResult;
 import android.widget.EditText;
 import ru.mail.mailnews.st;
+import ru.mail.webimage.WebDownload;
 
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
@@ -232,6 +233,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 					aa = Action.create(Action.NEW_TAB,url).setImageRes(R.drawable.images).setText(R.string.act_open_image);
 					aa.smallImageRes = 0;
 					ar.add(aa);
+					ar.add(Action.create(Action.SEARCH_BY_PICTURE,url));
 //					ar.add(Action.create(Action.SHARE_ELEMENT,url));
 				}
 			}
@@ -255,6 +257,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 				ar.add(Action.create(Action.EXTERNAL_VIDEO_PLAYER));
 				ar.add(Action.create(Action.COPY_NET_STRIMING_URL));
 			}
+			
 			break;
 		default:
 			if(mLink==null&&mImg==null)
@@ -312,6 +315,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 					aa = Action.create(Action.NEW_TAB,url).setImageRes(R.drawable.images).setText(R.string.act_open_image);
 					aa.smallImageRes = 0;
 					ar.add(aa);
+					ar.add(Action.create(Action.SEARCH_BY_PICTURE,url));
 //					ar.add(Action.create(Action.SHARE_ELEMENT,url));
 				}
 			}
@@ -400,7 +404,60 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 	}
 	@Override
 	public void onAction(Action act) {
+		String url = (String)act.param;
+
 		switch (act.command) {
+		case Action.SEARCH_BY_PICTURE:
+			ActArray ar = new ActArray();
+			Action aa;
+			for (int i=0;i<SearchSystem.SEARCH_SYSTEMS.length;i++) {
+				aa = Action.create(Action.OK,url)
+						.setText(SearchSystem.SEARCH_SYSTEMS[i].getName())
+						.setImageRes(SearchSystem.SEARCH_SYSTEMS[i].getIconId());
+				aa.smallImageRes = 0;//R.drawable.search;
+				aa.param = url;
+				aa.param2 = i;
+				ar.add(aa);
+				
+			}
+			new MenuPanelButton(getMain(), ar, new OnAction() 
+			{
+				@Override
+				public void onAction(Action act) 
+				{
+					String url = (String)act.param;
+					int ss = (Integer) act.param2;
+					switch (ss)
+					{
+					// bing
+					case 1:
+						WebDownload.enc(url);
+						break;
+					}
+					String link = SearchSystem.getOtherLink(ss,
+							SearchSystem.CMD_SEARCH_BY_PICTURE, 
+							url,null);
+					if(!TextUtils.isEmpty(link))
+					{
+						getMain().openUrl(link,Action.NEW_TAB);
+					}
+				}
+			}).show();
+
+//			url = (String)act.param;
+//			int lnd = url.lastIndexOf("/");
+//			if (lnd>-1) {
+//				url = url.substring(lnd+1);
+//				int command = SearchSystem.CMD_SEARCH_IMAGES;
+//				String link = SearchSystem.getLink(command, WebDownload.enc(url),null);
+////				if(!TextUtils.isEmpty(text)&&!TextUtils.isEmpty(link))
+////					saveSearch(ma, text);
+//				if(!TextUtils.isEmpty(link))
+//				{
+//					getMain().openUrl(link,Action.NEW_TAB);
+//				}
+//			}
+			return;	
 		case Action.EXTERNAL_VIDEO_PLAYER:
 			startExternalVideoPlayer();
 			return;
@@ -410,6 +467,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 				st.toast(getMain().getString(R.string.сopied)+st.STR_COLON+st.STR_LF+vUrl);
 			}
 			return;
+		case Action.QUICK_SETTINGS:
 		case Action.TRANSLATE_LINK:
 			getMain().runAction(act);
 			return;
@@ -458,15 +516,12 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			//BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, act);
 			return;
 		case Action.SAVEFILE:
-			String url = (String) act.param;
+			url = (String) act.param;
 			UrlProcess.forceDownload(getMain(), Uri.parse(url), true);
 			break;
 		case Action.SHARE_ELEMENT:
 		case Action.SHARE_URL:
 			getMain().share((String)act.param,st.STR_NULL);
-			return;
-		case Action.QUICK_SETTINGS:
-			getMain().runAction(act);
 			return;
 		default:
 			break;
@@ -519,6 +574,8 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			ar.add(Action.create(Action.COPY_URL_TO_CLIPBOARD,url));
 			ar.add(Action.create(Action.SHARE_ELEMENT,url));
 			ar.add(Action.create(Action.SAVEFILE, url));
+			ar.add(Action.create(Action.TRANSLATE_LINK, url));
+			ar.add(Action.create(Action.TRANSLATE_COPYING));
 		}
 		if(!TextUtils.isEmpty(imageUrl))
 		{
@@ -528,6 +585,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			aa = Action.create(Action.NEW_TAB,imageUrl).setImageRes(R.drawable.images).setText(R.string.act_open_image);
 			aa.smallImageRes = 0;
 			ar.add(aa);
+			ar.add(Action.create(Action.SEARCH_BY_PICTURE,imageUrl));
 			ar.add(Action.create(Action.SHARE_URL,url));
 		}
 		if(vUrl!=null)

@@ -155,8 +155,9 @@ public class PanelMainMenu extends FrameLayout implements WebViewEvent,OnGlobalE
 		ar.add(Action.create(Action.SOURCE_CODE));
 		ar.add(Action.create(Action.GO_HOME));
 		ar.add(Action.create(Action.COPY_ALL_OPEN_URL));
-		if(Build.VERSION.SDK_INT>=11)
+		if(Build.VERSION.SDK_INT>=11) {
 			ar.add(Action.create(Action.SAVEFILE).setText(R.string.act_save_page));
+		}
 		ar.add(Action.create(Action.OPENFILE));
 		ar.add(Action.create(Action.QUICK_SETTINGS));
 		ar.add(Action.MAIN_SETTINGS);

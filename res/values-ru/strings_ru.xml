@@ -9,6 +9,9 @@
     <string name="supermenu_button_vert8inch">Планшет 8\"</string>
     
     <string name="first_start_msg">Это первый запуск браузера, хотите ознакомиться с помошью по работе? </string>
+    
+    <string name="act_save_html">Сохранить только html</string>
+    <string name="act_search_by_image">Поиск по картинке</string>
 <!-- импорт/экспорт -->
     <string name="act_export">Экспорт</string>
     <string name="act_export_path">Папка сохранения:</string>
@@ -123,6 +126,7 @@
     <string name="сopied">Скопировано</string>
     <string name="empty">Пусто</string>
     <string name="empty_edit">Введите хоть что-нибудь!</string>
+    <string name="empty_clipboard">Буфер пуст</string>
     <string name="open_new_window">Открыто новую вкладку</string>
     <string name="save_photo">Сохранить кадр</string>
     <string name="save_photo_success">Фотография успешно сохранена</string>
@@ -232,6 +236,7 @@
     <string name="big">Большой</string>
     <string name="small">Маленький</string>
     <string name="act_translate">Перевести страницу</string>
+    <string name="act_translate_copying_text">Перевести скопированное</string>
     <string name="act_translate_system">Какой системой переводить?</string>
     <string name="set_cache">Режим загрузки из кеша</string>
     <string name="set_cache_default">Стандартно</string>
@@ -347,7 +352,7 @@
     <string name="color_white">Белый</string>
     <string name="color_black">Чёрный</string>
     <string name="color_rosy_brown">Светло-коричневый</string>
-    <string name="color_saddle_brown">Коричневый</string>
+    <string name="color_brown">Коричневый</string>
     <string name="color_coral">Коралловый</string>
     <string name="color_gold">Золотой</string>
     

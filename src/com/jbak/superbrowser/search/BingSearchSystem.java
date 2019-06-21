@@ -18,6 +18,10 @@ public class BingSearchSystem extends SearchSystem {
 			return SEARCH_URL+SEARCH_Q+searchEncodedText;
 		case CMD_I_FEEL_LUCKY:
 			return null;
+		case CMD_SEARCH_BY_PICTURE:
+			return "https://www.bing.com/images/search?view=detailv2&iss=sbi&form=SBIHMP&sbisrc=UrlPaste&q=imgurl:"
+					+searchEncodedText
+					+"&exph=0&expw=0&vt=2&sim=1";
 		case CMD_SEARCH_IMAGES:
 			return SEARCH_URL+"images/"+SEARCH_Q+searchEncodedText+"&btnI";
 		case CMD_SEARCH_VIDEOS:

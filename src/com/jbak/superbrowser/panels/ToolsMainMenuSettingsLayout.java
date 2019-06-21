@@ -117,8 +117,8 @@ public class ToolsMainMenuSettingsLayout extends RelativeLayout implements ICons
 
 		ll.addView(layoutCenter,lpCenterLayout);
 		ll.addView(mAdd,lp);
-		mExist.setAdapter(new PanelButtonsAdapter(c, mExistsActions,PanelButton.TYPE_BUTTON_MEDIUM));
-		mAdd.setAdapter(new PanelButtonsAdapter(c, mAddActions,PanelButton.TYPE_BUTTON_MEDIUM));
+		mExist.setAdapter(new PanelButtonsAdapter(c, mExistsActions,PanelButton.TYPE_BUTTON_MEDIUM_TWO_LINE));
+		mAdd.setAdapter(new PanelButtonsAdapter(c, mAddActions,PanelButton.TYPE_BUTTON_MEDIUM_TWO_LINE));
 		RelativeLayout.LayoutParams rp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
 		addView(ll,rp);
 	}

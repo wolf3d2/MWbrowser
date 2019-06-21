@@ -37,10 +37,13 @@ public class UrlProcess implements IConst{
 	public static final String PLAY_MARKET_DOMAIN = "play.google.com";
 	public static final String PLAY_MARKET_STORE = "store";
 	public static final String APK_EXT = "apk";
-	public static final String APK_MIME = "application/vnd.android.package-archive";
 	public static final String HTML_EXT = "html";
 	public static final String MHT_EXT = "mht";
-	public static final String MHT_MIME = "multipart/related";
+	
+	public static final String MIME_TEXT_HTML = "text/html";
+	public static final String MIME_TEXT_PLAIN = "text/plain";
+	public static final String MIME_MHT = "multipart/related";
+	public static final String APK_MIME = "application/vnd.android.package-archive";
 	public static boolean checkFileOpen(MainActivity a,String url)
 	{
 		Uri uri = Uri.parse(url);
@@ -166,7 +169,7 @@ public class UrlProcess implements IConst{
 		if(APK_EXT.equals(ext))
 			return APK_MIME;
 		if(MHT_EXT.equals(ext))
-			return MHT_MIME;
+			return MIME_MHT;
 		String mime = getMimeFromFileContent(f);
 		if(TextUtils.isEmpty(mime)&&ext!=null)
 			mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
@@ -201,7 +204,13 @@ public class UrlProcess implements IConst{
 	}
 	public static boolean canOpenMimeInBrowser(String mime)
 	{
-		if(!TextUtils.isEmpty(mime)&&(isMimeTextOrImage(mime)||MHT_MIME.equals(mime)))
+		if(TextUtils.isEmpty(mime))
+			return false;
+		if((isMimeTextOrImage(mime)||MIME_MHT.equals(mime)))
+			return true;
+		else if(mime.contains("xml"))
+			return true;
+		else if(mime.contains(MIME_TEXT_HTML))
 			return true;
 		return false;
 	}

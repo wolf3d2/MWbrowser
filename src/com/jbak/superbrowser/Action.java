@@ -4,6 +4,8 @@ package com.jbak.superbrowser;
 import com.mw.superbrowser.R;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import org.json.JSONObject;
 
@@ -172,13 +174,15 @@ public class Action {
 	public static final int MODE_NAVIGATION_PANEL_ALPHA= 121;
 	public static final int SIZE_BUTTON_NAVIGATION_PANEL = 122;
 	public static final int SELECT_WW_BACK_COLOR = 123;
-	public static final int SUPERMENU_BUTTON_SET = 124;
+	/** перевести скопированное*/
+	public static final int TRANSLATE_COPYING = 124;
 	public static final int INSTALL_MWSHARE2SAVE = 125;
 	public static final int COPY_TEXT_URL_TO_CLIPBOARD= 126;
 	public static final int WHATS_NEW = 127;
 	public static final int EXTERNAL_VIDEO_PLAYER = 128;
 	/** Копировать ссылку сетевого потока */
 	public static final int COPY_NET_STRIMING_URL = 129;
+	public static final int SEARCH_BY_PICTURE = 130;
 
 	public static final int MIN_FONT_RANGE[] = new int[]{1,5,6,7,8,9,10,11,12,13,14,16,18,20,22,24,30,32,40,48,60,72};
 	
@@ -262,12 +266,14 @@ public class Action {
 	public static Action create(int action,Object param)
 	{
 		switch (action) {
-		case SUPERMENU_BUTTON_SET:
-			return new Action(action,action,R.string.act_translate,param,R.drawable.translate)
+		case SEARCH_BY_PICTURE:
+			return new Action(action,action,R.string.act_search_by_image,param,R.drawable.images,R.drawable.search);
+		case TRANSLATE_COPYING:
+			return new Action(action,action,R.string.act_translate_copying_text,param,R.drawable.translate, R.drawable.txt)
 			{
 				public boolean doAction(final MainActivity activity){
 					ActArray ar = new ActArray();
-					ar.add(Action.create(TRANSLATE_LINK_TRANSLATE_RU,"Translate.ru").setText("Translate.ru"));
+					//ar.add(Action.create(TRANSLATE_LINK_TRANSLATE_RU,"Translate.ru").setText("Translate.ru"));
 					ar.add(Action.create(TRANSLATE_LINK_YANDEX,"Yandex").setText("Yandex"));
 					ar.add(Action.create(TRANSLATE_LINK_GOOGLE,"Google").setText("Google"));
 					new MenuPanelButton(activity, ar, new OnAction() 
@@ -275,7 +281,35 @@ public class Action {
 						@Override
 						public void onAction(Action act) 
 						{
-							translateUrl(activity,act);
+							//String
+							//CharSequence
+							CharSequence cs = stat.getClipboardCharSequence(activity);
+							if (cs == null) {
+								st.toast(R.string.empty_clipboard);
+								return;
+							}
+							String txt = cs.toString();	
+							txt = txt.trim();
+							if(!TextUtils.isEmpty(txt))
+							{
+								switch (act.command)
+								{
+								case Action.TRANSLATE_LINK_GOOGLE:
+									txt ="https://translate.google.com/#view=home&op=translate&sl=en&tl=ru&text="
+											+WebDownload.enc(txt);
+									break;
+								case Action.TRANSLATE_LINK_YANDEX:
+									txt ="https://translate.yandex.by/?ui=ru&lang=en-ru&text="
+											+WebDownload.enc(txt);
+									break;
+//								case Action.TRANSLATE_LINK_TRANSLATE_RU:
+//									txt ="https://translate.google.com/#view=home&op=translate&sl=en&tl=ru&text="
+//											+WebDownload.enc(txt);
+//									
+//									break;
+								}
+								activity.openUrl(txt,Action.NEW_TAB);
+							}
 						}
 					}).show();
 					return true;
@@ -350,7 +384,7 @@ public class Action {
 						
 						act.closeEmptyWindow();
 						act.tabStart(ww,"helpToBrowser",false);
-						ww.getWebView().loadDataWithBaseURL(null, help, "text/html", "utf-8", null);
+						ww.getWebView().loadDataWithBaseURL(null, help, UrlProcess.MIME_TEXT_HTML, "utf-8", null);
 						//ww.getWebView().loadUrl(help);//.openUrl((String)act.param,act.command);
 						//PanelUrlEdit purl = act.getMainPanel().findViewById(id);
 						
@@ -898,7 +932,7 @@ public class Action {
 						DownloadFileInfo fi = new DownloadFileInfo();
 						String saveName = activity.getSaveFilename(UrlProcess.MHT_EXT);
 						fi.filename = saveName;
-						fi.mimeType = UrlProcess.MHT_MIME;
+						fi.mimeType = UrlProcess.MIME_MHT;
 						DialogDownloadFile df = new DialogDownloadFile(activity,new DownloadOptions(saveName),fi) {
 							@SuppressLint("NewApi")
 							@Override
@@ -1225,12 +1259,15 @@ public class Action {
 				mime = mMime;
 			if(UrlProcess.canOpenMimeInBrowser(mime))
 			{
-				if(UrlProcess.MHT_MIME.equals(mime)||ext!=null&&UrlProcess.MHT_EXT.compareToIgnoreCase(ext)==0)
+				if(UrlProcess.MIME_MHT.equals(mime)||ext!=null&&UrlProcess.MHT_EXT.compareToIgnoreCase(ext)==0)
 					activity.openWebArchive(f);
 				else	
 				{
 					Uri uri = Uri.fromFile(f);
-					activity.openUrl(uri.toString(), Action.NEW_TAB);
+					String url = uri.toString();
+					if (url.startsWith(st.STR_FILE))
+						url = uri.decode(uri.toString());
+					activity.openUrl(url.toString(), Action.NEW_TAB);
 				}
 			}
 			else

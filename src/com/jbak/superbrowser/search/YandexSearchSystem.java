@@ -18,6 +18,10 @@ public class YandexSearchSystem extends SearchSystem {
 			return null;
 		case CMD_SEARCH_IMAGES:
 			return "http://yandex.ru/images/search?text="+searchEncodedText;
+		case CMD_SEARCH_BY_PICTURE:
+			return "https://yandex.ru/images/search?url="
+			+searchEncodedText
+			+"&rpt=imageview";
 		case CMD_SEARCH_VIDEOS:
 			return "http://yandex.ru/video/search?text="+searchEncodedText;
 		case CMD_SEARCH_NEWS:

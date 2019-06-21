@@ -205,7 +205,7 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 								if(f.exists())
 								{
 									Action a = Action.create(Action.OPENFILE, f);
-									((FileOpenAction)a).setMime(UrlProcess.MHT_MIME);
+									((FileOpenAction)a).setMime(UrlProcess.MIME_MHT);
 									BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, a);
 									runBookmark = false;
 								}

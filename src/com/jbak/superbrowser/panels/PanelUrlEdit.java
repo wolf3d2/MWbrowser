@@ -28,6 +28,7 @@ import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
 import com.jbak.superbrowser.Bookmark;
 import com.jbak.superbrowser.BrowserApp;
+import com.jbak.superbrowser.IConst;
 import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.Prefs;
 import com.mw.superbrowser.R;
@@ -39,6 +40,7 @@ import com.jbak.superbrowser.Tab;
 import com.jbak.superbrowser.pluginapi.Plugin;
 import com.jbak.superbrowser.search.SearchSystem;
 import com.jbak.superbrowser.ui.HorizontalPanel;
+import com.jbak.superbrowser.ui.MyWebView;
 import com.jbak.superbrowser.ui.OnAction;
 import com.jbak.superbrowser.ui.PanelButton;
 import com.jbak.superbrowser.ui.SuggestionsAdapter;
@@ -63,6 +65,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		super(c, attrs);
 		init();
 	}
+	boolean mIncognito = false;
 	boolean mUserEditText = false;
 	/** Юзер не редактирует текст */
 	public static final int STATE_ADDR_NONE = 0;
@@ -103,7 +106,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		// пока не используется
 		addView(createUrlEditPanel());
 		mToolsPanel = new HorizontalPanel(getContext());
-		mToolsPanel.setButtonsType(PanelButton.TYPE_BUTTON_MEDIUM_ONE_LINE);
+		mToolsPanel.setButtonsType(PanelButton.TYPE_BUTTON_MEDIUM_TWO_LINE);
 		mToolsPanel.setCheckWidthWhileNotAutoFill(false);
 		addView(mToolsPanel);
 //		setDescendantFocusability(FOCUS_BEFORE_DESCENDANTS);
@@ -152,31 +155,30 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 	}
 	public void runAction(Action a)
 	{
-		if(a.command==Action.CLEAR_TEXT)
+		switch (a.command)
 		{
+		case Action.CLEAR_TEXT:
 			mEditUrl.setText(null);
 			if(!mUserEditText)
 				st.showEditKeyboard(mEditUrl);
 			return;
-		}
-		else if(a.command==Action.CANCEL)
-		{
+		case Action.CANCEL:
 			onAddrStateChanged(STATE_ADDR_NONE);
 			return;
-		}
-		else if(a.command==Action.PASTE)
-		{
-			mEditUrl.setText(stat.getClipboardString(getContext()));
+		case Action.TRANSLATE_LINK:
+		case Action.TRANSLATE_COPYING:
+			((MainActivity)getContext()).runAction(a);
 			return;
-		}
-		else if(a.command==Action.VOICE_SEARCH)
-		{
+		case Action.PASTE:
+			mEditUrl.setText(stat.getClipboardCharSequence(getContext()));
+			return;
+		case Action.VOICE_SEARCH:
 			a.param = this;
 			((MainActivity)getContext()).runAction(a);
 			return;
-		}
-		else
+		default:
 			a.setParam(mEditUrl.getText().toString());
+		}
 		if(mActionListener!=null)
 		{
 			mActionListener.onAction(a);
@@ -239,12 +241,15 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 	public void createToolsActions()
 	{
 		ActArray ar = new ActArray();
-		if(mUserEditText)
+		if(mUserEditText) {
 			ar.add(Action.create(Action.CANCEL));
+			//ar.add(Action.create(Action.TRANSLATE_LINK));
+			ar.add(Action.create(Action.TRANSLATE_COPYING));
+		}
 		String text = mEditUrl.getText().toString();
 		if(TextUtils.isEmpty(text))
 		{
-			if(!TextUtils.isEmpty(stat.getClipboardString(getContext())))
+			if(!TextUtils.isEmpty(stat.getClipboardCharSequence(getContext())))
 				ar.add(Action.PASTE);
 			if(stat.isVoiceSearchExist(getContext()))
 				ar.add(Action.create(Action.VOICE_SEARCH,this));
@@ -492,7 +497,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 				cur_ind = i;
 		}
 		Spinner sp = new Spinner(getContext());
-		AdapterSpinnerImageArray adapter = new AdapterSpinnerImageArray(getContext(), 
+		Adapt adapter = new Adapt(getContext(), 
 		        ar);
 //		ArrayAdapter<?> adapter = 
 //		ArrayAdapter.createFromResource(getContext(), R.array.ww_back_color, android.R.layout.simple_spinner_item);
@@ -510,21 +515,52 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		sp.setSelection(cur_ind);
 		rl.addView(sp);
 		
+		RelativeLayout.LayoutParams ilp = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT, 
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		ilp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		ImageView incog = new ImageView(getContext());
+		incog.setVisibility(View.GONE);
+		incog.setBackgroundResource(R.drawable.mask_32);
+		incog.setId(1001);
+		incog.setLayoutParams(ilp);
+		mIncognito = false;
+		incog.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if (MainActivity.activeInstance!=null) {
+					
+					ImageView iv = (ImageView) v;
+					if (mIncognito) {
+						iv.setBackgroundResource(R.drawable.mask_32);
+						MainActivity.activeInstance.setIncognito(false);
+					} else {
+						iv.setBackgroundResource(R.drawable.mask_purple_32);
+						MainActivity.activeInstance.setIncognito(true);
+					}
+					mIncognito = !mIncognito;
+				}
+			}
+		});
+		rl.addView(incog);
+		
 		RelativeLayout.LayoutParams etlp = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.MATCH_PARENT, 
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		etlp.addRule(RelativeLayout.RIGHT_OF, sp.getId());
+		etlp.addRule(RelativeLayout.LEFT_OF, incog.getId());
 
 		mEditUrl.setLayoutParams(etlp);
 		rl.addView(mEditUrl);
 		return rl;
 	}
-	public class AdapterSpinnerImageArray extends ArrayAdapter<Integer> {
+	public class Adapt extends ArrayAdapter<Integer> {
 		private Integer[] images;
 		private ImageView imageView;
 		private Drawable dr;
 		
-		public AdapterSpinnerImageArray(Context context, Integer[] images) {
+		public Adapt(Context context, Integer[] images) {
 		    super(context, android.R.layout.simple_spinner_item, images);
 		    this.images = images;
 		}

@@ -61,6 +61,7 @@ import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.DownloadListener;
+import android.webkit.ValueCallback;
 import android.webkit.WebIconDatabase;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.PluginState;
@@ -128,10 +129,12 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	public static long addOnGlobalLayoutTimerTemp = 0;
 	// период в мс через, какой промежуток делать повторную обработку
 	public static long EVENT_TIME_PERIOD = 200;
-	// текущая тема -
-	// 0 - светлая
-	// 1 - тёмная
-	int cur_theme = 0;
+	/** текущая тема -
+	// 0 - светлая,
+	 1 - тёмная.
+	 Используется для установки цвета в round_button и цвета текста в панели поиска
+	 */
+	public static int cur_theme = 0;
 	// последние значения для кнопок back и forward панели навигации
 	boolean last_tab_back= false;
 	boolean last_tab_forward = false;
@@ -1537,6 +1540,8 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		{
 			Uri uri = intent.getData();
 			String scheme = uri.getScheme();
+			File f = new File(uri.toString());
+			String mime = UrlProcess.getMimeFromFile(f);
 			if(PluginUtils.JBAK_BROWSER_SCHEME.equals(scheme))
 			{
 				if(PluginUtils.JBAK_BROWSER_INCOGNITO_URL.equals(uri.toString()))
@@ -1547,20 +1552,24 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 					return true;
 				}
 			}
-			String adr = uri.toString();
-			//  из-за этих строк, файлы с русскими названиями не открываются и 
-			// браузер по кнопке back закрывается нормально,  а вот файлы
-			// с английскими названиями постоянно переружаются. 
-			// Разобраться!
-//			if (adr.startsWith(IConst.STR_FILE)){
-//				String url = adr;
-//				adr = IConst.STR_FILE.substring(0,IConst.STR_FILE.length())+uri.getPath();
-//				if (url.compareToIgnoreCase(adr)!=0){
-//					st.toast("Понимаю только английские названия файлов");
-//				}
-//			} 
-			//openUrl(uri.toString(),Action.NEW_TAB);
-			openUrl(adr,Action.NEW_TAB);
+			// закоментил 16.06.19
+//			String url = uri.toString();
+//			//  из-за этих строк, файлы с русскими названиями не открываются и 
+//			// браузер по кнопке back закрывается нормально,  а вот файлы
+//			// с английскими названиями постоянно переружаются. 
+//			// Разобраться!
+////			if (adr.startsWith(IConst.STR_FILE)){
+////				String url = adr;
+////				adr = IConst.STR_FILE.substring(0,IConst.STR_FILE.length())+uri.getPath();
+////				if (url.compareToIgnoreCase(adr)!=0){
+////					st.toast("Понимаю только английские названия файлов");
+////				}
+////			} 
+//			//openUrl(uri.toString(),Action.NEW_TAB);
+			String url = uri.toString();
+			if (url.startsWith(st.STR_FILE))
+				url = uri.decode(uri.toString());
+			openUrl(url,Action.NEW_TAB);
 			return true;
 		}
 		return false;
@@ -1891,8 +1900,8 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			return;
 		}
 		String url = Uri.fromFile(f).toString();
-		//getWebView().loadDataWithBaseURL(url, data, "text/html", "quoted-printable", url);
-        if(android.os.Build.VERSION.SDK_INT == 19){
+		//getWebView().loadDataWithBaseURL(url, data, UrlProcess.MIME_TEXT_HTML, "quoted-printable", url);
+        if(android.os.Build.VERSION.SDK_INT >= 19){
     		getWebView().loadUrl(url);
         } else {
     		getWebView().loadDataWithBaseURL(url, data, "application/x-webarchive-xml", "UTF-8", url);
@@ -2252,17 +2261,34 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
     	if (Prefs.isNavigationPanelVisible())
     		mNavigationPanel.setVisibility(View.VISIBLE);
     }
-    // устанавливает  системную схему приложения
+    // устанавливает системную схему приложения
+    // cur_theme - каким цветом показывать round_button (0 - светлый, 1 - тёмный
     public void setMainTheme(Activity c)
     {
+		c.setTheme(android.R.style.Theme_Holo_NoActionBar);
+		int ggg = Prefs.getWVBackgroundResourse();
     	switch (Prefs.getWVBackgroundResourse())
     	{
     	case R.color.black_color:
-    		c.setTheme(android.R.style.Theme_Holo_NoActionBar);
+    	case R.color.blue_color:
+    	case R.color.blue_midnight_color:
+    	case R.color.blue_violet_color:
+    	case R.color.gray_color:
+    	case R.color.gray_dark_slate_color:
+    	case R.color.gray_light_color:
+    	case R.color.cyan_color:
+    	case R.color.brown_color:
+    	case R.color.green_color:
+    	case R.color.green_dark_color:
+    	case R.color.green_medium_spring_color:
+    	case R.color.green_chartreuse_color:
+       	case R.color.navy_color:
     		cur_theme = 1;
     		return;
     	}
-		c.setTheme(R.style.AppTheme);
+    	int aa = Color.GRAY;
+    	// если откоментить, то на индикаторе загрузки вспыхивает белым фоном
+		//c.setTheme(R.style.AppTheme);
 		cur_theme = 0;
     }
     View.OnClickListener mMyButtonClk = new View.OnClickListener() {
@@ -2329,31 +2355,59 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
   	}
     public void setLoadProgressColor()
     {
+		st.load_progress_color_error = false;
     	if (mLoadProgress!=null) {
     		int col = Prefs.getColorExtendedProgress();
-    		Drawable dr = getResources().getDrawable(col, getResources().newTheme());
-    		LayerDrawable progressDrawable = (LayerDrawable)mLoadProgress.getProgressDrawable();
-    		ClipDrawable cd = new ClipDrawable(dr, Gravity.LEFT,ClipDrawable.HORIZONTAL);
-    		progressDrawable.setDrawableByLayerId(android.R.id.progress, cd);
-    		// если откоментить, то фон рисуется сразу полный!!!
-    		//mLoadProgress.setProgressDrawable(dr);
-    		
-    		int tcol = Color.WHITE;
-    		switch (col)
-    		{
-    		case R.color.gray_color:
-        		tcol = Color.GREEN;
-    			break;
-    		case R.color.green_color:
-        		tcol = Color.MAGENTA;
-    			break;
-    		case R.color.yellow_color:
-        		tcol = Color.MAGENTA;
-    			break;
-    		}
-    		
-    		mLoadProgress.mTextPaint.setColor(tcol);
+    		Drawable dr = null;
+    		try {
+        		dr = getResources().getDrawable(col, getResources().newTheme());
+				
+			} catch (Throwable e) {
+				dr = null;
+			}
+    		if (dr==null)
+    			try {
+            		dr = getResources().getDrawable(col);
+				} catch (Throwable e) {
+					dr = null;
+				}
+    		if (dr!=null) {
+        		LayerDrawable progressDrawable = (LayerDrawable)mLoadProgress.getProgressDrawable();
+        		ClipDrawable cd = new ClipDrawable(dr, Gravity.LEFT,ClipDrawable.HORIZONTAL);
+        		progressDrawable.setDrawableByLayerId(android.R.id.progress, cd);
+        		// если откоментить, то фон рисуется сразу полная загрузка!!!
+        		//mLoadProgress.setProgressDrawable(dr);
+        		
+        		int tcol = Color.WHITE;
+        		switch (col)
+        		{
+        		case R.color.gray_color:
+            		tcol = Color.GREEN;
+        			break;
+        		case R.color.green_color:
+            		tcol = Color.MAGENTA;
+        			break;
+        		case R.color.yellow_color:
+            		tcol = Color.MAGENTA;
+        			break;
+        		}
+        		mLoadProgress.mTextPaint.setColor(tcol);
+    			
+    		} else
+    			st.load_progress_color_error = true;
     	}
   	}
+    public void setIncognito(boolean incognito) {
+    	CookieManager cm = CookieManager.getInstance();
+    	if (incognito) {
+    		if (cm !=null)
+    			cm = null;
+    		TempCookieStorage.onStartIncognito(true);
+    	} else {
+    		if (TempCookieStorage.INSTANCE!=null)
+    			TempCookieStorage.INSTANCE = null;
+    		new MyCookieManager();
 
+    	}
+    }
 }

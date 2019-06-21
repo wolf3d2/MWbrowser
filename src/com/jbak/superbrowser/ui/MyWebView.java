@@ -1,11 +1,13 @@
 package com.jbak.superbrowser.ui;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -24,6 +26,7 @@ import com.jbak.superbrowser.IConst;
 import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.NetworkChecker;
 import com.jbak.superbrowser.Prefs;
+import com.jbak.superbrowser.UrlProcess;
 import com.jbak.superbrowser.WebViewEvent.EventInfo;
 import com.jbak.superbrowser.utils.TempCookieStorage;
 import com.jbak.utils.SameThreadTimer;
@@ -139,12 +142,33 @@ public class MyWebView extends WebView {
 		if (url.startsWith(st.STR_FILE)){
 //			if (codepage==null||codepage.isEmpty())
 //				codepage = IConst.UTF8;
-			loadDataWithBaseURL(url, st.fileToStr(url.substring(6)), "text/html", IConst.UTF8, url);
-//			codepage = null;
-			return;
+			File f = new File(url);
+			String mime = UrlProcess.getMimeFromFile(f);
+			if (mime == null) {
+				loadDataWithBaseURL(url, st.fileToStr(url.substring(6)), UrlProcess.MIME_TEXT_HTML, IConst.UTF8, url);
+				return;
+			}
+			else if (mime.compareToIgnoreCase(UrlProcess.MIME_MHT) == 0) {
+				// закоментил 17.06.19 - попробуем загрузку
+				// через loadUrl
+				// старая строка
+//				loadDataWithBaseURL(url, st.fileToStr(url.substring(6)), UrlProcess.MIME_TEXT_HTML, IConst.UTF8, url);
+//				loadDataWithBaseURL(url, st.fileToStr(url.substring(6)), "application/x-webarchive-xml", IConst.UTF8, url);
+//				return;
+			}
+			else if (mime.compareToIgnoreCase(UrlProcess.MIME_TEXT_PLAIN) == 0) {
+				loadDataWithBaseURL(url, st.fileToStr(url.substring(6)), UrlProcess.MIME_TEXT_PLAIN, IConst.UTF8, url);
+				return;
+			}
+			// закоментил 17.06.19 - попробуем загрузку
+			// через loadUrl
+//			else if (mime.compareToIgnoreCase(UrlProcess.MIME_TEXT_HTML) == 0) {
+//				loadDataWithBaseURL(url, st.fileToStr(url.substring(6)), UrlProcess.MIME_TEXT_HTML, IConst.UTF8, url);
+//				return;
+//			}
 		}
-		if (url.startsWith("ASSETS_FILE:")){
-			loadDataWithBaseURL(url, st.fileToStr(url.substring(6)), "text/html", IConst.UTF8, url);
+		else if (url.startsWith("ASSETS_FILE:")){
+			loadDataWithBaseURL(url, st.fileToStr(url.substring(6)), UrlProcess.MIME_TEXT_HTML, IConst.UTF8, url);
 //			codepage = null;
 			return;
 		}
@@ -349,7 +373,7 @@ public class MyWebView extends WebView {
 				ma.round_btn.setText(" ∇ ");
 			}
 			ma.round_btn.setTextSize(25);
-			if (Prefs.getWVDarkWhiteTheme()==0){
+			if (ma.cur_theme == 0) {
 				ma.round_btn.setTextColor(Color.WHITE);
 				ma.round_btn.setBackgroundResource(R.drawable.round_button_cyan);
 			} else {

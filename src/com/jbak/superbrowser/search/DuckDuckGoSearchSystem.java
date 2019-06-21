@@ -15,6 +15,7 @@ public class DuckDuckGoSearchSystem extends SearchSystem{
 			return SEARCH_URL+searchEncodedText;
 		case CMD_I_FEEL_LUCKY:
 			return null;
+		case CMD_SEARCH_BY_PICTURE:
 		case CMD_SEARCH_IMAGES:
 			return SEARCH_URL+searchEncodedText+"&t=h_&iax=images&ia=images";
 		case CMD_SEARCH_VIDEOS:

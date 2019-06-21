@@ -95,7 +95,7 @@ public abstract interface IConst extends StrConst{
 	public static final long MONTH_MILLIS = 30*DAY_MILLIS;
 	
 	public static final int BUTTONS_SMALL = PanelButton.TYPE_BUTTON_SMALL;
-	public static final int BUTTONS_MEDIUM= PanelButton.TYPE_BUTTON_MEDIUM;
+	public static final int BUTTONS_MEDIUM= PanelButton.TYPE_BUTTON_MEDIUM_TWO_LINE;
 	public static final int BUTTONS_BIG = PanelButton.TYPE_BUTTON_NORMAL;
 	public static ObjectKeyValues<Integer, Integer> BUTTON_TYPES = new ObjectKeyValues<Integer, Integer>
 	(

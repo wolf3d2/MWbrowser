@@ -18,6 +18,9 @@ public class GoogleSearchSystem extends SearchSystem{
 			return SEARCH_URL+searchEncodedText+"&btnI";
 		case CMD_SEARCH_IMAGES:
 			return SEARCH_URL+searchEncodedText+"&tbm=isch";
+		case CMD_SEARCH_BY_PICTURE:
+			return "http://www.google.com/searchbyimage?image_url="
+			+searchEncodedText;
 		case CMD_SEARCH_VIDEOS:
 			return SEARCH_URL+searchEncodedText+"&tbm=vid";
 		case CMD_SEARCH_NEWS:

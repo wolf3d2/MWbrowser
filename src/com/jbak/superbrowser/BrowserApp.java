@@ -27,6 +27,7 @@ import com.jbak.superbrowser.search.SearchSystem;
 import com.jbak.superbrowser.ui.dialogs.DialogAbout;
 import com.jbak.superbrowser.ui.dialogs.ThemedDialog;
 import com.jbak.superbrowser.ui.themes.MyTheme;
+import com.jbak.superbrowser.utils.TempCookieStorage;
 import com.jbak.ui.ConfirmOper;
 import com.jbak.utils.DateToString;
 import com.jbak.utils.Utils;
@@ -75,6 +76,8 @@ public class BrowserApp extends Application {
 		//checkMoveDbToFiles();
 		//FileUtils.copyOrMove(true, new File("/data/data/com.jbak.superbrowser"), new File(Environment.getExternalStorageDirectory(),"JbakBrowserData"));
 		new MyCookieManager();
+		//TempCookieStorage.onStartIncognito(true);
+
 		androidDefaultUEH = Thread.getDefaultUncaughtExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			

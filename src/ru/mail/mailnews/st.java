@@ -24,6 +24,8 @@ import com.mw.superbrowser.R;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Service;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -53,6 +55,8 @@ import android.widget.Toast;
 
 public class st
 {
+	/** true, если ошибка установки цвета полосы прогресса загрузки */
+	public static boolean load_progress_color_error = false;
 	 // строковые константы для уменьшения объёма занимаемой памяти
 	public static final String STR_COMMENT = "//";
 	public static final String STR_SPACE = " ";
@@ -577,9 +581,6 @@ public class st
 			case R.color.navy_color:
 				ret = con.getString(R.string.color_navy);
 				break;
-			case R.color.purple_color:
-				ret = con.getString(R.string.color_purple);
-				break;
 			case R.color.orange_dark_color:
 				ret = con.getString(R.string.color_dark_orange);
 				break;
@@ -589,7 +590,7 @@ public class st
 			case R.color.gray_light_color:
 				ret = con.getString(R.string.color_light_gray);
 				break;
-			case R.color.chartreuse_color:
+			case R.color.green_chartreuse_color:
 				ret = con.getString(R.string.color_chartreuse);
 				break;
 			case R.color.green_medium_spring_color:
@@ -604,8 +605,8 @@ public class st
 			case R.color.brown_rosy_color:
 				ret = con.getString(R.string.color_rosy_brown);
 				break;
-			case R.color.brown_saddle_color:
-				ret = con.getString(R.string.color_saddle_brown);
+			case R.color.brown_color:
+				ret = con.getString(R.string.color_brown);
 				break;
 			case R.color.gray_dark_slate_color:
 				ret = con.getString(R.string.color_dark_slate_gray);
@@ -629,13 +630,13 @@ public class st
 			Action act = Action.create(Action.OK,colorResId)
 				.setText(getColorName(con, colorResId))
 				.setImageRes(colorResId);
-					
-			
 			return act;
 		}
-		public static int getColorFromResourse(Context con, int resColorId)
+		/** возвращаем значение цвета из ресурсов
+		 * @param resColorId - цвет в ресурсах, вида R.color.white_color */
+		public static int getColorFromResourse(Context cont, int resColorId)
 		{
-			return con.getResources().getColor(resColorId);
+			return cont.getResources().getColor(resColorId);
 		}
 	    
 }

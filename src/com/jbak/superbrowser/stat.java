@@ -30,6 +30,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.Service;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -55,7 +57,6 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.Media;
 import android.provider.MediaStore.Images;
 import android.speech.RecognizerIntent;
-import android.text.ClipboardManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
@@ -636,10 +637,19 @@ public class stat implements IConst {
 		ClipboardManager cm = (ClipboardManager)c.getSystemService(Service.CLIPBOARD_SERVICE);
 		cm.setText(text);
 	}
-	public static CharSequence getClipboardString(Context c)
+	public static CharSequence getClipboardCharSequence(Context c)
 	{
-		ClipboardManager cm = (ClipboardManager)c.getSystemService(Service.CLIPBOARD_SERVICE);
-		return cm.getText();
+     	ClipboardManager cm = (ClipboardManager)c.getSystemService(c.CLIPBOARD_SERVICE);
+        ClipData clip = cm.getPrimaryClip();
+        if (clip==null)
+        	return null;
+        if (clip.getItemCount()<1)
+        	return null;
+     	CharSequence str = clip.getItemAt(0).getText();
+     	return str;
+// старый код - ClipboardManager из android.text
+//		ClipboardManager cm = (ClipboardManager)c.getSystemService(Service.CLIPBOARD_SERVICE);
+//		return cm.getText();
 	}
 	static void editBookmark(Context c, Uri uri,long id,String name,Bookmark parentName)
 	{

@@ -38,6 +38,10 @@ public class MyCookieManager extends CookieManager {
 			INSTANCE = new MyCookieManager();
 		return INSTANCE;
 	}
+	public CookieManager getInstanceCookieManager()
+	{
+		return mInstance;
+	}
 
 	@Override
 	public boolean acceptCookie() {

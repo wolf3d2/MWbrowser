@@ -17,7 +17,7 @@ import com.jbak.utils.Utils;
 public class TempCookieStorage implements WebViewEvent{
 	HashMap<String, String> mIncognitoCookies;
 	HashMap<String, String> mNormalCookies;
-	private static TempCookieStorage INSTANCE = null;
+	public static TempCookieStorage INSTANCE = null;
 	boolean mIncognito = false;
 	public static void onStartIncognito(boolean start)
 	{

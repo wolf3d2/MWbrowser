@@ -29,6 +29,7 @@ import com.jbak.ui.CustomDialog;
 public class MenuPanelButton extends CustomDialog {
 
 	OnAction mActionListener;
+	/** не переделывать - с такими настройками грида, title не показывается */
 	public MenuPanelButton(Context context,ActArray actions,OnAction listener) {
 		super(context, context instanceof MainActivity&&Prefs.getFullscreen()?R.style.CustomDialogFullscreenTheme:R.style.CustomDialogTheme);
 		mActionListener = listener;
