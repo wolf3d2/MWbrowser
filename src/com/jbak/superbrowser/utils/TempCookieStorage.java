@@ -113,10 +113,10 @@ public class TempCookieStorage implements WebViewEvent{
 	}
 	public static void onMainActivityResume(MainActivity a)
 	{
-		if(INSTANCE==null||a==null||MainActivity.activeInstance==null||a==MainActivity.activeInstance)
+		if(INSTANCE==null||a==null||MainActivity.inst==null||a==MainActivity.inst)
 			return; 
 		TabList l1 = a.getTabList();
-		TabList l2 = MainActivity.activeInstance.getTabList();
+		TabList l2 = MainActivity.inst.getTabList();
 		if(l1.isIncognito()==l2.isIncognito())
 			return;
 		INSTANCE.mIncognito = l1.isIncognito();

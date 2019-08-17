@@ -376,5 +376,6 @@
     <string name="color_rosy_brown">RosyBrown</string>
     <string name="color_brown">SaddleBrown</string>
     <string name="color_dark_slate_gray">DarkSlateGray</string>
+    <string name="color_magenta">Magenta</string>
     
 </resources>

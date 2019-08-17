@@ -472,7 +472,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			getMain().runAction(act);
 			return;
 		case Action.SEARCH_ON_PAGE:
-			getMain().activeInstance.startSearchPage(act);
+			getMain().inst.startSearchPage(act);
 			return;
 		case Action.SOURCE_CODE:
 			showSourceCode();

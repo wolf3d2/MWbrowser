@@ -75,10 +75,10 @@ public class PanelQuickTools extends FrameLayout implements WebViewEvent,OnGloba
 		WebView webView = act.getWebView();
 		if(webView==null)
 			return;
-		if(webView.canGoBack())
-			ar.add(Action.create(Action.GO_BACK));
-		if(webView.canGoForward())
-			ar.add(Action.create(Action.GO_FORWARD));
+//		if(webView.canGoBack())
+//			ar.add(Action.create(Action.GO_BACK));
+//		if(webView.canGoForward())
+//			ar.add(Action.create(Action.GO_FORWARD));
 
 	}
 	public static void setMinipanelActions(ActArray ar)
@@ -163,14 +163,14 @@ public class PanelQuickTools extends FrameLayout implements WebViewEvent,OnGloba
 				if(ma.getWebView()!=null&&ma.getTab()!=null&&ma.getTab().isLoading())
 					ar.set(i, Action.create(Action.STOP));
 				break;
-			case Action.GO_BACK:
-				if(!webView.canGoBack())
-					ar.remove(i);
-				break;
-			case Action.GO_FORWARD:
-				if(!webView.canGoForward())
-					ar.remove(i);
-				break;
+//			case Action.GO_BACK:
+//				if(!webView.canGoBack())
+//					ar.remove(i);
+//				break;
+//			case Action.GO_FORWARD:
+//				if(!webView.canGoForward())
+//					ar.remove(i);
+//				break;
 			default:
 				break;
 			}

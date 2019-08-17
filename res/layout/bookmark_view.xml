@@ -5,8 +5,8 @@
     android:orientation="vertical" 
     >
     <ru.mail.webimage.widgets.BgImgContainer android:id="@+id/thumbnail"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:padding="1dp"
         android:layout_centerVertical="true"
         />
@@ -35,7 +35,7 @@
 	    android:layout_height="wrap_content"
 	    android:textColor="#ffffff"
 	    android:textSize="16sp"
-	    android:padding="5dp"
+	    android:padding="2dp"
 	    android:maxLines="2"
 	    />
     <ImageView android:id="@+id/close"
@@ -49,7 +49,7 @@
         android:src="@drawable/clear"
         android:visibility="gone"
         />
-    		<TextView  
+    <TextView  
 	    android:id="@+id/normalText"
 	    android:layout_below="@id/bigText"
 	    android:layout_width="match_parent"
@@ -61,7 +61,7 @@
 	    android:ellipsize="end"
 	    android:paddingLeft="10dp"
 	    android:paddingBottom="0dp"
-	    android:padding="5dp"
+	    android:padding="2dp"
 	    android:layout_toRightOf="@id/thumbnail"
 	    />
     <TextView android:id="@+id/shortText"

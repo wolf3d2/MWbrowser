@@ -6,7 +6,8 @@ import com.jbak.superbrowser.ui.PanelButton;
 import com.jbak.utils.ObjectKeyValues;
 import com.jbak.utils.DbUtils.StrConst;
 
-public abstract interface IConst extends StrConst{
+public abstract interface IConst extends StrConst
+{
 	public static final String ABOUT_NULL = "about:null";
 	public static final String ABOUT_BLANK = "about:blank";
 	public static final String PACKAGE_MWCOSTS = "com.mwcorp.costs";

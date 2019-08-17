@@ -4,7 +4,7 @@
     package="com.mw.superbrowser"
     android:installLocation="auto"
     android:versionCode="24"
-    android:versionName="1.02.04" >
+    android:versionName="1.02.05" >
 
     <!-- не менять! Иначе перестаёт работать Текст элемента в контекстном меню -->
     <uses-sdk

@@ -14,6 +14,7 @@ public class BookmarkViewRecyclerAdapter extends Adapter<BookmarkViewHolder> imp
 	OnClickListener mClickListener;
 	OnLongClickListener mLongClickListener;
 	int mViewType = BookmarkView.TYPE_DEFAULT;
+	
 	public BookmarkViewRecyclerAdapter(BookmarkAdapter adapter) {
 		mBa = adapter;
 		mBa.setParentAdapter(this);

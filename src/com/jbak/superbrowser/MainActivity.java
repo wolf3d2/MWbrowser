@@ -158,7 +158,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	ViewGroup mWebViewFrame;
 	ViewGroup mTempWebViewFrame;
 	MainPanel mPanel;
-	public static MainActivity activeInstance;
+	public static MainActivity inst;
 	WeakRefArray<WebViewEvent> mWebViewListeners = new WeakRefArray<WebViewEvent>();
 	RelativeLayout mMagicButtonLayout;
 	RelativeLayout mNvigationPanelLayout;
@@ -577,7 +577,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 				try {
 			        Intent intent = new Intent(Intent.ACTION_VIEW);
 			        intent.setData(Uri.parse(link));
-			        activeInstance.startActivity(intent);
+			        inst.startActivity(intent);
 				} catch (Throwable e) {
 				}
 				return;
@@ -586,7 +586,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 				try {
 			        Intent intent = new Intent(Intent.ACTION_VIEW);
 			        intent.setData(Uri.parse(link1));
-			        activeInstance.startActivity(intent);
+			        inst.startActivity(intent);
 				} catch (Throwable e) {
 				}
 				return;
@@ -595,7 +595,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 				try {
 			        Intent intent = new Intent(Intent.ACTION_VIEW);
 			        intent.setData(Uri.parse(link2));
-			        activeInstance.startActivity(intent);
+			        inst.startActivity(intent);
 				} catch (Throwable e) {
 				}
 				return;
@@ -628,7 +628,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 					}).show();
 				}
 				else
-					openUrl(url, activeInstance.WINDOW_OPEN_SAME);
+					openUrl(url, inst.WINDOW_OPEN_SAME);
 			}
 			return;
 			case Action.MAGIC_BUTTON_POS:
@@ -677,8 +677,8 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 				mJsProcessor.runJavaScript(JavaScriptProcessor.JS_GET_SOURCE_CODE, null,getWebView());
 				return;
 			case Action.CLOSE_ALL_TABS:
-            	new ThemedDialog(activeInstance).setConfirm(
-            			activeInstance.getString(R.string.act_close_windows)+"?", 
+            	new ThemedDialog(inst).setConfirm(
+            			inst.getString(R.string.act_close_windows)+"?", 
             			null, 
             			new ConfirmOper() {
 					
@@ -801,13 +801,13 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			mWebView.pageUp(true);
 			//mWebView.scrollTo(0, 0);
 		}
-		else if(id==R.id.magicButton)
-		{
-			showPanel(!isPanelShown());
-		}
 		else if(id==R.id.pageBottom)
 		{
 			mWebView.pageDown(true);
+		}
+		else if(id==R.id.magicButton)
+		{
+			showPanel(!isPanelShown());
 		}
 		else if(id==R.id.history)
 		{
@@ -838,8 +838,8 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		}
 		if(getTabList().isIncognito())
 			TempCookieStorage.onStartIncognito(false);
-		if(activeInstance==this)
-			activeInstance=null;
+		if(inst==this)
+			inst=null;
 		Tab ww = getTab();
 		if(ww!=null)
 		{
@@ -1619,7 +1619,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	protected void onResume() {
 		super.onResume();
 		TempCookieStorage.onMainActivityResume(this);
-		activeInstance = this;
+		inst = this;
 		boolean incognito = getTabList()!=null&&getTabList().isIncognito();
 		CookieManager.getInstance().setAcceptCookie(!incognito);
 		checkMainPanelStartMode();
@@ -1666,7 +1666,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			onSettingsChanged((String)param);
 			break;
 		case BrowserApp.GLOBAL_ACTION:
-			if(this!=activeInstance)
+			if(this!=inst)
 				return;
 			if(param instanceof Action)
 			{
@@ -1908,7 +1908,11 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
         }
 
 	}
+	/** жесты, когда открываем видео на полный экран */
+	GestureDetector fullVideoGestureDetector = null;
 	public void showCustomView(View view) {
+        View fullView = null;
+		fullVideoGestureDetector = null;
 		if(view==null) //hide
 		{
 			setFullscreen(Prefs.getFullscreen(), false);
@@ -1932,10 +1936,12 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			if (view!=null) {
 			    if (view instanceof FrameLayout) {
 			        final FrameLayout frame = (FrameLayout) view;
-			        int iii = frame.getChildCount();
+//			        fullView = (View) frame.getChildAt(0);
+//			        if (fullView!=null)
+//			        	fullVideoGestureDetector = new GestureDetector(fullView.getContext(), videoongesturelistener);
 			        if (frame.getChildAt(0) instanceof VideoView) {
 			            // get video view
-
+			        	// видео на полный экран
 			        	VideoView vv = (VideoView) frame.getFocusedChild();
 			        	Uri mUri = null;
 			        	try {
@@ -1948,12 +1954,62 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 
 			}
 			setFullscreen(true, false);
+// сделал, жесты на видео срабатывают, но не знаю что делать дальше			
+//			if (fullVideoGestureDetector!=null&&fullView!=null)
+//				fullView.setOnTouchListener(new View.OnTouchListener() {
+//					
+//					@Override
+//					public boolean onTouch(View arg0, MotionEvent event) {
+//						if (fullVideoGestureDetector!=null
+//								&&fullVideoGestureDetector.onTouchEvent(event))
+//							return true;
+//						return false;
+//					}
+//				});
 			mCustomLayoutFrame.setBackgroundColor(0xff000000);
 	        mCustomLayoutFrame.addView(view);
 	        mCustomLayoutFrame.setVisibility(View.VISIBLE);
 	        //mWebView.setVisibility(View.INVISIBLE);
 		}
 	}
+	// ПОКА НЕ ДОДЕЛАЛ!			
+	// обработка жестов когда видео на полный экран
+	   SimpleOnGestureListener videoongesturelistener = new SimpleOnGestureListener() {
+			@Override
+			public boolean onDoubleTap(MotionEvent e) {
+				return super.onDoubleTap(e);
+			}
+			@Override
+			public boolean onFling(MotionEvent e1, MotionEvent e2, float velX,
+					float velY) {
+				// процент области экрана справа и лева для горизонтальных жестов
+				int AREAL_LENGTH_PROC = 50;
+				// области от края экрана в процентах - если жест в их пределат, то обрабатывать
+//				int ar_l= (int)((st.getDisplayWidth(mInstances)/100)*AREAL_LENGTH_PROC);
+//				int ar_r= (int)st.getDisplayWidth(mInstances)-((st.getDisplayWidth(m_c)/100)*AREAL_LENGTH_PROC);
+	        	
+				int begX = (int)e1.getX();
+	            int begY = (int)e1.getY();
+	            float dx = e2.getX()-e1.getX();
+	            float dy = e2.getY()-e1.getY();
+	            float mdx = Math.abs(dx);
+	            float mdy = Math.abs(dy);
+
+	            return super.onFling(e1, e2, velX, velY);
+			}
+
+			@Override
+			public void onLongPress(MotionEvent e) {
+				super.onLongPress(e);
+			}
+
+			@Override
+			public boolean onSingleTapConfirmed(MotionEvent e) {
+				return super.onSingleTapConfirmed(e);
+			}
+		};
+
+	
 	public final TabList getTabList()
 	{
 		return mTabList;
@@ -2158,7 +2214,8 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		if (mNavigationPanel!=null){
 			size = Prefs.get().getInt(Prefs.NAVIGATION_PANEL_SIZE, 40);
 			alpha = Prefs.get().getInt(Prefs.NAVIGATION_PANEL_ALPHA, 100);
-			col = Prefs.get().getInt(Prefs.NAVIGATION_PANEL_COLOR, Color.RED);
+			col = Prefs.get().getInt(Prefs.NAVIGATION_PANEL_COLOR, R.color.red_color);
+			col = st.getColorFromResourse(getApplicationContext(), col);
 			m_tv = (TextView)mNavigationPanel.findViewById(R.id.np_up);
 			if (m_tv!=null){
 				m_tv.setAlpha(alpha/100f);

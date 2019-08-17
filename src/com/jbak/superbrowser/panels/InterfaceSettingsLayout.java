@@ -803,7 +803,7 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 						{
 							Prefs.get().edit().putInt(Prefs.EXTENDED_PROGRESS_COLOR, 
 									(Integer)act.param).commit();
-							MainActivity.activeInstance.setLoadProgressColor();;
+							MainActivity.inst.setLoadProgressColor();;
 							b.setDesc(st.getColorName(cc, -1));
 							notifyDataSetChanged();
 						}

@@ -298,10 +298,10 @@ public class CustomDialog extends Dialog implements OnClickListener{
 		if(mButtonListener!=null)
 			mButtonListener.onButtonClick(false);
 		super.onBackPressed();
-		if(st.fl_temp_hide_navigationpanel&&MainActivity.activeInstance!=null){
+		if(st.fl_temp_hide_navigationpanel&&MainActivity.inst!=null){
 			
-			MainActivity.activeInstance.setInterface(2);
-			MainActivity.activeInstance.showMagickAndNavigation();
+			MainActivity.inst.setInterface(2);
+			MainActivity.inst.showMagickAndNavigation();
 			st.fl_temp_hide_navigationpanel=false;
 		}
 	}

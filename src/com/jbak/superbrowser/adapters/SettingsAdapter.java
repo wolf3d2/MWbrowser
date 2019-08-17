@@ -612,7 +612,7 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 				{
 					Prefs.get().edit().putInt(Prefs.WEBVIEW_BACKGROUND_COLOR_NEW, 
 							(Integer)act.param).commit();
-					MainActivity.activeInstance.setLoadProgressColor();
+					MainActivity.inst.setLoadProgressColor();
 					//MainActivity.activeInstance.setMainTheme(MainActivity.activeInstance);
 					b.setDesc(st.getColorName(cc, -2));
 					notifyDataSetChanged();

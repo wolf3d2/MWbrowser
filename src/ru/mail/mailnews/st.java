@@ -16,6 +16,7 @@ import java.util.TimeZone;
 import org.json.JSONArray;
 
 import com.jbak.superbrowser.Action;
+import com.jbak.superbrowser.IConst;
 import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.Prefs;
 import com.jbak.superbrowser.ui.dialogs.DialogHelp;
@@ -34,6 +35,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
@@ -224,13 +226,13 @@ public class st
            }
            public static void toast(String text)
            {
-        	   if (MainActivity.activeInstance!=null)
-        		   toast(MainActivity.activeInstance, text);
+        	   if (MainActivity.inst!=null)
+        		   toast(MainActivity.inst, text);
            }
            public static void toast(int resId)
            {
-        	   if (MainActivity.activeInstance!=null){
-        		   toast(MainActivity.activeInstance, MainActivity.activeInstance.getString(resId));
+        	   if (MainActivity.inst!=null){
+        		   toast(MainActivity.inst, MainActivity.inst.getString(resId));
         	   }
            }
            public static void toast(Context c,String text)
@@ -243,13 +245,13 @@ public class st
            }
            public static void toastLong(String text)
            {
-        	   if (MainActivity.activeInstance!=null)
-        		   toastLong(MainActivity.activeInstance, text);
+        	   if (MainActivity.inst!=null)
+        		   toastLong(MainActivity.inst, text);
            }
            public static void toastLong(int resId)
            {
-        	   if (MainActivity.activeInstance!=null){
-        		   toastLong(MainActivity.activeInstance, MainActivity.activeInstance.getString(resId));
+        	   if (MainActivity.inst!=null){
+        		   toastLong(MainActivity.inst, MainActivity.inst.getString(resId));
         	   }
            }
            public static void toastLong(Context c,String text)
@@ -617,13 +619,16 @@ public class st
 			case R.color.cyan_color:
 				ret = con.getString(R.string.color_cyan);
 				break;
+			case R.color.magenta_color:
+				ret = con.getString(R.string.color_magenta);
+				break;
 			default: 
 				ret = con.getString(R.string.empty);
 			}
 
 			return ret;
 		}
-		/** создаем аа для менюшек выбора цвета */
+		/** создаем Action для менюшек выбора цвета */
 		public static Action createActionColor(Context con, int colorResId)
 		{
 			// берём любой Action который рисуется без дополнительной обработки 
@@ -636,7 +641,12 @@ public class st
 		 * @param resColorId - цвет в ресурсах, вида R.color.white_color */
 		public static int getColorFromResourse(Context cont, int resColorId)
 		{
-			return cont.getResources().getColor(resColorId);
+			int ret = Color.BLUE;
+			try {
+				ret = cont.getResources().getColor(resColorId);
+			} catch (Throwable e) {
+			}
+			return ret;
 		}
 	    
 }

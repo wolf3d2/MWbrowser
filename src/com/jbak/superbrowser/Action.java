@@ -379,7 +379,7 @@ public class Action {
 				public boolean doAction(MainActivity act) {
 					String help = st.getTextAssets(act, "_help.htm");
 					if (help!=null) {
-						Tab ww = new Tab(act.activeInstance, act.getTabList().getNewTabId(),act.getTabList());
+						Tab ww = new Tab(act.inst, act.getTabList().getNewTabId(),act.getTabList());
 						act.tabStart(ww, null);
 						
 						act.closeEmptyWindow();
@@ -425,7 +425,7 @@ public class Action {
 								proc = 100;
 							}
 							Prefs.get().edit().putInt(Prefs.MAGIC_KEY_ALPHA, proc).commit();
-							MainActivity.activeInstance.setMagicButtonAlpha();
+							MainActivity.inst.setMagicButtonAlpha();
 						}
 					}).show();
 					return true;
@@ -465,38 +465,21 @@ public class Action {
 			return new Action(action,action,R.string.act_color,param,R.drawable.contextmenu)
 			{
 				public boolean doAction(final MainActivity activity){
-					// пока не сделал
-					ActArray ar = new ActArray();
-					ar.add(Action.create(NAVIGATION_PANEL_TEXT_COLOR).setText(activity.getString(R.string.pn_color_r)));
-					ar.add(Action.create(NAVIGATION_PANEL_TEXT_COLOR).setText(activity.getString(R.string.pn_color_g)));
-					ar.add(Action.create(NAVIGATION_PANEL_TEXT_COLOR).setText(activity.getString(R.string.pn_color_b)));
-					ar.add(Action.create(NAVIGATION_PANEL_TEXT_COLOR).setText(activity.getString(R.string.pn_color_m)));
-					ar.add(Action.create(NAVIGATION_PANEL_TEXT_COLOR).setText(activity.getString(R.string.pn_color_dg)));
-					ar.add(Action.create(NAVIGATION_PANEL_TEXT_COLOR).setText(activity.getString(R.string.pn_color_bl)));
-					
+				int col=Color.MAGENTA;
+				ActArray ar = new ActArray();
+					ar.add(st.createActionColor(activity, R.color.red_color));
+					ar.add(st.createActionColor(activity, R.color.green_color));
+					ar.add(st.createActionColor(activity, R.color.blue_color));
+					ar.add(st.createActionColor(activity, R.color.magenta_color));
+					ar.add(st.createActionColor(activity, R.color.gray_dark_color));
+					ar.add(st.createActionColor(activity, R.color.black_color));
+
 					new MenuPanelButton(activity, ar, new OnAction() 
 					{
 						@Override
 						public void onAction(Action act) 
 						{
-							int col=0;
-							try {
-								String str = act.itemText.toString().substring(0,act.itemText.toString().indexOf("."));
-								col = Integer.parseInt(str); 
-							} catch (NumberFormatException e){
-								col = 3;
-							}
-							switch (col)
-							{
-							case 1: col=Color.RED;break;
-							case 2: col=Color.GREEN;break;
-							case 3: col=Color.BLUE;break;
-							case 4: col=Color.MAGENTA;break;
-							case 5: col=Color.DKGRAY;break;
-							case 6: col=Color.BLACK;break;
-							default: col=Color.RED;
-							}
-							Prefs.get().edit().putInt(Prefs.NAVIGATION_PANEL_COLOR, col).commit();
+							Prefs.get().edit().putInt(Prefs.NAVIGATION_PANEL_COLOR, (Integer)act.param).commit();
 							activity.showMagickAndNavigation();
 							activity.setNavigationPanel();
 							st.fl_temp_hide_navigationpanel=false;

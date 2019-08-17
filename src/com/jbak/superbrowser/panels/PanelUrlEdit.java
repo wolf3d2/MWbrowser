@@ -86,6 +86,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 	public static final int STYLE_VISIBLE_TOOLS = 0x0002;
 	int mAddrState = STATE_ADDR_NONE;
 	OnAction mActionListener;
+	
 	private void init() {
 		setOrientation(VERTICAL);
 //		setOrientation(HORIZONTAL);
@@ -244,13 +245,16 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		if(mUserEditText) {
 			ar.add(Action.create(Action.CANCEL));
 			//ar.add(Action.create(Action.TRANSLATE_LINK));
+			if(!TextUtils.isEmpty(stat.getClipboardCharSequence(getContext())))
+				ar.add(Action.PASTE);
 			ar.add(Action.create(Action.TRANSLATE_COPYING));
 		}
 		String text = mEditUrl.getText().toString();
 		if(TextUtils.isEmpty(text))
 		{
-			if(!TextUtils.isEmpty(stat.getClipboardCharSequence(getContext())))
-				ar.add(Action.PASTE);
+// старое положение кнопки paste
+//			if(!TextUtils.isEmpty(stat.getClipboardCharSequence(getContext())))
+//				ar.add(Action.PASTE);
 			if(stat.isVoiceSearchExist(getContext()))
 				ar.add(Action.create(Action.VOICE_SEARCH,this));
 			BrowserApp.pluginServer.getPluginActions(ar, Plugin.WINDOW_ADDR_EMPTY,this);
@@ -529,15 +533,15 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 			
 			@Override
 			public void onClick(View v) {
-				if (MainActivity.activeInstance!=null) {
+				if (MainActivity.inst!=null) {
 					
 					ImageView iv = (ImageView) v;
 					if (mIncognito) {
 						iv.setBackgroundResource(R.drawable.mask_32);
-						MainActivity.activeInstance.setIncognito(false);
+						MainActivity.inst.setIncognito(false);
 					} else {
 						iv.setBackgroundResource(R.drawable.mask_purple_32);
-						MainActivity.activeInstance.setIncognito(true);
+						MainActivity.inst.setIncognito(true);
 					}
 					mIncognito = !mIncognito;
 				}
