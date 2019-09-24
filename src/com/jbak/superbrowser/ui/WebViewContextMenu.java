@@ -1,5 +1,6 @@
 package com.jbak.superbrowser.ui;
 
+import java.io.File;
 import java.net.URI;
 
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
@@ -32,12 +34,18 @@ import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.MainActivityRef;
 import com.jbak.superbrowser.Prefs;
 import com.jbak.superbrowser.SearchAction;
+import com.jbak.superbrowser.Tab;
 import com.mw.superbrowser.R;
 import com.jbak.superbrowser.stat;
 import com.jbak.superbrowser.UrlProcess;
 import com.jbak.superbrowser.noobfuscate.JavaScriptProcessor;
 import com.jbak.superbrowser.search.SearchSystem;
+import com.jbak.superbrowser.stat.DownloadOptions;
+import com.jbak.superbrowser.ads.AdsBlock;
+import com.jbak.superbrowser.ads.AdsBlock.AdBlockList;
 import com.jbak.superbrowser.ui.dialogs.DialogEditor;
+import com.jbak.superbrowser.ui.dialogs.ThemedDialog;
+import com.jbak.ui.ConfirmOper;
 import com.jbak.utils.Utils;
 
 @SuppressLint("Recycle")
@@ -195,6 +203,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 					ar.add(Action.create(Action.SHARE_ELEMENT,url));
 					ar.add(Action.create(Action.NEW_TAB,url));
 					ar.add(Action.create(Action.BACKGROUND_TAB,url));
+					ar.add(Action.create(Action.BLOCK,url));
 				}
 			}
 
@@ -215,6 +224,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 					ar.add(Action.create(Action.BACKGROUND_TAB,url));
 					ar.add(Action.create(Action.SEARCH_ON_PAGE));
 					ar.add(Action.create(Action.SAVEFILE,url).setText(R.string.act_save_link));
+					ar.add(Action.create(Action.BLOCK,url));
 //					ar.add(Action.create(Action.SELECT_TEXT));
 //					Stat.url = url;
 //					ar.add(new SearchAction(SearchSystem.CMD_TRANSLATE_URL, R.string.act_translate, R.drawable.translate));
@@ -235,6 +245,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 					ar.add(aa);
 					ar.add(Action.create(Action.SEARCH_BY_PICTURE,url));
 //					ar.add(Action.create(Action.SHARE_ELEMENT,url));
+					ar.add(Action.create(Action.BLOCK,url));
 				}
 			}
 			if(!TextUtils.isEmpty(mText)){
@@ -256,6 +267,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			if(vUrl!=null) {
 				ar.add(Action.create(Action.EXTERNAL_VIDEO_PLAYER));
 				ar.add(Action.create(Action.COPY_NET_STRIMING_URL));
+				//ar.add(Action.create(Action.BLOCK,url));
 			}
 			
 			break;
@@ -272,7 +284,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 					ar.add(Action.create(Action.BACKGROUND_TAB,url));
 					ar.add(Action.create(Action.COPY_URL_TO_CLIPBOARD,url));
 					ar.add(Action.create(Action.SHARE_ELEMENT,url));
-					
+					ar.add(Action.create(Action.BLOCK,url));
 				}
 			}
 
@@ -293,9 +305,11 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 					ar.add(Action.create(Action.SHARE_ELEMENT,url));
 					ar.add(Action.create(Action.SAVEFILE,url).setText(R.string.act_save_link));
 					ar.add(Action.create(Action.SEARCH_ON_PAGE));
+					ar.add(Action.create(Action.BLOCK,url));
 					if(vUrl!=null) {
 						ar.add(Action.create(Action.EXTERNAL_VIDEO_PLAYER));
 						ar.add(Action.create(Action.COPY_NET_STRIMING_URL));
+						//ar.add(Action.create(Action.BLOCK,url));
 					}
 //					ar.add(Action.create(Action.SELECT_TEXT));
 //					Stat.url = url;
@@ -316,6 +330,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 					aa.smallImageRes = 0;
 					ar.add(aa);
 					ar.add(Action.create(Action.SEARCH_BY_PICTURE,url));
+					ar.add(Action.create(Action.BLOCK,url));
 //					ar.add(Action.create(Action.SHARE_ELEMENT,url));
 				}
 			}
@@ -407,6 +422,27 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 		String url = (String)act.param;
 
 		switch (act.command) {
+		case Action.BLOCK:
+			AdBlockList abl = new AdBlockList(url,true);
+			final MyWebView mwv2 = getMain().getWebView();
+			if (mwv2== null)
+				return;
+			mwv2.adblock_urls.add(abl);
+        	new ThemedDialog(getMain()).setConfirm("Элемент добавлен в блокировку.\n\n"+getMain().getString(R.string.act_refresh), 
+        			null, new ConfirmOper()
+        	{
+				
+				@Override
+				public void onConfirm(Object userParam) {
+					mwv2.loadUrl (IConst.ABOUT_BLANK);
+//					st.toastLong("adblock_urls:"+mwv2.adblock_urls.size()+"\n"
+//							+ mwv2.adblock_urls.get(0).url
+//							);
+					mwv2.loadUrl(mBaseUrl);
+				}
+			});
+			
+			break;
 		case Action.SEARCH_BY_PICTURE:
 			ActArray ar = new ActArray();
 			Action aa;

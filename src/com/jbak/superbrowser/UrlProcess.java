@@ -188,8 +188,10 @@ public class UrlProcess implements IConst{
 		if(TextUtils.isEmpty(fn))
 		{
 			fn = uri.getHost();
-			fn = fn.replace('.', '_');
-			fn+='.'+ext;
+			if (fn!=null) {
+				fn = fn.replace('.', '_');
+				fn+='.'+ext;
+			}
 		}
 		return fn;
 	}

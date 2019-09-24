@@ -4,6 +4,9 @@
     <string name="in_developing">В разработке</string>
     <string name="app_name">MW Browser</string>
 
+<!-- блокировщик рекламы     -->
+    <string name="ads_block_element">Блокировать элемент</string>
+    
     <string name="supermenu_button_set">Наборы расположения кнопок при использовании суперменю</string>
     <string name="supermenu_button_def">По умолчанию</string>
     <string name="supermenu_button_vert8inch">Планшет 8\"</string>

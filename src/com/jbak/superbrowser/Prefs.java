@@ -17,6 +17,8 @@ import com.mw.superbrowser.R;
 
 public class Prefs 
 {
+	/**  ключ, включена ли блокировка рекламы*/
+	public static final String ADS_BLOCK = "ads_block";
 	/**  ключ, самый первый запуск браузера*/
 	public static final String FIRST_START_BROWSER = "first_start_browser";
 	/**  ключ, показ панели в две колонки по выбору системы*/
@@ -124,6 +126,7 @@ public class Prefs
 		INSTANCE = new Prefs();
 		INSTANCE.mPrefs = c.getSharedPreferences(NAME_SETTING, Context.MODE_PRIVATE);
 		INSTANCE.mVolumeKeysState = INSTANCE.mPrefs.getInt(VOLUME_KEYS_STATE, VOLUME_KEYS_NONE);
+		
 		remove();
 	}
 	private static void remove()
@@ -381,4 +384,16 @@ public class Prefs
 	{
 		Prefs.setBoolean(SET_TWO_COLUMN, val);
 	}
+	/** включена ли блокировка рекламы */
+	public static final boolean isAdsABlock()
+	{
+		st.adblock = Prefs.getBoolean(Prefs.ADS_BLOCK,false); 
+		return st.adblock;
+	}
+	public static final void setAdsABlock(boolean val)
+	{
+		Prefs.setBoolean(ADS_BLOCK, val);
+		st.adblock = val;
+	}
+
 }

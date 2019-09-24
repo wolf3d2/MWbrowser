@@ -1296,6 +1296,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		}
 	}
 	public void loadBookmark(Bookmark bm,int tabMode) {
+		st.last_search = null;
 		String url = TextUtils.isEmpty(bm.originalUrl)?bm.getUrl():bm.originalUrl;
 		if(tabMode>WINDOW_OPEN_SAME)
 		{
@@ -1569,6 +1570,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			String url = uri.toString();
 			if (url.startsWith(st.STR_FILE))
 				url = uri.decode(uri.toString());
+			st.last_search = null;
 			openUrl(url,Action.NEW_TAB);
 			return true;
 		}
@@ -1579,12 +1581,14 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		if (url.startsWith("^=") ){
 			SearchAction sa = new SearchAction(SearchSystem.CMD_SEARCH,0,0);
 			sa.doAction(this, url, null);
+			st.last_search = null;
 			return;
 		}
 		if(!stat.isWebAddr(url))
 		{
 			SearchAction sa = new SearchAction(SearchSystem.CMD_SEARCH,0,0);
 			sa.doAction(this, url, null);
+			st.last_search = url;
 			return;
 		}
 		else if(!stat.hasScheme(url))
@@ -1597,6 +1601,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			if(!url.startsWith(IConst.HTTP)&&!url.startsWith(IConst.HTTPS))
 				url=IConst.HTTP+url;
 		}
+		st.last_search = null;
 		loadBookmark(new Bookmark(url, null, System.currentTimeMillis()), windowState);
 		setNavigationPanel();
 	}
@@ -1899,6 +1904,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			//CustomPopup.toast(this, R.string.);
 			return;
 		}
+		st.last_search = null;
 		String url = Uri.fromFile(f).toString();
 		//getWebView().loadDataWithBaseURL(url, data, UrlProcess.MIME_TEXT_HTML, "quoted-printable", url);
         if(android.os.Build.VERSION.SDK_INT >= 19){

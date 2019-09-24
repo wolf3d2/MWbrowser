@@ -2,6 +2,7 @@ package com.jbak.superbrowser.ui;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -28,12 +29,17 @@ import com.jbak.superbrowser.NetworkChecker;
 import com.jbak.superbrowser.Prefs;
 import com.jbak.superbrowser.UrlProcess;
 import com.jbak.superbrowser.WebViewEvent.EventInfo;
+import com.jbak.superbrowser.ads.AdsBlock.AdBlockList;
 import com.jbak.superbrowser.utils.TempCookieStorage;
 import com.jbak.utils.SameThreadTimer;
 import com.mw.superbrowser.R;
 
 public class MyWebView extends WebView {
 //	String codepage = null;
+
+/** список урлов для блокировки для этого экземпляра MyWebView. <br>
+ *  Каждый урл с новой строки */	
+	public ArrayList<AdBlockList> adblock_urls = new ArrayList<AdBlockList>();
 	/** прогресс бар вызываемый для массштабирования страницы */
 	SeekBar sb_mashtab = null;
 	boolean page_boundary = false;
@@ -62,6 +68,7 @@ public class MyWebView extends WebView {
 	void init(Context c)
 	{
 		m_c = c;
+		adblock_urls.clear();
 		m_gesture_count = 0;
 		eventInfo = new EventInfo();
 		eventInfo.setWebView(this);

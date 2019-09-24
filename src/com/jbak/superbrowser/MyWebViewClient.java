@@ -2,6 +2,7 @@ package com.jbak.superbrowser;
 
 import java.lang.ref.WeakReference;
 
+import ru.mail.mailnews.st;
 import ru.mail.webimage.WebDownload;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.jbak.superbrowser.ads.AdsBlock;
 import com.jbak.superbrowser.search.GoogleSearchSystem;
 import com.jbak.superbrowser.search.SearchSystem;
 import com.jbak.superbrowser.ui.dialogs.DialogLoginPassword;
@@ -58,33 +60,34 @@ public class MyWebViewClient extends WebViewClient {
 			//super.onReceivedHttpAuthRequest(view, handler, host, realm);
 		}
 
-		public void onPageStarted(WebView view, String url, Bitmap favicon) 
+		public void onPageStarted(WebView webview, String url, Bitmap favicon) 
 		{
 			//Utils.log(TAG,"started "+url);
 			if(!url.equals(getMainActivity().getMainPanel().getUrl())&&URLUtil.isFileUrl(url)&&UrlProcess.checkFileOpen(getMainActivity(), url))
 			{
-				getMainActivity().sendWebViewEvent(WebViewEvent.WWEVENT_PAGE_FINISH, view, url, favicon);
+				getMainActivity().sendWebViewEvent(WebViewEvent.WWEVENT_PAGE_FINISH, webview, url, favicon);
 				return;
 			}
-			getMainActivity().sendWebViewEvent(WebViewEvent.WWEVENT_PAGE_START, view, url, favicon);
+			getMainActivity().sendWebViewEvent(WebViewEvent.WWEVENT_PAGE_START, webview, url, favicon);
 			//mMainActivity.mPanel.onWebViewEvent(MainPanel.WWEVENT_TITLE_LOADED, view.getTitle());
-			Tab ww = getWebWindow(view);
+			Tab ww = getWebWindow(webview);
 			if(ww!=null)
 			{
 				if(ww.isError()&&(url.equals(ww.failingUrl)||MainActivity.ABOUT_BLANK.equals(url))&&!ww.getWebView().isReload())
 				{
 					//Log.d(TAG, "Failed page loading");
 					if(!MainActivity.ABOUT_BLANK.equals(url))
-						view.stopLoading();
+						webview.stopLoading();
 					return;
 					
 				}
+				//ww.getWebView().adblock_urls.clear();;
 				ww.setError(Tab.ERROR_SUCCESS, null, null);
 				ww.setUrl(url);
 				ww.loadedResource = url;
 				getMainActivity().setProgress(ww);
 			}
-			super.onPageStarted(view, url, favicon);
+			super.onPageStarted(webview, url, favicon);
 
 		}
 
@@ -160,8 +163,10 @@ public class MyWebViewClient extends WebViewClient {
 			setResource(view, url);
 			return super.shouldInterceptRequest(view, url);
 		}
+/** подгрузка всех урлов со страницы, при её загрузке */		
 		@Override
 		public void onLoadResource(WebView view, String url) {
+			
 			MainActivity ma = getMainActivity();
 			if(ma==null)
 				return;
@@ -169,6 +174,16 @@ public class MyWebViewClient extends WebViewClient {
 			if(ww!=null)
 			{
 				ma.setProgress(ww);
+//				if (url.contains(".braun")) {
+//					st.toast(url);
+//					return;
+//				}
+				if (AdsBlock.isBlockUrl(ww.getWebView(), url)) {
+					view.loadUrl("javascript:(function() { " +  
+		                    "(elem = document.getElementById('"+url+"')).parentNode.removeChild(elem); " +  
+		                    "})()");         
+					return;
+				}
 			}
 			super.onLoadResource(view, url);
 		}

@@ -183,6 +183,7 @@ public class Action {
 	/** Копировать ссылку сетевого потока */
 	public static final int COPY_NET_STRIMING_URL = 129;
 	public static final int SEARCH_BY_PICTURE = 130;
+	public static final int BLOCK = 131;
 
 	public static final int MIN_FONT_RANGE[] = new int[]{1,5,6,7,8,9,10,11,12,13,14,16,18,20,22,24,30,32,40,48,60,72};
 	
@@ -519,6 +520,8 @@ public class Action {
 					return true;
 				};
 			};
+		case BLOCK:
+			return new Action(action,action, R.string.ads_block_element, param,R.drawable.block_64);
 		case COPY_ALL_OPEN_URL:
 			return new Action(action,R.id.copy_link, R.string.act_copy_all_url, param,R.drawable.copy,R.drawable.all_url);
 		case OPEN_ALL_BOOKMARK:
@@ -914,6 +917,8 @@ public class Action {
 					{
 						DownloadFileInfo fi = new DownloadFileInfo();
 						String saveName = activity.getSaveFilename(UrlProcess.MHT_EXT);
+						if (saveName == null)
+							return true;
 						fi.filename = saveName;
 						fi.mimeType = UrlProcess.MIME_MHT;
 						DialogDownloadFile df = new DialogDownloadFile(activity,new DownloadOptions(saveName),fi) {
@@ -1363,7 +1368,8 @@ public class Action {
 			url ="https://translate.google.com/translate?u="+WebDownload.enc(url);
 			break;
 		case Action.TRANSLATE_LINK_YANDEX:
-			url ="https://translate.yandex.ru/web?ui=ru&lang=en-ru&dir=&url="+WebDownload.enc(url);
+			//old string - url ="https://translate.yandex.ru/web?ui=ru&lang=en-ru&dir=&url="+WebDownload.enc(url);
+			url ="https://translate.yandex.ru/?lang=en-ru&text="+WebDownload.enc(url);
 			break;
 		case Action.TRANSLATE_LINK_TRANSLATE_RU:
 			url ="http://www.translate.ru/url/translation.aspx?direction=er&template=PersonalCorrespondence&autotranslate=off&transliterate=off&showvariants=off&sourceURL="+WebDownload.enc(url);

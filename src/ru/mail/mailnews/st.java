@@ -39,6 +39,7 @@ import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -57,6 +58,13 @@ import android.widget.Toast;
 
 public class st
 {
+	/** Последнияя строка поиска, если в адресной строке был набран не url <br>
+	 * эта строка нужна, для быстрой смены поисковой системы и поиска в ней сразу */
+	public static String last_search = null;
+	/** true - блокировка рекламы включёна */
+	public static boolean adblock = false;
+	/** объект видеоплеера, при воспроизведении видео на весь экран */
+	public static MediaPlayer mp = null;
 	/** true, если ошибка установки цвета полосы прогресса загрузки */
 	public static boolean load_progress_color_error = false;
 	 // строковые константы для уменьшения объёма занимаемой памяти

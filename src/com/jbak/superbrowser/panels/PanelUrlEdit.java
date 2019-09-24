@@ -6,6 +6,7 @@ import ru.mail.mailnews.st;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.speech.RecognizerIntent;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
@@ -489,6 +491,8 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 				RelativeLayout.LayoutParams.WRAP_CONTENT, 
 				RelativeLayout.LayoutParams.MATCH_PARENT);
 		splp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+		splp.addRule(RelativeLayout.CENTER_VERTICAL);
+		splp.addRule(RelativeLayout.CENTER_HORIZONTAL);
 		//splp.addRule(RelativeLayout.LEFT_OF, 1001);
 		String cur_name = SearchSystem.getCurrent().getName();
 		/** индекс текущей поисковой системы */
@@ -519,17 +523,59 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		sp.setSelection(cur_ind);
 		rl.addView(sp);
 		
+		RelativeLayout.LayoutParams adslp = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT, 
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		adslp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		adslp.addRule(RelativeLayout.CENTER_VERTICAL);
+		adslp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+		TextView ads = new TextView(getContext());
+		ads.setText("Ad");
+		ads.setTextSize(12);
+		ads.setTextColor(Color.BLACK);
+		ads.setPadding(5, 0, 5, 0);
+		//MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT, ads);
+		//MyTheme.get().setViewsTextColor(MyTheme.ITEM_TITLE, ads);
+		
+		setAdsIndicator(ads,Prefs.isAdsABlock());
+		ads.setId(1002);
+		ads.setLayoutParams(adslp);
+		ads.setOnLongClickListener(new View.OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View arg0) {
+				
+				return false;
+			}
+		});
+		ads.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				 
+				if (st.adblock) 
+					setAdsIndicator((TextView)v, false);
+				else
+					setAdsIndicator((TextView)v, true);
+				//st.adblock = !st.adblock;
+				Prefs.setAdsABlock(!st.adblock);
+			}
+		});
+		rl.addView(ads);
+		
 		RelativeLayout.LayoutParams ilp = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.WRAP_CONTENT, 
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
-		ilp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-		ImageView incog = new ImageView(getContext());
-		incog.setVisibility(View.GONE);
-		incog.setBackgroundResource(R.drawable.mask_32);
-		incog.setId(1001);
-		incog.setLayoutParams(ilp);
+		ilp.addRule(RelativeLayout.LEFT_OF, ads.getId());
+
+		ImageView incognito = new ImageView(getContext());
+		incognito.setVisibility(View.GONE);
+		incognito.setBackgroundResource(R.drawable.mask_32);
+		incognito.setId(1001);
+		incognito.setLayoutParams(ilp);
 		mIncognito = false;
-		incog.setOnClickListener(new View.OnClickListener() {
+		incognito.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -547,17 +593,30 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 				}
 			}
 		});
-		rl.addView(incog);
+		rl.addView(incognito);
 		
 		RelativeLayout.LayoutParams etlp = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.MATCH_PARENT, 
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		etlp.addRule(RelativeLayout.RIGHT_OF, sp.getId());
-		etlp.addRule(RelativeLayout.LEFT_OF, incog.getId());
-
+		etlp.addRule(RelativeLayout.LEFT_OF, ads.getId());
 		mEditUrl.setLayoutParams(etlp);
+
 		rl.addView(mEditUrl);
 		return rl;
+	}
+	Drawable img_ads_block_indicator = null;
+	
+	public void setAdsIndicator(TextView tv, boolean flag)
+	{
+		if (flag)
+			img_ads_block_indicator = getContext().getResources().getDrawable(R.drawable.bullet_red);
+		else
+			img_ads_block_indicator = getContext().getResources().getDrawable(R.drawable.bullet_black);
+		img_ads_block_indicator.setBounds( 0, 0, 25, 25 );
+		tv.setCompoundDrawables( img_ads_block_indicator, null, null, null );
+		tv.setCompoundDrawablePadding(0);
+		
 	}
 	public class Adapt extends ArrayAdapter<Integer> {
 		private Integer[] images;
@@ -603,6 +662,12 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
     	{
     		String ss = SearchSystem.SEARCH_SYSTEMS[selectedItemPosition].getName();
     		SearchSystem.setSearchSystem(ss);
+    		if (st.last_search!=null) {
+				if (MainActivity.inst!=null) {
+						MainActivity.inst.openUrl(st.last_search, MainActivity.WINDOW_OPEN_SAME);
+					}
+
+    		}
     	}
     	public void onNothingSelected(AdapterView<?> parent) {
     	}
