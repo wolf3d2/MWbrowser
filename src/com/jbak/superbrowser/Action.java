@@ -151,8 +151,8 @@ public class Action {
 	public static final int END = 99;
 	public static final int PGDN = 100;
 	public static final int PGUP = 101;
-	public static final int TOSTART = 102;
-	public static final int TOEND = 103;
+	public static final int TO_START = 102;
+	public static final int TO_END = 103;
 	public static final int INSTALL_JBAK2KEYBOARD = 104;
 	public static final int TRANSLATE_LINK = 105;
 	public static final int SHARE_URL= 106;
@@ -184,6 +184,7 @@ public class Action {
 	public static final int COPY_NET_STRIMING_URL = 129;
 	public static final int SEARCH_BY_PICTURE = 130;
 	public static final int BLOCK = 131;
+	public static final int SEARCH_EDIT_DIALOG_LAYOUT = 132;
 
 	public static final int MIN_FONT_RANGE[] = new int[]{1,5,6,7,8,9,10,11,12,13,14,16,18,20,22,24,30,32,40,48,60,72};
 	
@@ -346,8 +347,10 @@ public class Action {
 					ar.add(Action.create(Action.ABOUT));
 					ar.add(Action.create(Action.HELP));
 					ar.add(Action.create(Action.CANCEL));
+					//ar.add(Action.create(Action.SEARCH_EDIT_DIALOG_LAYOUT));
 					//ar.add(Action.create(Action));
-					new DialogEditor(act, act.getString(R.string.act_whatsnew), act.getWhatsNew(), ar).show();
+					new DialogEditor(act, act.getString(R.string.act_whatsnew), 
+							act.getWhatsNew(), ar).show();
 					// старый Что нового
 					//st.dialogHelp(act, act.getWhatsNew(), act.getString(R.string.act_whatsnew));
 					return true;
@@ -963,9 +966,9 @@ public class Action {
 			return new Action(action,action, R.string.act_go_home, param,R.drawable.edit);
 		case Action.PGUP:
 			return new Action(action,action, R.string.act_go_home, param,R.drawable.edit);
-		case Action.TOSTART:
+		case Action.TO_START:
 			return new Action(action,action, R.string.act_go_home, param,R.drawable.edit);
-		case Action.TOEND:
+		case Action.TO_END:
 			return new Action(action,action, R.string.act_go_home, param,R.drawable.edit);
 		case CODEPAGE:
 			return new Action(action,action,R.string.act_codepage,param,R.drawable.codepage)
@@ -1222,6 +1225,12 @@ public class Action {
 			};
 		case SEARCH_ON_PAGE:
 			return new Action(action,R.id.searchPage, R.string.act_search_page, param,R.drawable.searchpage);
+		case SEARCH_EDIT_DIALOG_LAYOUT:
+			return new Action(action,R.id.searchPage, R.string.act_search, param,R.drawable.searchpage);
+//		case SEARCH_EDIT_DIALOG_CLOSE:
+//			return new Action(action,R.id.searchPage, R.string.act_search, param,R.drawable.searchpage);
+//		case SEARCH_EDIT_DIALOG_LAYOUT:
+//			return new Action(action,R.id.searchPage, R.string.act_search, param,R.drawable.searchpage);
 		case DELETE_ITEM:
 			return new Action(action,action, R.string.act_delete_item, param,R.drawable.clear);
 		default:

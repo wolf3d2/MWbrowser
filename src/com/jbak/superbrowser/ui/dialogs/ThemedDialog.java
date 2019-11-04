@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.method.ScrollingMovementMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.ScrollView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.TextView;
 
@@ -124,13 +126,14 @@ public class ThemedDialog extends CustomDialog implements OnAction{
 	public ThemedDialog setAlert(String text,String title)
 	{
 		setTitleText(title);
-		TextView textView = new TextView(context());
-		textView.setTextAppearance(context(), R.style.textView);
-		textView.setMaxHeight(stat.getSizeHeight(context()));
-		textView.setText(text);
-		setView(textView);
+		TextView tv = new TextView(context());
+		tv.setTextAppearance(context(), R.style.textView);
+		tv.setMaxHeight(stat.getSizeHeight(context()));
+		tv.setText(text);
+		tv.setMovementMethod(new ScrollingMovementMethod());
+		setView(tv);
 		setButtons(new ActArray(Action.OK), 0);
-		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT, textView);
+		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT, tv);
 		return this;
 	}
 	public ThemedDialog setTitleText(int res)
@@ -239,4 +242,5 @@ public class ThemedDialog extends CustomDialog implements OnAction{
 	{
 		return context().getString(strId);
 	}
+
 }

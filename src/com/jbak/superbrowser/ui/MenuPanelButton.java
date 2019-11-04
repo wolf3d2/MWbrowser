@@ -7,8 +7,10 @@ import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
@@ -65,6 +67,58 @@ public class MenuPanelButton extends CustomDialog {
 		});
 		inflate(grid, lp, Gravity.CENTER);
 		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_BACKGROUND, grid);
+	}
+	public MenuPanelButton(final Context context,String title, boolean copy_title, ActArray actions,OnAction listener) {
+		super(context, context instanceof MainActivity&&Prefs.getFullscreen()?R.style.CustomDialogFullscreenTheme:R.style.CustomDialogTheme);
+		mActionListener = listener;
+		LinearLayout ll = new LinearLayout(context());
+		ll.setOrientation(LinearLayout.VERTICAL);
+		TextView tv = new TextView(context());
+		if (copy_title)
+			tv.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					stat.setClipboardString(context, ((TextView)v).getText().toString());
+					st.toast(context.getString(R.string.сopied));
+					
+				}
+			});
+		tv.setGravity(Gravity.LEFT);
+		tv.setMaxLines(4);
+		tv.setText(title);
+		ll.addView(tv);
+		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT,tv);
+		
+		HorizontalPanel grid = new HorizontalPanel(context());
+		grid.setActions(actions);
+		grid.setWrapContent(true);
+		grid.setType(RecyclerViewEx.TYPE_GRID);
+		grid.setMaxHeight(Integer.MAX_VALUE);
+        if (Build.VERSION.SDK_INT >= 24) // android7
+    		grid.setMaxHeight(st.getDisplayHeight(context)/2);//я закоментил Integer.MAX_VALUE);
+		grid.setOnActionListener(new OnAction() {
+			
+			@Override
+			public void onAction(Action act) {
+				dismiss();
+				onActionSelected(act);
+			}
+		});
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		grid.setOnUnusedSpaceClickListener(new android.view.View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				onOk(false);
+			}
+
+		});
+		ll.addView(grid, lp);
+		//inflate(grid, lp, Gravity.CENTER);
+		inflate(ll, lp, Gravity.CENTER);
+		//MyTheme.get().setViews(MyTheme.ITEM_DIALOG_BACKGROUND, grid);
+		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_BACKGROUND, ll);
 	}
 	public void onActionSelected(Action a)
 	{

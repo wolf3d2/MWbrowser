@@ -174,7 +174,20 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 		}
 		ActArray ar = getSuperMenuItemPos(a);
 // создаём меню для долгого нажатия на ссылку
-		new MenuPanelButton(a, ar, this).show();
+		String url=st.STR_NULL;
+		HitTestResult HitResult = null;
+		HitResult = getMain().getWebView().getHitTestResult();
+		if(HitResult.getType()==HitTestResult.SRC_ANCHOR_TYPE||HitResult.getType()==HitTestResult.IMAGE_TYPE||HitResult.getType()==HitTestResult.IMAGE_ANCHOR_TYPE||HitResult.getType()==HitTestResult.SRC_IMAGE_ANCHOR_TYPE)
+			url = HitResult.getExtra();
+		if (vUrl!=null)
+		url = vUrl;
+		
+		if (url != null&&url.length()>0) {
+//			url = getMain().getString(R.string.act_share_elem)+": "+url;
+			new MenuPanelButton(a, url, true, ar, this).show();
+		} else {
+			new MenuPanelButton(a, ar, this).show();
+		}
 		return true;
 	}
 	/** вщзвращает выбранный в настройках набор расположения кнопок в супер меню */
@@ -245,6 +258,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 					ar.add(aa);
 					ar.add(Action.create(Action.SEARCH_BY_PICTURE,url));
 //					ar.add(Action.create(Action.SHARE_ELEMENT,url));
+					ar.add(Action.create(Action.SOURCE_CODE));
 					ar.add(Action.create(Action.BLOCK,url));
 				}
 			}
@@ -331,6 +345,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 					ar.add(aa);
 					ar.add(Action.create(Action.SEARCH_BY_PICTURE,url));
 					ar.add(Action.create(Action.BLOCK,url));
+					ar.add(Action.create(Action.SOURCE_CODE));
 //					ar.add(Action.create(Action.SHARE_ELEMENT,url));
 				}
 			}
@@ -423,12 +438,13 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 
 		switch (act.command) {
 		case Action.BLOCK:
-			AdBlockList abl = new AdBlockList(url,true);
+			AdBlockList abl = new AdBlockList(mHtmlText,true);
 			final MyWebView mwv2 = getMain().getWebView();
 			if (mwv2== null)
 				return;
 			mwv2.adblock_urls.add(abl);
-        	new ThemedDialog(getMain()).setConfirm("Элемент добавлен в блокировку.\n\n"+getMain().getString(R.string.act_refresh), 
+        	new ThemedDialog(getMain()).setConfirm("Элемент добавлен в блокировку.\n\nТекст элемента:\n\n"
+        			+mHtmlText+getMain().getString(R.string.act_refresh), 
         			null, new ConfirmOper()
         	{
 				
@@ -593,12 +609,12 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 				a.getWebView().requestFocusNodeHref(mHandler.obtainMessage());
 				return true;
 			}
-			showContextMenu(url, null);
+			showStandartContextMenu(url, null);
 			return true;
 		}
 		return false;
 	}
-	void showContextMenu(String url,String imageUrl)
+	void showStandartContextMenu(String url,String imageUrl)
 	{
 
 		ActArray ar = new ActArray();
@@ -627,7 +643,13 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 		if(vUrl!=null)
 			ar.add(Action.create(Action.EXTERNAL_VIDEO_PLAYER));
 
-		new MenuPanelButton(getMain(), ar, this).show();
+		if (url != null&&url.length()>0) {
+//			url = getMain().getString(R.string.act_share_elem)+": "+url;
+			new MenuPanelButton(getMain(), url, true, ar, this).show();
+		} else {
+			new MenuPanelButton(getMain(), ar, this).show();
+		}
+
 	}
 	@SuppressLint("HandlerLeak")
 	public class MyHandler extends Handler
@@ -642,7 +664,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 			catch(Throwable e)
 			{}
 			String imageUrl = mLastHitResult.getExtra();
-			showContextMenu(url, imageUrl);
+			showStandartContextMenu(url, imageUrl);
 		}
 	}
 	public static class InputInfo

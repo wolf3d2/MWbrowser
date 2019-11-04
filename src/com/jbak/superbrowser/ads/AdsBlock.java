@@ -34,15 +34,17 @@ public class AdsBlock
 			return false;
 		if (webview.adblock_urls == null)
 			return false;
-		if (url.contains(".braun"))
-			return true;
+//		if (url.contains(".braun"))
+//			return true;
 		
 		AdBlockList abl = null;
 		for (int i=0;i<webview.adblock_urls.size();i++) {
 			abl = webview.adblock_urls.get(i);
 			if (abl.url.contains(url))
-				if (abl.block)
+				if (abl.block) {
+
 					return true;
+				}
 		}
 		return false;
 	}

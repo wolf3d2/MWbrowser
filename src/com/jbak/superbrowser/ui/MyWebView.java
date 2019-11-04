@@ -34,8 +34,10 @@ import com.jbak.superbrowser.utils.TempCookieStorage;
 import com.jbak.utils.SameThreadTimer;
 import com.mw.superbrowser.R;
 
-public class MyWebView extends WebView {
-//	String codepage = null;
+public class MyWebView extends WebView 
+{
+	/** загруженные урлы на текущей странице */
+	public String loadUrls = null;
 
 /** список урлов для блокировки для этого экземпляра MyWebView. <br>
  *  Каждый урл с новой строки */	

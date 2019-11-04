@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
+import ru.mail.mailnews.st;
 
 public class FileUtils
 {
@@ -178,8 +179,19 @@ public class FileUtils
 	public static String filenameFromUri(Uri uri,String mime)
 	{
 		List<String> path = uri.getPathSegments();
-		if(path!=null&&path.size()>0)
-			return path.get(path.size()-1);
+		if(path!=null&&path.size()>0) {
+			String fn = path.get(path.size()-1);
+			String ext = null;
+			try {
+				ext = st.STR_POINT+mime.substring(mime.indexOf("/")+1);
+			} catch (Exception e) {
+				ext = null;
+			}
+			if (!fn.contains(st.STR_POINT))
+				if (ext!=null)
+					fn += ext;
+			return fn;
+		}
 		if(!TextUtils.isEmpty(mime))
 		{
 			 return getDateFileName(mime);

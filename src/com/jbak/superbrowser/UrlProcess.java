@@ -121,11 +121,11 @@ public class UrlProcess implements IConst{
 		public String location;
 		byte data[];
 	}
-	public static void forceDownload(final MainActivity a,Uri uri,final boolean fromUser)
+	public static void forceDownload(final MainActivity activity,Uri uri,final boolean fromUser)
 	{
-		if(downloadFileIfCan(a, uri))
+		if(downloadFileIfCan(activity, uri))
 			return;
-		getDownloadFileInfo(a, uri, new st.UniObserver() {
+		getDownloadFileInfo(activity, uri, new st.UniObserver() {
 			
 			@Override
 			public int OnObserver(Object param1, Object param2) {
@@ -133,9 +133,9 @@ public class UrlProcess implements IConst{
 				if(!fromUser&&fi.mimeType!=null&&fi.mimeType.contains("text"))
 					return 0;
 				if(fi!=null&&fi.ok)
-					downloadFileWithDialog(a, fi);
+					downloadFileWithDialog(activity, fi);
 				else if(fromUser)
-					CustomPopup.toast(a, R.string.cant_download_file);
+					CustomPopup.toast(activity, R.string.cant_download_file);
 				return 0;
 			}
 		});

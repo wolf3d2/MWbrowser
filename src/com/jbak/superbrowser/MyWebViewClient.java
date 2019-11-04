@@ -85,6 +85,7 @@ public class MyWebViewClient extends WebViewClient {
 				ww.setError(Tab.ERROR_SUCCESS, null, null);
 				ww.setUrl(url);
 				ww.loadedResource = url;
+				ww.getWebView().loadUrls = null;
 				getMainActivity().setProgress(ww);
 			}
 			super.onPageStarted(webview, url, favicon);
@@ -165,12 +166,12 @@ public class MyWebViewClient extends WebViewClient {
 		}
 /** подгрузка всех урлов со страницы, при её загрузке */		
 		@Override
-		public void onLoadResource(WebView view, String url) {
+		public void onLoadResource(WebView webview, String url) {
 			
 			MainActivity ma = getMainActivity();
 			if(ma==null)
 				return;
-			Tab ww = ma.getTabList().getTabByWebView(view);
+			Tab ww = ma.getTabList().getTabByWebView(webview);
 			if(ww!=null)
 			{
 				ma.setProgress(ww);
@@ -178,14 +179,20 @@ public class MyWebViewClient extends WebViewClient {
 //					st.toast(url);
 //					return;
 //				}
+				ww.getWebView().loadUrls += url+"\n\n";
 				if (AdsBlock.isBlockUrl(ww.getWebView(), url)) {
-					view.loadUrl("javascript:(function() { " +  
-		                    "(elem = document.getElementById('"+url+"')).parentNode.removeChild(elem); " +  
-		                    "})()");         
-					return;
+					// удалить элемент по его id
+//					view.loadUrl("javascript:(function() { " +  
+//		                    "(elem = document.getElementById('"+url+"')).parentNode.removeChild(elem); " +  
+//		                    "})()");
+					url = "";
+					//return;
 				}
 			}
-			super.onLoadResource(view, url);
+			if (url.contains("rs.mail.ru/pixel")) {
+				url = "";
+			}
+			super.onLoadResource(webview, url);
 		}
 
 		public MainActivity getMainActivity() {

@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 import org.json.JSONObject;
 
+import ru.mail.mailnews.SiteApp;
 import ru.mail.mailnews.st;
 import ru.mail.mailnews.st.UniObserver;
 import ru.mail.webimage.FileUtils;
@@ -124,6 +125,7 @@ import com.jbak.utils.WeakRefArray;
 @SuppressWarnings("deprecation")
 public class MainActivity extends Activity implements OnClickListener,OnLongClickListener,OnItemLongClickListener,IConst,BrowserApp.OnGlobalEventListener,GlobalHandler 
 {
+	public static IniFile ini = null;
 	// для снижения жора батарейки, обработка ведётся по таймеру
 	public static long addOnGlobalLayoutTimer = 0;
 	public static long addOnGlobalLayoutTimerTemp = 0;
@@ -211,6 +213,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		Payment.check();
 //		 вызываекм падение чтоб сработал отчёт об ошибке
 //		 int bbb = Integer.valueOf("huk");
+		createIniFile(this);
 		st.pref_navigation = Prefs.getNavigationMethod();
 		boolean tempSession =  getIntent().getData() instanceof Uri;
 		mTimer = new WebTimer(this);
@@ -264,12 +267,10 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		mFavIcon = (ImageView)findViewById(R.id.favicon);
 		mSearchPage = (ViewGroup)findViewById(R.id.searchPage);
 		mSearchPageText = (EditText)findViewById(R.id.searchText);
-		if (cur_theme == 0)
-			mSearchPageText.setTextColor(Color.BLACK);
-		else{
-			mSearchPageText.setTextColor(Color.WHITE);
+		if (cur_theme != 0)
 			mSearchPage.setBackgroundColor(Color.DKGRAY);
-		}
+		MyTheme.get().setViews(MyTheme.ITEM_DIALOG_TEXT,mSearchPageText);
+
 //		mSearchPageText.setBackgroundColor(Color.WHITE);
 //		mSearchPageText.setTextColor(Color.BLACK);
 		mSearchPageText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -375,11 +376,24 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		boolean ret = Prefs.getBoolean(Prefs.FIRST_START_BROWSER, true);
 		return Prefs.getBoolean(Prefs.FIRST_START_BROWSER, true);
 	}
+	void createIniFile(Context c)
+	{
+		ini = new IniFile(c);
+		String path = c.getFilesDir().toString()+ st.STR_SLASH;
+		ini.setFilename(path + ini.PAR_INI);
+		if (!ini.isFileExist()) {
+			ini.create(path, ini.PAR_INI);
+		}
+		if (!ini.isFileExist())
+			ini = null;
+		
+	}
+	
 	boolean isNewVersion(Context c)
 	{
 		try {
 			boolean newvers = false;
-			IniFile ini = new IniFile(c);
+			ini = new IniFile(c);
 			String path = c.getFilesDir().toString()+ st.STR_SLASH;
 			ini.setFilename(path + ini.PAR_INI);
 			if (!ini.isFileExist()) {
@@ -388,6 +402,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			}
 			if (!ini.isFileExist())
 				return false;
+			SiteApp.checkUpdate(ini);
 			String codever = st.getAppVersionCode(c);
 			String param = ini.getParamValue(ini.VERSION_CODE);
 			if (param == null) {
@@ -1099,7 +1114,6 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			showMagickAndNavigation();
 			st.fl_temp_hide_navigationpanel= false;
 		}
-		int www = mTabList.getCurrent().getWebView().getChildCount();
 		if(clearCustomViews())
 			return;
 		if(isPanelShown()&&mPanel.getMode()!=MainPanel.MODE_START_PAGE)
@@ -1112,7 +1126,6 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 				&&mTabList.getCurrent().getWebView().getChildCount() == 0
 				&&!isPanelShown())
 		{
-			www = mTabList.getCurrent().getWebView().getChildCount();
 			st.toast(R.string.close_tab_last_page_toast);
 			return;
 		}

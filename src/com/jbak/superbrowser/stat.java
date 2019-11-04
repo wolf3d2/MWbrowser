@@ -967,6 +967,12 @@ public class stat implements IConst {
 			size = 400;
 		else if (size>640)
 			size = 400;
+//		else if (size>1024&&size<1400)
+//			size = 800;
+//		else if (size>1400&&size<1800)
+//			size = 1100;
+//		else if (size>1800)
+//			size = 1600;
 
 		return size;
 	}

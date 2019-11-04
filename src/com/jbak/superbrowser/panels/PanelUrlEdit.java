@@ -1,7 +1,9 @@
 package com.jbak.superbrowser.panels;
 
+import java.io.File;
 import java.util.ArrayList;
 
+import ru.mail.mailnews.SiteApp;
 import ru.mail.mailnews.st;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +11,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -41,13 +44,18 @@ import com.jbak.superbrowser.WebViewEvent;
 import com.jbak.superbrowser.Tab;
 import com.jbak.superbrowser.pluginapi.Plugin;
 import com.jbak.superbrowser.search.SearchSystem;
+import com.jbak.superbrowser.stat.DownloadOptions;
 import com.jbak.superbrowser.ui.HorizontalPanel;
 import com.jbak.superbrowser.ui.MyWebView;
 import com.jbak.superbrowser.ui.OnAction;
 import com.jbak.superbrowser.ui.PanelButton;
 import com.jbak.superbrowser.ui.SuggestionsAdapter;
+import com.jbak.superbrowser.ui.dialogs.DialogEditor;
+import com.jbak.superbrowser.ui.dialogs.ThemedDialog;
 import com.jbak.superbrowser.ui.themes.MyTheme;
+import com.jbak.ui.ConfirmOper;
 import com.jbak.ui.SuggestionEdit;
+import com.jbak.ui.CustomDialog.OnUserInput;
 import com.jbak.ui.SuggestionEdit.OnAutoCompleteAction;
 
 public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
@@ -504,6 +512,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 			if (cur_name.equals(SearchSystem.SEARCH_SYSTEMS[i].getName()))
 				cur_ind = i;
 		}
+		// поисковая система
 		Spinner sp = new Spinner(getContext());
 		Adapt adapter = new Adapt(getContext(), 
 		        ar);
@@ -523,6 +532,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		sp.setSelection(cur_ind);
 		rl.addView(sp);
 		
+		// блокировщик рекламы
 		RelativeLayout.LayoutParams adslp = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.WRAP_CONTENT, 
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -545,8 +555,20 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 			
 			@Override
 			public boolean onLongClick(View arg0) {
-				
-				return false;
+				if (MainActivity.inst==null)
+					return false;
+				Tab ww = getWebWindow();
+				String sss = ww.getWebView().loadUrls;
+				try {
+					new DialogEditor(MainActivity.inst, "Загруженные урлы", 
+							getWebWindow().getWebView().loadUrls)
+					.show();
+					
+				} catch (Exception e) {
+					return false;
+				}
+
+				return true;
 			}
 		});
 		ads.setOnClickListener(new View.OnClickListener() {
@@ -563,7 +585,8 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 			}
 		});
 		rl.addView(ads);
-		
+		ads.setVisibility(View.GONE);
+		// инкогнито
 		RelativeLayout.LayoutParams ilp = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.WRAP_CONTENT, 
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -595,11 +618,62 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		});
 		rl.addView(incognito);
 		
+		RelativeLayout.LayoutParams ulp = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT, 
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		ulp.addRule(RelativeLayout.CENTER_VERTICAL);
+		ulp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		if (ads.getVisibility() == View.GONE)
+			ulp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		else
+			ulp.addRule(RelativeLayout.LEFT_OF, ads.getId());
+
+		TextView upd = new TextView(getContext());
+		upd.setId(1003);
+		upd.setText("Upd");
+		upd.setTextSize(12);
+		upd.setBackgroundColor(Color.RED);
+		upd.setTextColor(Color.WHITE);
+		upd.setLayoutParams(ulp);
+		upd.setPadding(5, 0, 5, 0);
+		upd.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if (MainActivity.inst!=null) {
+	            	new ThemedDialog(getContext()).setConfirm(
+	            			getContext().getString(R.string.upd_new_ver), 
+	            			null, 
+	            			new ConfirmOper() {
+						
+						@Override
+						public void onConfirm(Object userParam) {
+							try {
+								MainActivity.inst.openUrl(SiteApp.SITE_APP+SiteApp.PAGE_DOWТLOAD, 
+										Action.NEW_TAB);	
+								
+							} catch (Throwable e) {
+								// TODO: handle exception
+							}
+						}
+					});
+
+	            }
+					
+			}
+		});
+		rl.addView(upd);
+
+		upd.setVisibility(View.GONE);
+		if (MainActivity.ini!=null)
+			if (SiteApp.checkVersion(getContext(), MainActivity.ini))
+				upd.setVisibility(View.VISIBLE);
+
 		RelativeLayout.LayoutParams etlp = new RelativeLayout.LayoutParams(
 				RelativeLayout.LayoutParams.MATCH_PARENT, 
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		etlp.addRule(RelativeLayout.RIGHT_OF, sp.getId());
-		etlp.addRule(RelativeLayout.LEFT_OF, ads.getId());
+		etlp.addRule(RelativeLayout.LEFT_OF, upd.getId());
 		mEditUrl.setLayoutParams(etlp);
 
 		rl.addView(mEditUrl);

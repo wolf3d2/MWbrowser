@@ -11,6 +11,8 @@
 <!-- блокировщик рекламы     -->
     <string name="ads_block_element">Block element</string>
     
+    <string name="upd_new_ver">Есть новая версия браузера.\n\nОткрыть на странице скачивания?</string>
+    
     <string name="supermenu_button_set">Наборы расположения кнопок при использовании суперменю</string>
     <string name="supermenu_button_def">Default</string>
     <string name="supermenu_button_vert8inch">Tab 8\"</string>

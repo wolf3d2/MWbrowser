@@ -1,13 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <EditText xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ll_dialogEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+    <EditText 
         android:id="@+id/editText"
         style="@style/textEdit"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="#ffffff"
         android:gravity="top|start"
         android:inputType="textMultiLine"
         android:padding="@dimen/magic_padding"
         android:scrollbars="vertical"
-        android:textCursorDrawable="@null" />
+        android:textCursorDrawable="@null" 
+        />
+    <LinearLayout
+        android:id="@+id/editdialog_searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="#000000"
+        >
+         <TextView 
+            android:id="@+id/editdialog_pos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/editdialog_searchText"
+            style="@style/textEdit"
+            android:layout_height="35dp"
+            android:layout_weight="0.5"
+            android:background="#ffffff"
+            android:imeOptions="actionSearch|flagNoExtractUi"
+		    android:singleLine="true"
+            android:maxLines="2"
+            android:padding="5dp"
+            android:textCursorDrawable="@null" />
+
+        <ImageView
+            android:id="@+id/editdialog_search_close"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="5dp"
+            android:src="@drawable/clear" />
+
+        <ImageView
+            android:id="@+id/editdialog_search_up"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="5dp"
+            android:src="@drawable/up" />
+
+        <ImageView
+            android:id="@+id/editdialog_search_down"
+            android:padding="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/down" />
+
+    </LinearLayout>
+    </LinearLayout>
+    </LinearLayout>
     

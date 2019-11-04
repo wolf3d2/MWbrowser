@@ -29,7 +29,11 @@ public class IniFile {
 	public final String PAR_INI= "par.ini";
 
 	// имена параметров в par.ini
+	/** версия которая была установлена <br>
+	 * для вывода окна Что нового */
 	public final String VERSION_CODE = "version_code";
+	/** номер чекнутой версии */
+	public static final String VERSION_UPDATE = "version_update";
 
 	public IniFile(Context c) {
 		m_c = c;

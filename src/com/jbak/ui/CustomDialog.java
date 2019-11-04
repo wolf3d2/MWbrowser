@@ -263,8 +263,12 @@ public class CustomDialog extends Dialog implements OnClickListener{
 	}
 	@Override
 	public void onClick(View v) {
+		String sss = String.format("0x%08x",v.getId());
 		if(v.getId()==R.id.dialogBody)
 			return;
+		else if(v.getId()==R.id.editdialog_search_close)
+			return;
+		
 		processId(v.getId());
 	}
 	public static interface OnButtonClick
