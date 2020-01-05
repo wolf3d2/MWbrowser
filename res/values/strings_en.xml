@@ -61,6 +61,9 @@
     <string name="act_mwcosts">Install\nMWcosts</string>
     <string name="act_mwmwshare2save">Install\nMWshare2save</string>
     <string name="act_history">History</string>
+    <string name="act_js">javascript</string>
+    <string name="act_js_enable">javascript enabled</string>
+    <string name="act_js_disable">javascript disabled</string>
     <string name="act_copy_all_url">Copy all open URL</string>
     <string name="act_copy_url">Copy url</string>
     <string name="act_copy_url_text">Copy text URL</string>

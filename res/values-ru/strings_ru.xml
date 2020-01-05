@@ -55,6 +55,9 @@
     <string name="act_mwcosts">Установить\nMWcosts</string>
     <string name="act_mwmwshare2save">Установить\nMWshare2save</string>
     <string name="act_history">История</string>
+    <string name="act_js">javascript</string>
+    <string name="act_js_enable">javascript включен</string>
+    <string name="act_js_disable">javascript выключен</string>
     <string name="act_copy_url">Копир. ссылку</string>
     <string name="act_copy_url_text">Копир. текст ссылки</string>
     <string name="act_copy_all_url">Копир. адреса всех вкладок</string>

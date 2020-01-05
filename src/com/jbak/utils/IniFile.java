@@ -17,6 +17,9 @@ import ru.mail.mailnews.st;
 
 /** обработка своего .ini файла с доп параметрами */
 public class IniFile {
+	/** (String) время последней проверки */
+	public final String LAST_CHECK_TIME = "last_check_time";
+
 	public ArrayList<iniParam> par = new ArrayList<iniParam>();
 	// переданный контекст
 	Context m_c;

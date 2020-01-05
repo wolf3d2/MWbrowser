@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.mw.superbrowser"
     android:installLocation="auto"
-    android:versionCode="27"
-    android:versionName="1.02.07b1" >
+    android:versionCode="28"
+    android:versionName="1.03.01b2" >
 
     <!-- не менять! Иначе перестаёт работать Текст элемента в контекстном меню -->
     <uses-sdk

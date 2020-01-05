@@ -281,6 +281,7 @@ public class ToolsPanelSettingsLayout extends RelativeLayout implements IConst, 
 	{
 		return new ActArray(
 				Action.SHOW_MAIN_PANEL,
+				Action.JAVASCRIPT,
 				Action.MAINMENU_SETTING,
 				Action.MINI_PANEL_SETTINGS,
 				//Action.CODEPAGE,

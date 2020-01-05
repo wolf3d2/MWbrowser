@@ -29,6 +29,7 @@ import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.Prefs;
 import com.mw.superbrowser.R;
 import com.jbak.superbrowser.Tab;
+import com.jbak.superbrowser.TabList;
 import com.jbak.superbrowser.stat;
 import com.jbak.superbrowser.adapters.SettingsAdapter;
 import com.jbak.superbrowser.adapters.SettingsBookmark;
@@ -396,10 +397,11 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 		final Tab ww = getMain().getTab();
 		ArrayList<Bookmark>ar = new ArrayList<Bookmark>();
 		ar.add(new SettingsBookmark(context, Prefs.FULLSCREEN, R.string.act_fullscreen, Boolean.valueOf(Prefs.getFullscreen()),R.string.yes,R.string.no, false));
-		SettingsBookmark wwcolor =  new SettingsBookmark(context, Prefs.WEBVIEW_BACKGROUND_COLOR_NEW, R.string.act_ww_back, 
+		SettingsBookmark sb =  new SettingsBookmark(context, Prefs.WEBVIEW_BACKGROUND_COLOR_NEW, R.string.act_ww_back, 
 				st.getColorName(context, -2)
 				);
-		ar.add(wwcolor);
+		ar.add(sb);
+		ar.add(new SettingsBookmark(context, Prefs.JS_ENABLED, R.string.act_js_enable, Boolean.valueOf(Prefs.getJavaScriptEnabled()),R.string.yes,R.string.no, false));
 		ar.add(new SettingsBookmark(context, IConst.VIEW_TYPE, R.string.act_full_view, Boolean.valueOf(ww.getViewType()==Tab.VIEW_TYPE_FULL),R.string.yes,R.string.no, true));
 		ar.add(new SettingsBookmark(context, IConst.WS_IMAGES_ENABLED, R.string.act_images_enabled, Boolean.valueOf(ww.imagesEnabled),R.string.yes,R.string.no, false));
 		ar.add(new SettingsBookmark(context, IConst.WS_PREVIEW_ENABLED, R.string.act_preview_enabled, Boolean.valueOf(ww.previewEnabled),R.string.yes,R.string.no, false));
@@ -415,7 +417,7 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 		String desc = context.getString(R.string.supermenu_button_def);
 		if (Prefs.get().getInt(Prefs.SUPERMENU_BUTTON_SET, 0) == 1)
 			desc = context.getString(R.string.supermenu_button_vert8inch);
-		SettingsBookmark sb = new SettingsBookmark(context, Prefs.SUPERMENU_BUTTON_SET, R.string.supermenu_button_set, 
+		sb = new SettingsBookmark(context, Prefs.SUPERMENU_BUTTON_SET, R.string.supermenu_button_set, 
 				desc
 				);
 		ar.add(sb);
@@ -429,25 +431,43 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 		int minFont = Prefs.get().getInt(Prefs.MIN_FONT, 8);
 		String text = st.STR_NULL+minFont;
 		ar.add(new SettingsBookmark(context, Prefs.MIN_FONT, R.string.act_min_font, text));
-// клик по настройке в быстрых настройках		
+// клик по настройке в быстрых настройках
 		SettingsAdapter sa = new SettingsAdapter(context, ar)
 		{
 			@Override
 			public void onCheckboxChanged(BookmarkView bv, SettingsBookmark sb) {
 				super.onCheckboxChanged(bv, sb);
+				WebSettings ws = null;
 				if(Prefs.FULLSCREEN.equals(sb.prefKey))
 					getMain().setFullscreen(sb.checkBox, true);
+				else if(Prefs.JS_ENABLED.equals(sb.prefKey)) 
+				{
+					getMain().setJavaScript(getMain(), sb.checkBox);
+//					TabList tl = getMain().getTabList();
+//					Tab tt = null;
+//					for (int i=0;i< tl.getCount();i++) {
+//						tt = (Tab)tl.getOpenedTabByPos(i);
+//						ws = tt.getWebView().getSettings();
+//						ws.setJavaScriptEnabled(sb.checkBox);
+//						tt.refreshSettings();
+//					}
+////					ws = getMain().getWebView().getSettings();
+////					ws.setJavaScriptEnabled(sb.checkBox);
+////					getMain().getTab().refreshSettings();
+//					ww.getWebView().reload();
+					dismiss();
+				}
 				else if(IConst.VIEW_TYPE.equals(sb.prefKey))
 					ww.setViewType(sb.checkBox?Tab.VIEW_TYPE_FULL:Tab.VIEW_TYPE_SMARTPHONE, true);
 				else if(IConst.WS_IMAGES_ENABLED.equals(sb.prefKey))
 				{
-					WebSettings ws = getMain().getWebView().getSettings();
+					ws = getMain().getWebView().getSettings();
 					ws.setBlockNetworkImage(!sb.checkBox);
 					getMain().getTab().refreshSettings();
 				}
 				else if(IConst.WS_PREVIEW_ENABLED.equals(sb.prefKey))
 				{
-					WebSettings ws = getMain().getWebView().getSettings();
+					ws = getMain().getWebView().getSettings();
 					ws.setLoadWithOverviewMode(sb.checkBox);
 					getMain().getTab().refreshSettings();
 				}

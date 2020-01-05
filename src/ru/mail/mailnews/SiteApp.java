@@ -1,6 +1,7 @@
 package ru.mail.mailnews;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -15,27 +16,44 @@ public class SiteApp
 	public static final String CHECK_VERSION_NAME = "ver";
 	public static final String SITE_APP = "https://jbak2.ucoz.net";
 	public static final String PAGE_UPDATE = "/upd/act_ver_mwbrowser.htm";
-	public static final String PAGE_DOWТLOAD = "/load/mwbrowser/19";
+	public static final String PAGE_DOWNLOAD = "/load/mwbrowser/19";
+
+    /** (сутки) частота проверки */
+	public static final long FREQ_UPDATE_TIME= 1000l*3600l*24l*1l;
+	// для тестирования
+//	public static final long FREQ_UPDATE_TIME = 1000l*120l;
 
 	public static void checkUpdate(final IniFile ini)
 	{
+		final long curtime = new Date().getTime();
+		long lastcheck = 0;
+		// читаем и обрабатываем параметр - время последней проверки
+		String par = ini.getParamValue(ini.LAST_CHECK_TIME);
+		if (par != null) {
+			try {
+				lastcheck = Long.parseLong(par);
+			} catch (NumberFormatException e) {
+				lastcheck = 0;
+				ini.setParam(ini.LAST_CHECK_TIME, st.STR_NULL+(curtime-1000));
+			}
+		} else {
+			ini.setParam(ini.LAST_CHECK_TIME, st.STR_NULL+(curtime-1000));
+			return;
+		}
+
+		// проверяем время последней проверки
+		// если текущее время меньше <посл.проверка>+<частота проверки>,
+		// то дальше не проверяем
+		if (curtime < (lastcheck+FREQ_UPDATE_TIME)) {
+			return;
+		}
+
 		// чекаем в фоне
 		new Thread(new Runnable() {
 			public void run() {
 				if (ini == null)
 					return;
 				String info = null;
-//				// проверяем время последней проверки
-//				// если оно = 0 (выше параметр уже запишется в ini, 
-//				// или текущее время меньше <посл.проверка>+<частота проверки>,
-//				// то дальше не проверяем
-//				
-//				if (!bcheck) {
-//					if (!bcheck&&lastcheck == 0||curtime < (lastcheck+SiteKbd.FREQ_UPDATE_TIME)) {
-//						return;
-//					}
-//				}
-
 				// пытаемся чекнуть
 				Scanner sc =  null;
 				info = null;
@@ -83,6 +101,7 @@ public class SiteApp
 				} catch (Throwable e) {
 				}
 				sc.close();
+				ini.setParam(ini.LAST_CHECK_TIME, st.STR_NULL+(curtime-1000));
 			}
 		}).start();
 	}

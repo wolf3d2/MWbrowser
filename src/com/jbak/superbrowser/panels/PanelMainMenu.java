@@ -176,7 +176,13 @@ public class PanelMainMenu extends FrameLayout implements WebViewEvent,OnGlobalE
 			return;
 		}
 		if(mType==TYPE_TOOLS_MAIN)
-			ar = new ActArray(Action.GO_BACK,Action.GO_FORWARD,Action.REFRESH,Action.COPY_URL_TO_CLIPBOARD,Action.TO_TOP,Action.TO_BOTTOM);
+			ar = new ActArray(
+					Action.GO_BACK,
+					Action.GO_FORWARD,
+					Action.REFRESH,
+					Action.COPY_URL_TO_CLIPBOARD,
+					Action.TO_TOP,
+					Action.TO_BOTTOM);
 		else if(mType==TYPE_TOOLS_MAINMENU_PANEL)
 		{
 			ar = new ActArray();

@@ -1188,7 +1188,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 //		String ua = "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0";
 		//String ua = "ELinks/0.2.3 (textmode; NetBSD 1.6.2 sparc; 132x43)";
 //		ws.setUserAgentString(ua);
-		ws.setJavaScriptEnabled(true);
+		ws.setJavaScriptEnabled(Prefs.getJavaScriptEnabled());
 		ww.addJavascriptInterface(mJsProcessor, JavaScriptProcessor.INTERFACE_NAME);
         ws.setGeolocationEnabled(true);
 		ws.setMinimumFontSize(Prefs.get().getInt(Prefs.MIN_FONT, 8));
@@ -1436,7 +1436,9 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			switch(pb.getAction().command)
 			{
 				case  Action.SHOW_MAIN_PANEL:
-					showInterfaceSettings(-1);
+					showInterfaceSettings(InterfaceSettingsLayout.MODE_LAST_RUNNED);
+// старый запуск из панели инструментов - настройки всегда на первой вкладке					
+//					showInterfaceSettings(-1);
 					return true;
 				case  Action.GO_BACK:
 				case  Action.GO_FORWARD:
@@ -2486,4 +2488,36 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 
     	}
     }
+	public void setJavaScript(MainActivity act, boolean bJs)
+	{
+		Prefs.setJavaScriptEnabled(bJs);
+		TabList tl = act.getTabList();
+		WebSettings ws = null;
+		Tab tt = null;
+		for (int i=0;i< tl.getCount();i++) {
+			try {
+				tt = (Tab)tl.getOpenedTabByPos(i);
+				ws = tt.getWebView().getSettings();
+				ws.setJavaScriptEnabled(bJs);
+				tt.refreshSettings();
+				
+			} catch (Throwable e) {
+			}
+		}
+		int lc = Prefs.getLongClick();
+		int tlc = Prefs.getInt(Prefs.TEMP_LONGCLICK, -1);
+		if (bJs) {
+			if (tlc == Prefs.LONGCLICK_CONTEXT_MENU) {
+				Prefs.setInt(Prefs.TEMP_LONGCLICK, -1);
+				Prefs.setLongClick(Prefs.LONGCLICK_CONTEXT_MENU);
+			}
+		} else {
+			if (tlc==-1&&lc == Prefs.LONGCLICK_CONTEXT_MENU) {
+				Prefs.setInt(Prefs.TEMP_LONGCLICK, lc);
+				Prefs.setLongClick(Prefs.LONGCLICK_DEFAULT);
+			}
+		}
+		act.getWebView().reload();
+	}
+
 }

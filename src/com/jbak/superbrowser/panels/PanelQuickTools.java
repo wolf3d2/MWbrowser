@@ -7,12 +7,15 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
+import ru.mail.mailnews.st;
+
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
 import com.jbak.superbrowser.BrowserApp;
 import com.jbak.superbrowser.BrowserApp.OnGlobalEventListener;
 import com.jbak.superbrowser.IConst;
 import com.jbak.superbrowser.MainActivity;
+import com.jbak.superbrowser.Prefs;
 import com.jbak.superbrowser.WebViewEvent;
 import com.jbak.superbrowser.Tab;
 import com.jbak.superbrowser.ui.HorizontalPanel;
@@ -158,6 +161,13 @@ public class PanelQuickTools extends FrameLayout implements WebViewEvent,OnGloba
 		{
 			Action a = ar.get(i);
 			switch (a.command) {
+			case Action.JAVASCRIPT_DISABLED:
+			case Action.JAVASCRIPT:
+				if (!Prefs.getJavaScriptEnabled()) {
+					ar.set(i, Action.create(Action.JAVASCRIPT_DISABLED));
+				} else
+					ar.set(i, Action.create(Action.JAVASCRIPT));
+				break;
 			case Action.REFRESH:
 				MainActivity ma = (MainActivity)getContext();
 				if(ma.getWebView()!=null&&ma.getTab()!=null&&ma.getTab().isLoading())
@@ -185,6 +195,14 @@ public class PanelQuickTools extends FrameLayout implements WebViewEvent,OnGloba
 			return Action.create(Action.STOP);
 		else
 			return Action.create(Action.REFRESH);
+	}
+	public static Action getActionJavaScriptIcon(MainActivity ma)
+	{
+		boolean enab = Prefs.getJavaScriptEnabled();
+		if (enab)
+			return Action.create(Action.JAVASCRIPT);
+		else
+			return Action.create(Action.JAVASCRIPT_DISABLED);
 	}
 	public final void setOnActionListener(OnAction listener)
 	{

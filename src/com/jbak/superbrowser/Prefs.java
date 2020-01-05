@@ -17,6 +17,8 @@ import com.mw.superbrowser.R;
 
 public class Prefs 
 {
+	/**  ключ, включен ли javascript*/
+	public static final String JS_ENABLED = "js_enabled";
 	/**  ключ, включена ли блокировка рекламы*/
 	public static final String ADS_BLOCK = "ads_block";
 	/**  ключ, самый первый запуск браузера*/
@@ -58,6 +60,9 @@ public class Prefs
 	public static final String WEBWIEW_BACKGROUND_COLOR = "ww_back_color";
 	public static final String WEBVIEW_BACKGROUND_COLOR_NEW = "ww_back_color_new";
 	public static final String LONGCLICK = "longclick";
+	/** сохранённое значение старого режима долгого нажатия на странице, <br>
+	 * когда javascript выключен, для восстановления при включении js */
+	public static final String TEMP_LONGCLICK = "temp_longclick";
 	public static final String THEME = "theme";
 	public static final String START_APP = "startApp";
 	public static final String HOMESCREEN_FOLDER = "homescreenFolder";
@@ -103,6 +108,7 @@ public class Prefs
 	
 	public static final int LONGCLICK_DEFAULT = 0;
 	public static final int LONGCLICK_TEXT_SELECTION = 1;
+/** суперменю */
 	public static final int LONGCLICK_CONTEXT_MENU = 3;
 
 	public static final int START_RESTORE_WINDOWS = 0;
@@ -282,6 +288,14 @@ public class Prefs
 	public static final void setColorExtendedProgress(int val)
 	{
 		Prefs.setInt(EXTENDED_PROGRESS_COLOR, val);
+	}
+	public static final boolean getJavaScriptEnabled()
+	{
+		return Prefs.getBoolean(JS_ENABLED, true);
+	}
+	public static final void setJavaScriptEnabled(boolean val)
+	{
+		Prefs.setBoolean(JS_ENABLED, val);
 	}
 	// способ навигации на странице
 	public static final int getNavigationMethod()

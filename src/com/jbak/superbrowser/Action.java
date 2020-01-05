@@ -185,6 +185,8 @@ public class Action {
 	public static final int SEARCH_BY_PICTURE = 130;
 	public static final int BLOCK = 131;
 	public static final int SEARCH_EDIT_DIALOG_LAYOUT = 132;
+	public static final int JAVASCRIPT = 133;
+	public static final int JAVASCRIPT_DISABLED = 134;
 
 	public static final int MIN_FONT_RANGE[] = new int[]{1,5,6,7,8,9,10,11,12,13,14,16,18,20,22,24,30,32,40,48,60,72};
 	
@@ -525,6 +527,26 @@ public class Action {
 			};
 		case BLOCK:
 			return new Action(action,action, R.string.ads_block_element, param,R.drawable.block_64);
+		case JAVASCRIPT:
+			return new Action(action,action, R.string.act_js, param,R.drawable.js64)
+			{
+				@Override
+				public boolean doAction(MainActivity act) 
+				{
+					act.setJavaScript(act,false);
+					return true;
+				};
+			};
+		case JAVASCRIPT_DISABLED:
+			return new Action(action,action, R.string.act_js_disable, param,R.drawable.js64,R.drawable.clear)
+			{
+				@Override
+				public boolean doAction(MainActivity act) 
+				{
+					act.setJavaScript(act,true);
+					return true;
+				};
+			};
 		case COPY_ALL_OPEN_URL:
 			return new Action(action,R.id.copy_link, R.string.act_copy_all_url, param,R.drawable.copy,R.drawable.all_url);
 		case OPEN_ALL_BOOKMARK:

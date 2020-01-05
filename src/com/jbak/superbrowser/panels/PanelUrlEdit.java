@@ -649,7 +649,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 						@Override
 						public void onConfirm(Object userParam) {
 							try {
-								MainActivity.inst.openUrl(SiteApp.SITE_APP+SiteApp.PAGE_DOWТLOAD, 
+								MainActivity.inst.openUrl(SiteApp.SITE_APP+SiteApp.PAGE_DOWNLOAD, 
 										Action.NEW_TAB);	
 								
 							} catch (Throwable e) {

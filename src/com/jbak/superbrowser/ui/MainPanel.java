@@ -275,6 +275,7 @@ public class MainPanel extends LinearLayoutEx implements OnAction,WebViewEvent,O
 		mUrlEdit.createToolsActions();
 		mPanelTools.forceUpdate();
 	}
+	/** Не используется? */
 	public Action getActionStopOrRefresh()
 	{
 		if(getMain().getLoadProgress().getVisibility()==View.VISIBLE)
