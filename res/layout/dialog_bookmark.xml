@@ -24,6 +24,12 @@
         android:paddingBottom="5dp"
         android:textCursorDrawable="@null" />
 
+    <com.jbak.superbrowser.ui.HorizontalPanel
+        android:id="@+id/horizontal_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    
     <CheckBox
         android:id="@+id/cb_showkbd"
         android:layout_width="wrap_content"

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
@@ -27,18 +29,16 @@ import com.jbak.superbrowser.ui.PanelLayout;
 import com.jbak.superbrowser.ui.PanelSetting;
 import com.jbak.superbrowser.ui.themes.MyTheme;
 
-public class ToolsMainMenuSettingsLayout extends RelativeLayout implements IConst, OnClickListener{
+public class SetToolsPanelLayout extends RelativeLayout implements IConst, OnClickListener{
 
 	ActArray mExistsActions;
 	ActArray mAddActions;
 	ListView mExist;
-	public static ListView mAdd;
+	ListView mAdd;
 	Bitmap mDragImage;
 	TextView mButtons;
-	Context m_c;
-	public ToolsMainMenuSettingsLayout(Context c,ActArray existActions) {
+	public SetToolsPanelLayout(Context c,ActArray existActions) {
 		super(c);
-		m_c=c;
 		mExistsActions = existActions;
 		mAddActions = createAddActions();
 		checkAddActions();
@@ -52,7 +52,7 @@ public class ToolsMainMenuSettingsLayout extends RelativeLayout implements ICons
 		mExist = new ListView(c);
 		mAdd = new ListView(c);
 		TextView delim = (TextView) LayoutInflater.from(c).inflate(R.layout.textview_small, null);
-		delim.setText(R.string.panel_mainmenu_settings);
+		delim.setText(R.string.panelQuickTools_settings);
 		mButtons = (TextView) LayoutInflater.from(c).inflate(R.layout.textview_title, null);
 		setButtons();
 		MyTheme.get().setView(delim,MyTheme.ITEM_DIALOG_BACKGROUND,MyTheme.ITEM_DIALOG_TEXT);
@@ -64,25 +64,15 @@ public class ToolsMainMenuSettingsLayout extends RelativeLayout implements ICons
 		lpCenterLayout.leftMargin = lpCenterLayout.rightMargin = 2;
 		lpCenterLayout.weight = 1.2f;
 		layoutCenter.addView(delim);
-		//layoutCenter.addView(mButtons,lpButtons);
+		layoutCenter.addView(mButtons,lpButtons);
+		LinearLayout.LayoutParams lpLeftBtn = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		lpLeftBtn.topMargin = 25;
+		lpLeftBtn.leftMargin = lpLeftBtn.rightMargin = 2;
 		
 		// определяем ширину кнопок
-		LinearLayout.LayoutParams lpclr = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-		lpclr.topMargin = 5;
-		lpclr.leftMargin = lpclr.rightMargin = 2;
 		LinearLayout.LayoutParams lpleft = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		lpleft.topMargin = 25;
 		lpleft.leftMargin = lpleft.rightMargin = 2;
-		
-		Button clr = new Button(c);
-		clr.setText(R.string.clear_all);
-		clr.setId(3);
-		clr.setOnClickListener(m_ClickListener);
-		MyTheme.get().setView(clr,MyTheme.ITEM_DIALOG_BACKGROUND,MyTheme.ITEM_DIALOG_TEXT);
-		layoutCenter.addView(clr, lpclr);
-		clr.measure(0, 0);
-		int w_clr = clr.getMeasuredWidth(); 
-		layoutCenter.removeView(clr);
 		
 		Button up = new Button(c);
 		up.setText(R.string.up5);
@@ -104,16 +94,13 @@ public class ToolsMainMenuSettingsLayout extends RelativeLayout implements ICons
 		int w_down = down.getMeasuredWidth(); 
 		layoutCenter.removeView(down);
 		// теперь добавляем
-		// вычисляем максимальную длину кнопки
-		w_down = Math.max(w_clr, w_down);
-		w_down = Math.max(w_up, w_down);
-		LinearLayout.LayoutParams lpLeftBtn = new LinearLayout.LayoutParams(w_down,LayoutParams.WRAP_CONTENT);
-		lpLeftBtn.topMargin = 5;
-		lpLeftBtn.leftMargin = lpLeftBtn.rightMargin = 2;
-		layoutCenter.addView(clr, lpLeftBtn);
-		lpLeftBtn.topMargin = 25;
-		layoutCenter.addView(up, lpLeftBtn);
-		layoutCenter.addView(down, lpLeftBtn);
+		if (w_up>w_down)
+			w_down = w_up;
+		LinearLayout.LayoutParams lpLeftB = new LinearLayout.LayoutParams(w_down,LayoutParams.WRAP_CONTENT);
+		lpLeftB.topMargin = 25;
+		lpLeftB.leftMargin = lpLeftBtn.rightMargin = 2;
+		layoutCenter.addView(up, lpLeftB);
+		layoutCenter.addView(down, lpLeftB);
 
 		ll.addView(layoutCenter,lpCenterLayout);
 		ll.addView(mAdd,lp);
@@ -133,10 +120,9 @@ public class ToolsMainMenuSettingsLayout extends RelativeLayout implements ICons
 	}
 	void setButtons()
 	{
-// закоментил я		
-//		int but = PanelQuickTools.getButtonTypeMiniPanel();
-//		mButtons.setText(BUTTON_TYPES.getValueByKey(but));
-//		mButtons.setOnClickListener(this);
+		int but = PanelQuickTools.getButtonTypeMiniPanel();
+		mButtons.setText(BUTTON_TYPES.getValueByKey(but));
+		mButtons.setOnClickListener(this);
 	}
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -291,32 +277,66 @@ public class ToolsMainMenuSettingsLayout extends RelativeLayout implements ICons
 	{
 		return mExistsActions;
 	}
-// пункты правого меню
+	
 	public ActArray createAddActions()
 	{
 		ActArray ar = new ActArray();
-		ar.add(Action.create(Action.IMPORT));
-		ar.add(Action.create(Action.EXPORT));
-		//ar.add(Action.create(Action.CODEPAGE));
-		ar.addAll(PanelMainMenu.getDefaultMainMenuPanelActions());
-		return ar;
+		ar.add(Action.create(Action.SHOW_MAIN_PANEL));
+		ar.add(Action.create(Action.TRANSLATE_LINK));
+		ar.add(Action.create(Action.JAVASCRIPT));
+		ar.add(Action.create(Action.MAINMENU_SETTING));
+		ar.add(Action.create(Action.MINI_PANEL_SETTINGS));
+		ar.add(Action.create(Action.SHOW_CLOSED_TABS));
+		ar.add(Action.create(Action.SEARCH_ON_PAGE));
+		ar.add(Action.create(Action.BOOKMARKS));
+		ar.add(Action.create(Action.MAIN_SETTINGS));
+		ar.add(Action.create(Action.HISTORY));
+		ar.add(Action.create(Action.SHARE_ELEMENT));
+		ar.add(Action.create(Action.FONT_SCALE_SETTINGS));
+		ar.add(Action.create(Action.NEW_TAB));
+		ar.add(Action.create(Action.TAB_LIST));
+		ar.add(Action.create(Action.TAB_HISTORY));
+		ar.add(Action.create(Action.CLEAR_DATA));
+		ar.add(Action.create(Action.CLOSE_ALL_TABS));
+		ar.add(Action.create(Action.DOWNLOAD_LIST));
+		ar.add(Action.create(Action.CLOSE_TAB));
+		ar.add(Action.create(Action.REFRESH));
+		ar.add(Action.create(Action.TO_TOP));
+		ar.add(Action.create(Action.TO_BOTTOM));
+		ar.add(Action.create(Action.GO_BACK));
+		ar.add(Action.create(Action.GO_FORWARD));
+		ar.add(Action.create(Action.EXIT));
+		ar.add(Action.create(Action.ADD_BOOKMARK));
+		ar.add(Action.create(Action.GO_HOME));
+		ar.add(Action.create(Action.QUICK_SETTINGS));
+		ar.add(Action.create(Action.VOICE_SEARCH));
+		ar.add(Action.create(Action.COPY_URL_TO_CLIPBOARD));
+		if(Build.VERSION.SDK_INT>=11)
+			ar.add(Action.create(Action.SAVEFILE).setText(R.string.act_save_page));
+		ar.add(Action.create(Action.OPENFILE));
+		ar.add(Action.create(Action.INTERFACE_SETTINGS));
+		ar.add(Action.create(Action.MAGIC_BUTTON_POS));
+		ar.add(Action.create(Action.SYSTEM_WIFI_NETWORKS));
+		ar.add(Action.create(Action.SYSTEM_SETTINGS));
+		ar.add(Action.create(Action.SYSTEM_MOBILE_SETTINGS));
+		return ar; 
 	}
 	@Override
 	public void onClick(View v) {
 		if(v==mButtons)
 		{
-			int but = PanelMainMenu.getButtonTypeMiniPanel();
+			int but = PanelQuickTools.getButtonTypeMiniPanel();
 			int index = BUTTON_TYPES.getIndexByKey(but);
 			++index;
 			if(index==BUTTON_TYPES.size())
 				index = 0;
-			PanelSetting ps = PanelLayout.getPanelSetting(PanelLayout.PANEL_MAINMENU_TOOLS);
+			PanelSetting ps = PanelLayout.getPanelSetting(PanelLayout.PANEL_QUICK_TOOLS);
 			if(ps!=null&&ps.extraSettings!=null)
 			{
 				try {
 					ps.extraSettings.put(BUTTON_TYPE, BUTTON_TYPES.getKeyByIndex(index));
 					setButtons();
-					BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_SETTINGS_CHANGED, STRVAL_MAINMENU_PANEL);
+					BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_SETTINGS_CHANGED, STRVAL_MINI_PANEL);
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
@@ -347,13 +367,6 @@ public class ToolsMainMenuSettingsLayout extends RelativeLayout implements ICons
             		pos=mExist.getCount();
             		mExist.smoothScrollToPosition(pos);
             		break;
-            case 3:
-            	mExistsActions.clear();
-        		mAddActions.clear();
-        		mAddActions.addAll(createAddActions());
-				checkAddActions();
-				updateListViews();
-           		break;
             }
         }
     };

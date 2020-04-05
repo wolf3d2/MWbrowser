@@ -167,7 +167,8 @@ public class MyWebViewClient extends WebViewClient {
 /** подгрузка всех урлов со страницы, при её загрузке */		
 		@Override
 		public void onLoadResource(WebView webview, String url) {
-			
+			if (url.contains("d-ughwashes.ru"))
+				return;
 			MainActivity ma = getMainActivity();
 			if(ma==null)
 				return;

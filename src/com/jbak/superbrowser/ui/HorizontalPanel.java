@@ -18,7 +18,8 @@ import com.jbak.superbrowser.adapters.BookmarkAdapter;
 import com.jbak.superbrowser.recycleview.PanelButtonRecyclerAdapter;
 import com.jbak.superbrowser.recycleview.RecyclerViewEx;
 
-public class HorizontalPanel extends RecyclerViewEx implements OnClickListener,OnLongClickListener {
+public class HorizontalPanel extends RecyclerViewEx implements OnClickListener,OnLongClickListener 
+{
 	private boolean mCheckWidthWhileNotAutoFill = true;
 	ActArray mActions;
 	protected LinearLayout mContainer;

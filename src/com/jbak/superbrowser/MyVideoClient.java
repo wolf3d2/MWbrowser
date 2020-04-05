@@ -15,6 +15,7 @@ public class MyVideoClient extends WebChromeClient implements MediaPlayer.OnPrep
     @Override
     public void onCompletion(MediaPlayer mp) // Video finished playing, only called in the case of android.widget.VideoView (typically API level <11)
     {
+    	st.mp.release();
     	
     }
 

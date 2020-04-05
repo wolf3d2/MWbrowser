@@ -46,6 +46,10 @@ public class SearchRecyclerAdapter extends PanelButtonRecyclerAdapter {
 		if(old!=null&&!old.isClosed())
 			old.close();
 	}
+	public Cursor getCursor()
+	{
+		return mCursor;
+	}
 	@Override
 	public PanelButtonHolder onCreateViewHolder(ViewGroup vg, int pos) {
 		return super.onCreateViewHolder(vg, pos);

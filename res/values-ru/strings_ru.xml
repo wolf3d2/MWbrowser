@@ -47,7 +47,6 @@
     <string name="close_last_tab">Закрывать последнюю страницу вкладки?</string>
     <string name="act_clear">Очистить</string>
     <string name="act_back">Назад</string>
-    <string name="act_select">Однократное выделение</string>
     <string name="act_go">Перейти</string>
     <string name="act_codepage">Кодировка страницы</string>
     <string name="act_bookmark_exp_cb_del">Перезаписать закладки</string>
@@ -55,6 +54,7 @@
     <string name="act_mwcosts">Установить\nMWcosts</string>
     <string name="act_mwmwshare2save">Установить\nMWshare2save</string>
     <string name="act_history">История</string>
+    <string name="act_history_search">История поиска</string>
     <string name="act_js">javascript</string>
     <string name="act_js_enable">javascript включен</string>
     <string name="act_js_disable">javascript выключен</string>
@@ -97,6 +97,7 @@
     <string name="act_create_folder">Создать папку</string>
     <string name="act_openfile">Открыть файл</string>
     <string name="act_savefile">Сохранить файл</string>
+    <string name="act_savefile_error">Нечего сохранять</string>
     <string name="act_select_folder">Выбрать папку\n(если показывается папка emulated, выбирать папку лучше через неё, иначе возможны ошибки)</string>
     <string name="act_select_theme">Выбрать тему</string>
     <string name="act_two_column">Одна колонка в панелях, или по выбору системы</string>
@@ -114,6 +115,7 @@
     <string name="act_feedback">Письмо разработчику</string>
     <string name="act_other_apps">Другие программы</string>
     <string name="act_source_code">Исходный код</string>
+    <string name="act_select_all_text">Выбрать всё</string>
     <string name="act_select_text">Выбрать текст</string>
     <string name="act_copy_text">Копировать текст</string>
     <string name="act_item_text">Текст элемента</string>

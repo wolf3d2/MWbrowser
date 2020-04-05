@@ -447,14 +447,17 @@ public class st
 			if (Prefs.isColorIcon()) {
 				// Конвертируем Drawable в Bitmap
 				Bitmap src = BitmapFactory.decodeResource(c.getResources(), imRes);
-				iv.setImageBitmap(getGrayColorBitmap(src));
-				src.recycle();
+				if (src != null) {
+					iv.setImageBitmap(getGrayColorBitmap(src));
+					src.recycle();
+				}
 			} else
 				iv.setImageResource(imRes);
 		}
 		public static Bitmap getGrayColorBitmap(Bitmap src)
 		{
-			
+			if (src == null)
+				return src;
 			int width = src.getWidth();
 			int height = src.getHeight();
 

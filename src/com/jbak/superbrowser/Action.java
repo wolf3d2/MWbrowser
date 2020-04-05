@@ -30,7 +30,7 @@ import android.widget.TextView;
 
 import com.jbak.superbrowser.stat.DownloadOptions;
 import com.jbak.superbrowser.UrlProcess.DownloadFileInfo;
-import com.jbak.superbrowser.panels.InterfaceSettingsLayout;
+import com.jbak.superbrowser.panels.SetInterfaceLayout;
 import com.jbak.superbrowser.panels.PanelMainMenu;
 import com.jbak.superbrowser.panels.PanelQuickTools;
 import com.jbak.superbrowser.search.SearchSystem;
@@ -187,6 +187,7 @@ public class Action {
 	public static final int SEARCH_EDIT_DIALOG_LAYOUT = 132;
 	public static final int JAVASCRIPT = 133;
 	public static final int JAVASCRIPT_DISABLED = 134;
+	public static final int HISTORY_SEARCH = 135;
 
 	public static final int MIN_FONT_RANGE[] = new int[]{1,5,6,7,8,9,10,11,12,13,14,16,18,20,22,24,30,32,40,48,60,72};
 	
@@ -272,6 +273,18 @@ public class Action {
 		switch (action) {
 		case SEARCH_BY_PICTURE:
 			return new Action(action,action,R.string.act_search_by_image,param,R.drawable.images,R.drawable.search);
+//		case HISTORY_SEARCH:
+//			return new Action(action,R.id.bookmarks,R.string.act_history_search,param,R.drawable.search,R.drawable.history);
+		case HISTORY_SEARCH:
+			return new Action(action,R.id.bookmarks, R.string.act_history_search, param,R.drawable.search,R.drawable.history)
+			{
+				@Override
+				public boolean doAction(MainActivity act) {
+					Intent in = BookmarkActivity.getIntent(act, BookmarkActivity.TYPE_HISTORY_SEARCH);
+					BrowserApp.runActivityForResult(act,IConst.CODE_GET_HISTORY_SEARCH,in);
+					return true;
+				}
+			};
 		case TRANSLATE_COPYING:
 			return new Action(action,action,R.string.act_translate_copying_text,param,R.drawable.translate, R.drawable.txt)
 			{
@@ -644,7 +657,7 @@ public class Action {
 			{
 				public boolean doAction(MainActivity act) 
 				{
-					act.showInterfaceSettings(InterfaceSettingsLayout.MODE_WINDOWS_PANEL_SETTINGS);
+					act.showInterfaceSettings(SetInterfaceLayout.MODE_WINDOWS_PANEL_SETTINGS);
 					return true;
 				};
 			};
@@ -686,7 +699,7 @@ public class Action {
 			{
 				public boolean doAction(MainActivity act) 
 				{
-					new DialogToolsPanelSettings(act, PanelQuickTools.getMinipanelActions()).show();
+					new DialogToolsPanelSettings(act, PanelQuickTools.getMinipanelActionsDefault()).show();
 					return true;
 				};
 			};
@@ -727,7 +740,7 @@ public class Action {
 			{
 				@Override
 				public boolean doAction(MainActivity act) {
-					act.showInterfaceSettings(InterfaceSettingsLayout.MODE_SETTINGS);
+					act.showInterfaceSettings(SetInterfaceLayout.MODE_SETTINGS);
 					//BookmarkActivity.runByType(act, BookmarkActivity.TYPE_SETTINGS);
 					return true;
 				}
@@ -772,7 +785,7 @@ public class Action {
 		case ITEM_TEXT:
 			return new Action(action,action,R.string.act_item_text,param,R.drawable.edit);
 		case SELECT_TEXT:
-			return new Action(action,action,R.string.act_select,param,R.drawable.selecttext);
+			return new Action(action,action,R.string.act_select_text,param,R.drawable.selecttext);
 //			{
 //				@Override
 //				public boolean doAction(MainActivity act) {
@@ -819,7 +832,7 @@ public class Action {
 			{
 				public boolean doAction(MainActivity act) 
 				{
-					act.showInterfaceSettings(InterfaceSettingsLayout.MODE_MAGIC_BUTTON_POS);
+					act.showInterfaceSettings(SetInterfaceLayout.MODE_MAGIC_BUTTON_POS);
 					return true;
 				};
 			};
@@ -828,7 +841,7 @@ public class Action {
 			{
 				public boolean doAction(MainActivity act) 
 				{
-					act.showInterfaceSettings(InterfaceSettingsLayout.MODE_NAVIGATION_PANEL_POS);
+					act.showInterfaceSettings(SetInterfaceLayout.MODE_NAVIGATION_PANEL_POS);
 					return true;
 				};
 			};
@@ -942,8 +955,10 @@ public class Action {
 					{
 						DownloadFileInfo fi = new DownloadFileInfo();
 						String saveName = activity.getSaveFilename(UrlProcess.MHT_EXT);
-						if (saveName == null)
+						if (saveName == null) {
+							st.toast(activity, activity.getString(R.string.act_savefile_error));
 							return true;
+						}
 						fi.filename = saveName;
 						fi.mimeType = UrlProcess.MIME_MHT;
 						DialogDownloadFile df = new DialogDownloadFile(activity,new DownloadOptions(saveName),fi) {
@@ -1115,7 +1130,7 @@ public class Action {
 						ws.setTextSize(Prefs.OLD_SIZES.getValueByKey(zoom));
 					//activity.getWebView().reload();
 					//activity.getWebWindow().refreshSettings(activity.getWebView());
-					activity.getMainPanel().createActionsToolsGrid();
+					activity.getMainPanel().createMainMenuActionsTools();
 					return true;
 				}
 				@Override

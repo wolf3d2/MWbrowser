@@ -37,6 +37,10 @@ import com.jbak.utils.Utils;
 public class DialogEditor extends ThemedDialog{
 // переменные для поиска
 	boolean searchviewpanel = false;
+	/** максимальное количество строк для mEdit, когда поиск и клавиатура скрыта */
+	public static final int MAX_MAX_LINES_MAIN_EDIT_ON_SEARCH_KEYBOARD_GONE= 20;
+	/** максимальное количество строк для mEdit, когда поиск и клавиатура видна*/
+	public static final int MAX_MIN_LINES_MAIN_EDIT_ON_SEARCH_KEYBOARD_VISIBLE= 10;
 	LinearLayout llsearch = null;
 	protected EditText mEditSearch;
 	protected ImageView mSearchClose;
@@ -102,7 +106,7 @@ public class DialogEditor extends ThemedDialog{
 		setTitleText(title);
 		mEdit = (EditText) v.findViewById(R.id.editText);
 		//mEdit.setMaxHeight(stat.getSizeHeight(context));
-		mEdit.setMaxLines(20);
+		mEdit.setMaxLines(MAX_MAX_LINES_MAIN_EDIT_ON_SEARCH_KEYBOARD_GONE);
 		mEdit.setText(text);
 		llsearch = (LinearLayout) v.findViewById(R.id.editdialog_searchLayout);
 		mSearchTvPos = (TextView) llsearch.findViewById(R.id.editdialog_pos);
@@ -194,6 +198,7 @@ public class DialogEditor extends ThemedDialog{
 			public boolean onEditorAction(TextView tv, int action, KeyEvent tvent) {
 				  if (action == EditorInfo.IME_ACTION_SEARCH) {
 	   	    			search();
+	   	    			mEdit.setMaxLines(MAX_MAX_LINES_MAIN_EDIT_ON_SEARCH_KEYBOARD_GONE);
 	   	    			st.hideEditKeyboard(mEditSearch);
 	       				return true;
 				  }
@@ -207,9 +212,12 @@ public class DialogEditor extends ThemedDialog{
 			{
 				try {
 					if (hasFocus){
+	   	    			mEdit.setMaxLines(MAX_MIN_LINES_MAIN_EDIT_ON_SEARCH_KEYBOARD_VISIBLE);
 						mEditSearch.setBackgroundResource(R.drawable.edittext_back_focus_style);
-					}else 
+					}else {
+	   	    			mEdit.setMaxLines(MAX_MAX_LINES_MAIN_EDIT_ON_SEARCH_KEYBOARD_GONE);
 						mEditSearch.setBackgroundResource(R.drawable.edittext_back_notfocus_style);
+					}
 				} catch (Throwable e) {
 				}
 
@@ -227,6 +235,7 @@ public class DialogEditor extends ThemedDialog{
     	mEdit.setText(mEdit.getText().toString());
     	mEdit.setSelection(pos);
     	mEdit.setEnabled(true);
+		mEdit.setMaxLines(MAX_MAX_LINES_MAIN_EDIT_ON_SEARCH_KEYBOARD_GONE);
     	if (llsearch == null)
     		return;
     	llsearch.setVisibility(View.GONE);
@@ -292,7 +301,7 @@ public class DialogEditor extends ThemedDialog{
         	pos_search = -1;
     	}
     	if (searchviewpanel){
-    		mEdit.setEnabled(false);
+    		mEdit.setEnabled(true);
     		mEdit.setBackgroundColor(Color.WHITE);
     		mEdit.setTextColor(Color.BLACK);
     	}
@@ -365,7 +374,7 @@ public class DialogEditor extends ThemedDialog{
 		case Action.SEARCH_EDIT_DIALOG_LAYOUT:
 			if (llsearch == null)
 				return;
-			mEdit.setMaxLines(10);
+   			mEdit.setMaxLines(MAX_MIN_LINES_MAIN_EDIT_ON_SEARCH_KEYBOARD_VISIBLE);
 			//mEdit.setMinLines(5);
 			showSearchPanel();
 			//llsearch.setVisibility(View.VISIBLE);

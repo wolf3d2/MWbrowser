@@ -23,6 +23,8 @@ public class Prefs
 	public static final String ADS_BLOCK = "ads_block";
 	/**  ключ, самый первый запуск браузера*/
 	public static final String FIRST_START_BROWSER = "first_start_browser";
+	/**  ключ, показ панели кнопок в адресе в 1 строку или меню */
+	public static final String SET_ADRESS_PANEL_TOOLBAR_ONE_LINE = "set_adress_panel_toolbar_one_line";
 	/**  ключ, показ панели в две колонки по выбору системы*/
 	public static final String SET_TWO_COLUMN = "set_two_column";
 	// переменные

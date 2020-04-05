@@ -20,7 +20,7 @@ import com.jbak.superbrowser.MainActivityRef;
 import com.jbak.superbrowser.Prefs;
 import com.mw.superbrowser.R;
 import com.jbak.superbrowser.WebViewEvent;
-import com.jbak.superbrowser.panels.InterfaceSettingsLayout;
+import com.jbak.superbrowser.panels.SetInterfaceLayout;
 import com.jbak.superbrowser.panels.PanelQuickTools;
 import com.jbak.superbrowser.panels.PanelSettings;
 import com.jbak.superbrowser.panels.PanelUrlEdit;
@@ -280,7 +280,7 @@ public class PanelLayout extends MainActivityRef implements WebViewEvent,OnGloba
 			if(Prefs.PANEL_SETTINGS.equals(param))
 			{
 				setFromSettings();
-				InterfaceSettingsLayout.checkMagicKeyCanDisabled(getMain());
+				SetInterfaceLayout.checkMagicKeyCanDisabled(getMain());
 			}
 			else if(IConst.PANEL_WINDOWS.equals(param))
 			{

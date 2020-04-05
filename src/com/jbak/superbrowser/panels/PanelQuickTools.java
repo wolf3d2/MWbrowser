@@ -25,6 +25,7 @@ import com.jbak.superbrowser.ui.PanelButton;
 import com.jbak.superbrowser.ui.PanelLayout;
 import com.jbak.superbrowser.ui.PanelSetting;
 import com.jbak.superbrowser.ui.themes.MyTheme;
+import com.mw.superbrowser.R;
 
 public class PanelQuickTools extends FrameLayout implements WebViewEvent,OnGlobalEventListener{
 	public static final int TYPE_TOOLS_MAIN = 1;
@@ -49,7 +50,7 @@ public class PanelQuickTools extends FrameLayout implements WebViewEvent,OnGloba
 		//! создание минипанели
 		if(mType==TYPE_TOOLS_MINIPANEL)
 		{
-			mMinipanelSettingsAction = getMinipanelActions();
+			mMinipanelSettingsAction = getMinipanelActionsDefault();
 			BrowserApp.INSTANCE.addGlobalListener(this);
 			mPanel.setButtonsType(getButtonTypeMiniPanel());
 		}
@@ -110,7 +111,7 @@ public class PanelQuickTools extends FrameLayout implements WebViewEvent,OnGloba
 			return ps.extraSettings.optInt(IConst.BUTTON_TYPE, IConst.BUTTONS_MEDIUM);
 		return IConst.BUTTONS_MEDIUM;
 	}
-	public static ActArray getMinipanelActions()
+	public static ActArray getMinipanelActionsDefault()
 	{
 //		ArrayList<Integer> ids = Db.getStringTable().getIntArray(IConst.STRVAL_MINI_PANEL);
 		PanelSetting ps = PanelLayout.getPanelSettings().getPanelSetting(PanelLayout.PANEL_QUICK_TOOLS);
@@ -168,6 +169,9 @@ public class PanelQuickTools extends FrameLayout implements WebViewEvent,OnGloba
 				} else
 					ar.set(i, Action.create(Action.JAVASCRIPT));
 				break;
+			case Action.SAVEFILE:
+					ar.set(i, Action.create(Action.SAVEFILE).setText(R.string.act_save_page));
+				break;
 			case Action.REFRESH:
 				MainActivity ma = (MainActivity)getContext();
 				if(ma.getWebView()!=null&&ma.getTab()!=null&&ma.getTab().isLoading())
@@ -216,7 +220,7 @@ public class PanelQuickTools extends FrameLayout implements WebViewEvent,OnGloba
 	public void onGlobalEvent(int code, Object param) {
 		if(code==BrowserApp.GLOBAL_SETTINGS_CHANGED&&IConst.STRVAL_MINI_PANEL.equals(param))
 		{
-			mMinipanelSettingsAction = getMinipanelActions();
+			mMinipanelSettingsAction = getMinipanelActionsDefault();
 			setActions();
 			mPanel.setButtonsType(getButtonTypeMiniPanel());
 		}

@@ -95,34 +95,79 @@ public class Bookmark implements IConst
 		/** возвращает bookmark из текущей позиции курсора */
 		public static Bookmark fromManagedCursor(Cursor c)
 		{
+			// тип курсора - или 0, или 1 для истории поискаж
+			int type_cursor = 0; 
+			int index = 0;
+			String[] ar =  c.getColumnNames();
+			for (String curs:ar)
+			{
+				if (curs.compareToIgnoreCase(Db.SEARCH)==0) {
+					type_cursor = 1;
+					break;
+				}
+			}
 			//[_id, url, visits, date, bookmark, title, favicon, thumbnail, touch_icon, user_entered]
 			Bookmark bm = new Bookmark();
-			bm.setUrl(c.getString(c.getColumnIndex(Browser.BookmarkColumns.URL)));
-			int index = c.getColumnIndex(Browser.BookmarkColumns.DATE);
-			if(index<0)
-				index = c.getColumnIndex(MODIFIED);
-			if(index>=0)
-				bm.date = c.getLong(index);
-			
-			if(BrowserApp.DB_TYPE==BrowserApp.DB_OWN)
-				index = c.getColumnIndex(TYPE);
-			else
-				index = c.getColumnIndex(BrowserContract.Bookmarks.IS_FOLDER);
-			if(index>=0)
+			switch (type_cursor)
 			{
-				int type = c.getInt(index);
-				boolean folder = BrowserApp.DB_TYPE==BrowserApp.DB_OWN&&type==TableBookmarks.TYPE_FOLDER||BrowserApp.DB_TYPE!=BrowserApp.DB_OWN&&type>0;
-				if(folder)
-					bm.setImageRes(R.drawable.folder);
+			case 1:
+				//bm.setUrl(c.getString(c.getColumnIndex(Browser.BookmarkColumns.URL)));
+				index = c.getColumnIndex(Browser.BookmarkColumns.DATE);
+				if(index<0)
+					index = -1;
+				if(index>=0)
+					bm.date = c.getLong(index);
+				
+//				if(BrowserApp.DB_TYPE==BrowserApp.DB_OWN)
+//					index = c.getColumnIndex(TYPE);
+//				else
+//					index = c.getColumnIndex(BrowserContract.Bookmarks.IS_FOLDER);
+//				if(index>=0)
+//				{
+//					int type = c.getInt(index);
+//					boolean folder = BrowserApp.DB_TYPE==BrowserApp.DB_OWN&&type==TableBookmarks.TYPE_FOLDER||BrowserApp.DB_TYPE!=BrowserApp.DB_OWN&&type>0;
+//					if(folder)
+//						bm.setImageRes(R.drawable.folder);
+//				}
+				
+				index = c.getColumnIndex(_ID);
+				if(index>=0)
+					bm.param = c.getLong(index);
+				index = c.getColumnIndex(Db.SEARCH);
+				if(index>=0) {
+					bm.setTitle(c.getString(index));
+				}
+				bm.originalUrl = bm.getUrl();
+				break;
+			default:
+				bm.setUrl(c.getString(c.getColumnIndex(Browser.BookmarkColumns.URL)));
+				index = c.getColumnIndex(Browser.BookmarkColumns.DATE);
+				if(index<0)
+					index = c.getColumnIndex(MODIFIED);
+				if(index>=0)
+					bm.date = c.getLong(index);
+				
+				if(BrowserApp.DB_TYPE==BrowserApp.DB_OWN)
+					index = c.getColumnIndex(TYPE);
+				else
+					index = c.getColumnIndex(BrowserContract.Bookmarks.IS_FOLDER);
+				if(index>=0)
+				{
+					int type = c.getInt(index);
+					boolean folder = BrowserApp.DB_TYPE==BrowserApp.DB_OWN&&type==TableBookmarks.TYPE_FOLDER||BrowserApp.DB_TYPE!=BrowserApp.DB_OWN&&type>0;
+					if(folder)
+						bm.setImageRes(R.drawable.folder);
+				}
+				
+				index = c.getColumnIndex(_ID);
+				if(index>=0)
+					bm.param = c.getLong(index);
+				index = c.getColumnIndex(Browser.BookmarkColumns.TITLE);
+				if(index>=0)
+					bm.setTitle(c.getString(index));
+				bm.originalUrl = bm.getUrl();
+				break;
 			}
-			
-			index = c.getColumnIndex(_ID);
-			if(index>=0)
-				bm.param = c.getLong(index);
-			index = c.getColumnIndex(Browser.BookmarkColumns.TITLE);
-			if(index>=0)
-				bm.setTitle(c.getString(index));
-			bm.originalUrl = bm.getUrl();
 			return bm;
 			
 		}

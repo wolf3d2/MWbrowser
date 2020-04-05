@@ -43,6 +43,7 @@ import com.jbak.superbrowser.adapters.SettingsBookmark;
 import com.jbak.superbrowser.WebViewEvent;
 import com.jbak.superbrowser.Tab;
 import com.jbak.superbrowser.pluginapi.Plugin;
+import com.jbak.superbrowser.recycleview.RecyclerViewEx;
 import com.jbak.superbrowser.search.SearchSystem;
 import com.jbak.superbrowser.stat.DownloadOptions;
 import com.jbak.superbrowser.ui.HorizontalPanel;
@@ -75,6 +76,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		super(c, attrs);
 		init();
 	}
+	PanelSearch mPanelSearch = null;
 	boolean mIncognito = false;
 	boolean mUserEditText = false;
 	/** Юзер не редактирует текст */
@@ -96,7 +98,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 	public static final int STYLE_VISIBLE_TOOLS = 0x0002;
 	int mAddrState = STATE_ADDR_NONE;
 	OnAction mActionListener;
-	
+	int mToolsPanelHeight = 0;
 	private void init() {
 		setOrientation(VERTICAL);
 //		setOrientation(HORIZONTAL);
@@ -117,7 +119,12 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		// пока не используется
 		addView(createUrlEditPanel());
 		mToolsPanel = new HorizontalPanel(getContext());
-		mToolsPanel.setButtonsType(PanelButton.TYPE_BUTTON_MEDIUM_TWO_LINE);
+		mToolsPanel.setType(RecyclerViewEx.TYPE_GRID);
+		//mToolsPanel.setWrapContent(true);
+		//mToolsPanel.setButtonsType(PanelButton.TYPE_BUTTON_MEDIUM_TWO_LINE);
+		mToolsPanelHeight = PanelButton.getPanelButtonHeight(getContext(), null, PanelButton.TYPE_BUTTON_MEDIUM_TWO_LINE);
+		mToolsPanelHeight*=4;
+		mToolsPanel.setMaxHeight(mToolsPanelHeight);
 		mToolsPanel.setCheckWidthWhileNotAutoFill(false);
 		addView(mToolsPanel);
 //		setDescendantFocusability(FOCUS_BEFORE_DESCENDANTS);
@@ -168,6 +175,10 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 	{
 		switch (a.command)
 		{
+//		case Action.HISTORY_SEARCH:
+//			if (mPanelSearch == null)
+//				return;
+//			return;
 		case Action.CLEAR_TEXT:
 			mEditUrl.setText(null);
 			if(!mUserEditText)
@@ -248,7 +259,7 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 	{
 		return (mStyles&STYLE_VISIBLE_TOOLS)!=0;
 	}
-	// создание панели при нажатии на панель адреса
+	/** создание панели при нажатии на панель адреса */
 	public void createToolsActions()
 	{
 		ActArray ar = new ActArray();
@@ -272,6 +283,11 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		else
 		{
 			ar.add(Action.create(Action.CLEAR_TEXT));
+			mPanelSearch = new PanelSearch(getContext());
+			if (mPanelSearch.getPanel().getRealAdapter().getItemCount()>0) {
+				ar.add(Action.create(Action.HISTORY_SEARCH));
+			} else
+				mPanelSearch = null;
 			if(mAddrState!=STATE_ADDR_SEARCH)
 				ar.add(Action.create(Action.COPY_URL_TO_CLIPBOARD));
 			if(!TextUtils.isEmpty(text)&&(mAddrState==STATE_ADDR_URL||!mUserEditText&&isToolsVisible()&&stat.isWebAddr(text)))
@@ -428,6 +444,8 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 						//mEditUrl.clearFocus();
 						mEditUrl.requestFocus();
 						mEditUrl.selectAll();
+						mToolsPanel.setMaxHeight(mToolsPanelHeight);
+
 					}
 					else
 					{

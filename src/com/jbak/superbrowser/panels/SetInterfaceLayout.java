@@ -50,7 +50,7 @@ import com.jbak.superbrowser.ui.themes.MyTheme;
 import com.jbak.ui.UIUtils;
 import com.jbak.utils.ObjectKeyValues;
 // окно настроек
-public class InterfaceSettingsLayout implements OnClickListener,IConst{
+public class SetInterfaceLayout implements OnClickListener,IConst{
 
 	public static final int MODE_INTERFACE_SETTINGS = Action.INTERFACE_SETTINGS;
 	public static final int MODE_MAGIC_BUTTON_POS = Action.MAGIC_BUTTON_POS;
@@ -101,7 +101,7 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 	HorizontalPanel mActionPanel;
 	int mMode = MODE_INTERFACE_SETTINGS;
 	
-	public InterfaceSettingsLayout(RelativeLayout parent,int mode) {
+	public SetInterfaceLayout(RelativeLayout parent,int mode) {
 		set(parent,mode);
 
 	}
@@ -375,7 +375,7 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 		if(Prefs.isMagicKeyVisible()||Prefs.getBoolean(Prefs.MENU_KEY_CONFIRMED, false))
 			return;
 		View v = ma.getPanelLayout().getPanel(PanelLayout.PANEL_QUICK_TOOLS);
-		ActArray ar = PanelQuickTools.getMinipanelActions();
+		ActArray ar = PanelQuickTools.getMinipanelActionsDefault();
 		if(v!=null&&ar.has(Action.SHOW_MAIN_PANEL))
 			return;
 		new DialogEmptyInterface(ma).show();
@@ -766,7 +766,7 @@ public class InterfaceSettingsLayout implements OnClickListener,IConst{
 // закрываем окно настроек
 //				dismiss();
 				if(sb.getPanelSetting().id==PanelLayout.PANEL_QUICK_TOOLS)
-					new DialogToolsPanelSettings(mParent.getContext(), PanelQuickTools.getMinipanelActions()).show();
+					new DialogToolsPanelSettings(mParent.getContext(), PanelQuickTools.getMinipanelActionsDefault()).show();
 				else if(sb.getPanelSetting().id==PanelLayout.PANEL_TABS){
 					dismiss();
 					getMain().showInterfaceSettings(MODE_WINDOWS_PANEL_SETTINGS);

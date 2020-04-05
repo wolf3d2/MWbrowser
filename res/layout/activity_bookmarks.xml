@@ -19,7 +19,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/adframe"
-        android:layout_alignWithParentIfMissing="true" />
+        android:layout_alignWithParentIfMissing="true" 
+        />
+    
 	<FrameLayout android:id="@+id/recyclerContainer"
         android:padding="@dimen/magic_padding"
         android:layout_above="@id/horizontal_panel"

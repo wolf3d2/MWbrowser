@@ -3,6 +3,7 @@ package com.jbak.superbrowser.ui.dialogs;
 import java.io.File;
 import java.util.Locale;
 
+import ru.mail.mailnews.SiteApp;
 import ru.mail.mailnews.st;
 import android.content.Context;
 import android.content.Intent;
@@ -59,7 +60,9 @@ public class DialogAbout extends ThemedDialog{
 				sendFeedback(context());
 			break;
 			case Action.OTHER_APPS:
-				goMarketApps(context());
+				goOthertAppSite(context());
+				// запускаем маркет
+				//goMarketApps(context());
 			break;
 			case Action.FOUR_PDA:
 				try{
@@ -143,6 +146,23 @@ public class DialogAbout extends ThemedDialog{
 	        Intent intent = new Intent(Intent.ACTION_VIEW);
 	        intent.setData(Uri.parse(link));
 	        c.startActivity(intent);
+
+//			c.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(link)));
+		} catch (Throwable e) {
+		}
+		
+	}
+	/** другие приложения на сайте */
+	public static void goOthertAppSite(Context c) {
+		String link =  SiteApp.SITE_APP+SiteApp.PAGE_OTHER_APP;
+		try {
+			Bookmark bm = new Bookmark(link, null, System.currentTimeMillis());
+//			bm.tabMode = Action.NEW_TAB;
+			BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.NEW_TAB,bm));
+
+//	        Intent intent = new Intent(Intent.ACTION_VIEW);
+//	        intent.setData(Uri.parse(link));
+//	        c.startActivity(intent);
 
 //			c.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(link)));
 		} catch (Throwable e) {

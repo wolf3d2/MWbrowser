@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.RelativeLayout.LayoutParams;
 
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
@@ -28,16 +27,18 @@ import com.jbak.superbrowser.ui.PanelLayout;
 import com.jbak.superbrowser.ui.PanelSetting;
 import com.jbak.superbrowser.ui.themes.MyTheme;
 
-public class ToolsPanelSettingsLayout extends RelativeLayout implements IConst, OnClickListener{
+public class SetMainMenuLayout extends RelativeLayout implements IConst, OnClickListener{
 
 	ActArray mExistsActions;
 	ActArray mAddActions;
 	ListView mExist;
-	ListView mAdd;
+	public static ListView mAdd;
 	Bitmap mDragImage;
 	TextView mButtons;
-	public ToolsPanelSettingsLayout(Context c,ActArray existActions) {
+	Context m_c;
+	public SetMainMenuLayout(Context c,ActArray existActions) {
 		super(c);
+		m_c=c;
 		mExistsActions = existActions;
 		mAddActions = createAddActions();
 		checkAddActions();
@@ -51,7 +52,7 @@ public class ToolsPanelSettingsLayout extends RelativeLayout implements IConst, 
 		mExist = new ListView(c);
 		mAdd = new ListView(c);
 		TextView delim = (TextView) LayoutInflater.from(c).inflate(R.layout.textview_small, null);
-		delim.setText(R.string.panelQuickTools_settings);
+		delim.setText(R.string.panel_mainmenu_settings);
 		mButtons = (TextView) LayoutInflater.from(c).inflate(R.layout.textview_title, null);
 		setButtons();
 		MyTheme.get().setView(delim,MyTheme.ITEM_DIALOG_BACKGROUND,MyTheme.ITEM_DIALOG_TEXT);
@@ -63,15 +64,25 @@ public class ToolsPanelSettingsLayout extends RelativeLayout implements IConst, 
 		lpCenterLayout.leftMargin = lpCenterLayout.rightMargin = 2;
 		lpCenterLayout.weight = 1.2f;
 		layoutCenter.addView(delim);
-		layoutCenter.addView(mButtons,lpButtons);
-		LinearLayout.LayoutParams lpLeftBtn = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-		lpLeftBtn.topMargin = 25;
-		lpLeftBtn.leftMargin = lpLeftBtn.rightMargin = 2;
+		//layoutCenter.addView(mButtons,lpButtons);
 		
 		// определяем ширину кнопок
+		LinearLayout.LayoutParams lpclr = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		lpclr.topMargin = 5;
+		lpclr.leftMargin = lpclr.rightMargin = 2;
 		LinearLayout.LayoutParams lpleft = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		lpleft.topMargin = 25;
 		lpleft.leftMargin = lpleft.rightMargin = 2;
+		
+		Button clr = new Button(c);
+		clr.setText(R.string.clear_all);
+		clr.setId(3);
+		clr.setOnClickListener(m_ClickListener);
+		MyTheme.get().setView(clr,MyTheme.ITEM_DIALOG_BACKGROUND,MyTheme.ITEM_DIALOG_TEXT);
+		layoutCenter.addView(clr, lpclr);
+		clr.measure(0, 0);
+		int w_clr = clr.getMeasuredWidth(); 
+		layoutCenter.removeView(clr);
 		
 		Button up = new Button(c);
 		up.setText(R.string.up5);
@@ -93,13 +104,16 @@ public class ToolsPanelSettingsLayout extends RelativeLayout implements IConst, 
 		int w_down = down.getMeasuredWidth(); 
 		layoutCenter.removeView(down);
 		// теперь добавляем
-		if (w_up>w_down)
-			w_down = w_up;
-		LinearLayout.LayoutParams lpLeftB = new LinearLayout.LayoutParams(w_down,LayoutParams.WRAP_CONTENT);
-		lpLeftB.topMargin = 25;
-		lpLeftB.leftMargin = lpLeftBtn.rightMargin = 2;
-		layoutCenter.addView(up, lpLeftB);
-		layoutCenter.addView(down, lpLeftB);
+		// вычисляем максимальную длину кнопки
+		w_down = Math.max(w_clr, w_down);
+		w_down = Math.max(w_up, w_down);
+		LinearLayout.LayoutParams lpLeftBtn = new LinearLayout.LayoutParams(w_down,LayoutParams.WRAP_CONTENT);
+		lpLeftBtn.topMargin = 5;
+		lpLeftBtn.leftMargin = lpLeftBtn.rightMargin = 2;
+		layoutCenter.addView(clr, lpLeftBtn);
+		lpLeftBtn.topMargin = 25;
+		layoutCenter.addView(up, lpLeftBtn);
+		layoutCenter.addView(down, lpLeftBtn);
 
 		ll.addView(layoutCenter,lpCenterLayout);
 		ll.addView(mAdd,lp);
@@ -119,9 +133,10 @@ public class ToolsPanelSettingsLayout extends RelativeLayout implements IConst, 
 	}
 	void setButtons()
 	{
-		int but = PanelQuickTools.getButtonTypeMiniPanel();
-		mButtons.setText(BUTTON_TYPES.getValueByKey(but));
-		mButtons.setOnClickListener(this);
+// закоментил я		
+//		int but = PanelQuickTools.getButtonTypeMiniPanel();
+//		mButtons.setText(BUTTON_TYPES.getValueByKey(but));
+//		mButtons.setOnClickListener(this);
 	}
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -276,64 +291,32 @@ public class ToolsPanelSettingsLayout extends RelativeLayout implements IConst, 
 	{
 		return mExistsActions;
 	}
-	
+// пункты правого меню
 	public ActArray createAddActions()
 	{
-		return new ActArray(
-				Action.SHOW_MAIN_PANEL,
-				Action.JAVASCRIPT,
-				Action.MAINMENU_SETTING,
-				Action.MINI_PANEL_SETTINGS,
-				//Action.CODEPAGE,
-				Action.SHOW_CLOSED_TABS,
-				Action.SEARCH_ON_PAGE,
-				Action.BOOKMARKS,
-				Action.MAIN_SETTINGS,
-				Action.HISTORY,
-				Action.SHARE_ELEMENT,
-				Action.FONT_SCALE_SETTINGS,
-				Action.NEW_TAB,
-				Action.TAB_LIST,
-				Action.TAB_HISTORY,
-				Action.CLEAR_DATA,
-				Action.CLOSE_ALL_TABS,
-				Action.DOWNLOAD_LIST,
-				Action.CLOSE_TAB,
-				Action.REFRESH,
-				Action.TO_TOP,
-				Action.TO_BOTTOM,
-				Action.GO_BACK,
-				Action.GO_FORWARD,
-				Action.EXIT,
-				Action.ADD_BOOKMARK,
-				Action.GO_HOME,
-				Action.QUICK_SETTINGS,
-				Action.VOICE_SEARCH,
-				Action.COPY_URL_TO_CLIPBOARD,
-				Action.OPENFILE,
-				Action.INTERFACE_SETTINGS,
-				Action.MAGIC_BUTTON_POS,
-				Action.SYSTEM_WIFI_NETWORKS,
-				Action.SYSTEM_SETTINGS,
-				Action.SYSTEM_MOBILE_SETTINGS
-				);
+		ActArray ar = new ActArray();
+		ar.add(Action.create(Action.IMPORT));
+		ar.add(Action.create(Action.EXPORT));
+		//ar.add(Action.create(Action.CODEPAGE));
+		ar.addAll(PanelMainMenu.getDefaultMainMenuPanelActions());
+		return ar;
 	}
 	@Override
 	public void onClick(View v) {
 		if(v==mButtons)
 		{
-			int but = PanelQuickTools.getButtonTypeMiniPanel();
+			int but = PanelMainMenu.getButtonTypeMiniPanel();
 			int index = BUTTON_TYPES.getIndexByKey(but);
 			++index;
 			if(index==BUTTON_TYPES.size())
 				index = 0;
-			PanelSetting ps = PanelLayout.getPanelSetting(PanelLayout.PANEL_QUICK_TOOLS);
+			PanelSetting ps = PanelLayout.getPanelSetting(PanelLayout.PANEL_MAINMENU_TOOLS);
 			if(ps!=null&&ps.extraSettings!=null)
 			{
 				try {
 					ps.extraSettings.put(BUTTON_TYPE, BUTTON_TYPES.getKeyByIndex(index));
 					setButtons();
-					BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_SETTINGS_CHANGED, STRVAL_MINI_PANEL);
+					BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_SETTINGS_CHANGED, STRVAL_MAINMENU_PANEL);
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
@@ -364,6 +347,13 @@ public class ToolsPanelSettingsLayout extends RelativeLayout implements IConst, 
             		pos=mExist.getCount();
             		mExist.smoothScrollToPosition(pos);
             		break;
+            case 3:
+            	mExistsActions.clear();
+        		mAddActions.clear();
+        		mAddActions.addAll(createAddActions());
+				checkAddActions();
+				updateListViews();
+           		break;
             }
         }
     };

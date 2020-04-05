@@ -32,7 +32,6 @@ import com.jbak.superbrowser.IConst;
 import com.jbak.superbrowser.MainActivity;
 import com.jbak.superbrowser.Prefs;
 import com.mw.superbrowser.R;
-import com.jbak.superbrowser.SearchAction;
 import com.jbak.superbrowser.stat;
 import com.jbak.superbrowser.WebViewEvent;
 import com.jbak.superbrowser.TabList;
@@ -45,7 +44,6 @@ import com.jbak.superbrowser.panels.PanelTitle;
 import com.jbak.superbrowser.panels.PanelUrlEdit;
 import com.jbak.superbrowser.recycleview.PanelButtonRecyclerAdapter;
 import com.jbak.superbrowser.recycleview.RecyclerViewEx;
-import com.jbak.superbrowser.search.SearchSystem;
 import com.jbak.superbrowser.ui.themes.MyTheme;
 import com.jbak.ui.UIUtils;
 import com.jbak.utils.ObjectKeyValues;
@@ -74,7 +72,7 @@ public class MainPanel extends LinearLayoutEx implements OnAction,WebViewEvent,O
 	BookmarkFolderAdapter mBookmarkPanelAdapter;
 	long mHomescreenFolderId = IConst.ROOT_FOLDER_ID;
 	int mMode = -1;
-	PanelUrlEdit mUrlEdit;
+	public PanelUrlEdit mUrlEdit;
 	PanelTitle mPanelTitle;
 	PanelSettings mNormalPanelSettings;
 	PanelSettings mStartScreenPanelSettings;
@@ -214,7 +212,7 @@ public class MainPanel extends LinearLayoutEx implements OnAction,WebViewEvent,O
 
 		requestLayout();
 	}
-// окно при выходе и входе
+/** окно при выходе и входе */
 	void createToolsPanel()
 	{
 		//ActArray ar = new ActArray(Action.HISTORY,Action.OPENFILE,Action.SETTINGS,Action.EXIT);
@@ -269,7 +267,7 @@ public class MainPanel extends LinearLayoutEx implements OnAction,WebViewEvent,O
 			return;
 		mMode = mode;
 		setPanelsToLayout();
-		createActionsToolsGrid();
+		createMainMenuActionsTools();
 		mPanelSearch.getPanel().forceUpdate();
 		mPanelNavigation.setActions();
 		mUrlEdit.createToolsActions();
@@ -307,7 +305,7 @@ public class MainPanel extends LinearLayoutEx implements OnAction,WebViewEvent,O
 	}
 	/** пункты главного меню */
 	@SuppressLint("NewApi")
-	public void createActionsToolsGrid()
+	public void createMainMenuActionsTools()
 	{
 		ActArray ar = new ActArray();
 		ar.addAll(PanelMainMenu.getMainMenuPanelActions());
@@ -429,7 +427,7 @@ public class MainPanel extends LinearLayoutEx implements OnAction,WebViewEvent,O
 			
 		mGridTools.setAdapter(pba);
 	}
-	// пункты главного меню, которые должны выдаваться всегда
+/** пункты главного меню, которые должны выдаваться всегда */
 	public final ActArray getMainMenuActionAlways()
 	{
 		ActArray ar = new ActArray();
@@ -497,14 +495,14 @@ public class MainPanel extends LinearLayoutEx implements OnAction,WebViewEvent,O
 	{
 		return mMode;
 	}
-// запуск главной панели
+/** запуск главной панели */
 	public void show(boolean show)
 	{
 		UIUtils.showViews(show,this);
 		if(show)
 		{
 			checkShowBookmarksPanel();
-			createActionsToolsGrid();
+			createMainMenuActionsTools();
 			checkShowTitle();
 			if(TextUtils.isEmpty(mUrlEdit.getUserText()))
 				mUrlEdit.setText(mUrlEdit.getUrl());
@@ -573,14 +571,23 @@ public class MainPanel extends LinearLayoutEx implements OnAction,WebViewEvent,O
 	}
 	void checkShowBookmarksPanel()
 	{
-		boolean showBookmarks = !getMain().hasSoftKeyboard()&&(mMode==MODE_START_PAGE||isPanelVisible(PanelLayout.PANEL_BOOKMARKS));
+		boolean showBookmarks = getSowPanel(mPanelBookmarks);//!getMain().hasSoftKeyboard()&&(mMode==MODE_START_PAGE||isPanelVisible(PanelLayout.PANEL_BOOKMARKS));
 		UIUtils.showViews(showBookmarks, mPanelBookmarks);
-		boolean showSearch = isPanelVisible(PanelLayout.PANEL_SEARCH_HISTORY)&&mPanelSearch.getPanel().getRealAdapter().getItemCount()>0;
+		boolean showSearch = getSowPanel(mPanelSearch);//isPanelVisible(PanelLayout.PANEL_SEARCH_HISTORY)&&mPanelSearch.getPanel().getRealAdapter().getItemCount()>0;
 		UIUtils.showViews(showSearch, mPanelSearch);
 	}
 	public final int getLayoutType()
 	{
 		return mLayoutType;
+	}
+	public final boolean getSowPanel(View panel)
+	{
+		boolean ret = false;
+		if (panel instanceof BookmarkHorizontalPanel) 
+			ret = !getMain().hasSoftKeyboard()&&(mMode==MODE_START_PAGE||isPanelVisible(PanelLayout.PANEL_BOOKMARKS));
+		else if (panel instanceof PanelSearch) 
+			ret = isPanelVisible(PanelLayout.PANEL_SEARCH_HISTORY)&&mPanelSearch.getPanel().getRealAdapter().getItemCount()>0;		
+		return ret;
 	}
 	boolean mKeyboradShown = false;
 	@Override

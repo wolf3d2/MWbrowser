@@ -15,6 +15,7 @@ public class SiteApp
 	/** параметр Номер версии в чекнутом файле */
 	public static final String CHECK_VERSION_NAME = "ver";
 	public static final String SITE_APP = "https://jbak2.ucoz.net";
+	public static final String PAGE_OTHER_APP= "/index/vse_programmy/0-16";
 	public static final String PAGE_UPDATE = "/upd/act_ver_mwbrowser.htm";
 	public static final String PAGE_DOWNLOAD = "/load/mwbrowser/19";
 

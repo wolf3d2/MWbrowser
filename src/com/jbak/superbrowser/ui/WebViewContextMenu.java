@@ -180,7 +180,7 @@ public class WebViewContextMenu extends MainActivityRef implements OnAction{
 		if(HitResult.getType()==HitTestResult.SRC_ANCHOR_TYPE||HitResult.getType()==HitTestResult.IMAGE_TYPE||HitResult.getType()==HitTestResult.IMAGE_ANCHOR_TYPE||HitResult.getType()==HitTestResult.SRC_IMAGE_ANCHOR_TYPE)
 			url = HitResult.getExtra();
 		if (vUrl!=null)
-		url = vUrl;
+			url = vUrl;
 		
 		if (url != null&&url.length()>0) {
 //			url = getMain().getString(R.string.act_share_elem)+": "+url;

@@ -61,6 +61,7 @@ public abstract interface IConst extends StrConst
 	public static final int CODE_FILE_UPLOAD_REQUEST = 1026;
 	public static final int CODE_VOICE_RECOGNIZER = 1027;
 	public static final int CODE_BUY_PRO = 1028;
+	public static final int CODE_GET_HISTORY_SEARCH = 1029;
 	public static final String CUR_WINDOW_ID = "currentWindow";
 	public static final String LAST_FILES = "lastFiles";
 	public static final String LAST_DIRS = "lastDirs";

@@ -54,13 +54,13 @@
     <string name="close_last_tab">Закрывать последнюю страницу вкладки?</string>
     <string name="act_clear">Clear</string>
     <string name="act_back">Back</string>
-    <string name="act_select">Однократное выделение</string>
     <string name="act_go">Go</string>
     <string name="act_codepage">Code page</string>
     <string name="act_jbak2">Install\njbak2 keyboard</string>
     <string name="act_mwcosts">Install\nMWcosts</string>
     <string name="act_mwmwshare2save">Install\nMWshare2save</string>
     <string name="act_history">History</string>
+    <string name="act_history_search">Search history</string>
     <string name="act_js">javascript</string>
     <string name="act_js_enable">javascript enabled</string>
     <string name="act_js_disable">javascript disabled</string>
@@ -108,6 +108,7 @@
     <string name="act_fullscreen">Hide status bar</string>
     <string name="act_openfile">Open file</string>
     <string name="act_savefile">Save file</string>
+    <string name="act_savefile_error">Nothing to save</string>
     <string name="act_select_folder">Select folder\n(если показывается папка emulated, выбирать папку лучше через неё, иначе возможны ошибки)</string>
     <string name="act_select_theme">Select theme</string>
     <string name="act_two_column">Одна колонка в панелях, или по выбору системы</string>
@@ -125,6 +126,7 @@
     <string name="act_feedback">Send email</string>
     <string name="act_other_apps">Other apps</string>
     <string name="act_source_code">Source code</string>
+    <string name="act_select_all_text">Select all</string>
     <string name="act_select_text">Select text</string>
     <string name="act_copy_text">Copy text</string>
     <string name="act_item_text">Item text</string>

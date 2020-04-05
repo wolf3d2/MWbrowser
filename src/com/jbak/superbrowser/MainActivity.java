@@ -89,7 +89,7 @@ import com.jbak.superbrowser.stat.FileUploadInfo;
 import com.jbak.superbrowser.UrlProcess.DownloadFileInfo;
 import com.jbak.superbrowser.WebViewEvent.EventInfo;
 import com.jbak.superbrowser.noobfuscate.JavaScriptProcessor;
-import com.jbak.superbrowser.panels.InterfaceSettingsLayout;
+import com.jbak.superbrowser.panels.SetInterfaceLayout;
 import com.jbak.superbrowser.panels.PanelUrlEdit;
 import com.jbak.superbrowser.panels.PanelWindows;
 import com.jbak.superbrowser.pluginapi.PluginUtils;
@@ -309,6 +309,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		setMagicButtonPos(pos1);
 		setOnClickRecurce(vg);
 //		showPanel(false);
+		st.mp = null;
 		mWebView = new MyWebView(this);
 		mWebView.setBackgroundColor(Color.TRANSPARENT);
 		mWebViewFrame.addView(mWebView);
@@ -615,7 +616,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 				}
 				return;
 			case Action.QUICK_SETTINGS:
-				new InterfaceSettingsLayout(mMagicButtonLayout, InterfaceSettingsLayout.MODE_QUICK_SETTINGS);
+				new SetInterfaceLayout(mMagicButtonLayout, SetInterfaceLayout.MODE_QUICK_SETTINGS);
 				return;
 			case Action.ACTION_PLUGIN:
 				BrowserApp.pluginServer.runAction(this, a);
@@ -647,7 +648,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			}
 			return;
 			case Action.MAGIC_BUTTON_POS:
-				showInterfaceSettings(InterfaceSettingsLayout.MODE_MAGIC_BUTTON_POS);
+				showInterfaceSettings(SetInterfaceLayout.MODE_MAGIC_BUTTON_POS);
 				break;
 			case Action.INTERFACE_SETTINGS:
 				showInterfaceSettings(-1);
@@ -1413,12 +1414,12 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	{
 		clearCustomViews();
 		if(settingsMode<0)
-			settingsMode = InterfaceSettingsLayout.MODE_INTERFACE_SETTINGS;
+			settingsMode = SetInterfaceLayout.MODE_INTERFACE_SETTINGS;
 		if(mPanel.getMode()==MainPanel.MODE_START_PAGE)
 		{
 			openUrl(IConst.ABOUT_BLANK, WINDOW_OPEN_SAME);
 		}
-		new InterfaceSettingsLayout((RelativeLayout)mMagicButton.getParent(),settingsMode);
+		new SetInterfaceLayout((RelativeLayout)mMagicButton.getParent(),settingsMode);
 	}
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
@@ -1426,7 +1427,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		hideRoundButton();
 		if(v==mMagicButton)
 		{
-			showInterfaceSettings(InterfaceSettingsLayout.MODE_LAST_RUNNED);
+			showInterfaceSettings(SetInterfaceLayout.MODE_LAST_RUNNED);
 			return true;
 			//.show();
 		}
@@ -1436,7 +1437,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			switch(pb.getAction().command)
 			{
 				case  Action.SHOW_MAIN_PANEL:
-					showInterfaceSettings(InterfaceSettingsLayout.MODE_LAST_RUNNED);
+					showInterfaceSettings(SetInterfaceLayout.MODE_LAST_RUNNED);
 // старый запуск из панели инструментов - настройки всегда на первой вкладке					
 //					showInterfaceSettings(-1);
 					return true;
@@ -1493,7 +1494,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		Prefs.setMagicButtonPos(pos);
 		RelativeLayout layout = (RelativeLayout) mMagicButton.getParent();
 		layout.removeView(mMagicButton);
-		InterfaceSettingsLayout.setViewToRelativeLayout(layout, mMagicButton, pos, LayoutParams.WRAP_CONTENT,getResources().getDimensionPixelSize(R.dimen.magic_button_size));
+		SetInterfaceLayout.setViewToRelativeLayout(layout, mMagicButton, pos, LayoutParams.WRAP_CONTENT,getResources().getDimensionPixelSize(R.dimen.magic_button_size));
 	}
 	public void setNavigationPanelPos(int pos)
 	{
@@ -1507,7 +1508,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		layout.removeView(mNavigationPanel);
 		if (st.pref_navigation!=1)
 			return;
-		InterfaceSettingsLayout.setViewToRelativeLayout(layout, mNavigationPanel, pos, LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		SetInterfaceLayout.setViewToRelativeLayout(layout, mNavigationPanel, pos, LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 	}
 //	@Override
 //	public boolean onPrepareOptionsMenu(Menu menu) {
@@ -1931,6 +1932,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	}
 	/** жесты, когда открываем видео на полный экран */
 	GestureDetector fullVideoGestureDetector = null;
+	
 	public void showCustomView(View view) {
         View fullView = null;
 		fullVideoGestureDetector = null;
@@ -1940,6 +1942,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	    	mCustomLayoutFrame.removeAllViews();
 	        mCustomLayoutFrame.setVisibility(View.GONE);
 	        //mWebView.setVisibility(View.VISIBLE);
+			st.mp = null;
 		}
 		else
 		{
@@ -1957,6 +1960,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			if (view!=null) {
 			    if (view instanceof FrameLayout) {
 			        final FrameLayout frame = (FrameLayout) view;
+// откоментить для обработки жестов			        
 //			        fullView = (View) frame.getChildAt(0);
 //			        if (fullView!=null)
 //			        	fullVideoGestureDetector = new GestureDetector(fullView.getContext(), videoongesturelistener);
@@ -1975,6 +1979,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 
 			}
 			setFullscreen(true, false);
+// откоментить для обработки жестов			        
 // сделал, жесты на видео срабатывают, но не знаю что делать дальше			
 //			if (fullVideoGestureDetector!=null&&fullView!=null)
 //				fullView.setOnTouchListener(new View.OnTouchListener() {

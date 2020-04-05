@@ -39,6 +39,7 @@ import com.jbak.superbrowser.adapters.SettingsAdapter;
 import com.jbak.superbrowser.adapters.SettingsBookmark;
 import com.jbak.superbrowser.recycleview.BookmarkViewRecyclerAdapter;
 import com.jbak.superbrowser.recycleview.RecyclerViewEx;
+import com.jbak.superbrowser.recycleview.SearchRecyclerAdapter;
 import com.jbak.superbrowser.ui.HorizontalPanel;
 import com.jbak.superbrowser.ui.LoadBitmapInfo;
 import com.jbak.superbrowser.ui.MenuPanelButton;
@@ -75,6 +76,8 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 	public static final int TYPE_VIDEO_HISTORY = 14;
 	public static final int TYPE_SAVED_PAGES = 15;
 	public static final int TYPE_CLOSED_TAB = 16;
+	public static final int TYPE_HISTORY_SEARCH = 17;
+	
 	public static String EXTRA_WINDOW_ID = "windowId";
 	public static String EXTRA_CURPOS = "curPos";
 	public static String EXTRA_BOOKMARK = "bookmark";
@@ -114,7 +117,8 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 		TYPE_FILE_SELECT,R.string.selectFile,
 		TYPE_DIR_SELECT,R.string.act_select_folder,
 		TYPE_BOOKMARK_FOLDER_SELECT,R.string.act_select_folder,
-		TYPE_SAVED_PAGES,R.string.act_saved_pages_history
+		TYPE_SAVED_PAGES,R.string.act_saved_pages_history,
+		TYPE_HISTORY_SEARCH,R.string.act_history_search
 	);
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -211,6 +215,12 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 								}
 							}
 						}
+						else if (bm.getUrl() == null) {
+							runBookmark = false;
+							if (MainActivity.inst!=null) {
+								MainActivity.inst.openUrl(bm.getTitle(), Action.OPEN_TAB);//.NEW_TAB);
+							}
+						}
 						if(runBookmark)
 							BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, Action.create(Action.ACTION_BOOKMARK, v.getTag()));
 					}
@@ -234,7 +244,24 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 				}
 			});
 		}
-		if(mType!=TYPE_FILE_SELECT&&mType!=TYPE_DIR_SELECT&&!(ba instanceof SettingsAdapter))
+		// убираем долготап на истории поиска
+		if(mType==TYPE_HISTORY_SEARCH)
+		{
+			getRecyclerAdapter().setOnLongClickListener(new OnLongClickListener() {
+				
+				@Override
+				public boolean onLongClick(View v) {
+					if(v.getTag() instanceof Bookmark)
+					{
+//						Bookmark bm = (Bookmark)v.getTag();
+//						showBookmarkContextMenu(v,bm);
+						return true;
+					}
+					return false;
+				}
+			});
+		}
+		else if(mType!=TYPE_FILE_SELECT&&mType!=TYPE_DIR_SELECT&&!(ba instanceof SettingsAdapter))
 		{
 			getRecyclerAdapter().setOnLongClickListener(new OnLongClickListener() {
 	
@@ -302,6 +329,10 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 		{
 			//Cursor c = new DbUtils.Select(stat.STR_NULL).where().eq(Browser.BookmarkColumns.BOOKMARK, type==TYPE_BOOKMARKS?"1":"0").orderBy(Browser.BookmarkColumns.DATE, false).selectOpt(getContentResolver(), Browser.BOOKMARKS_URI);
 			ba = new HistoryAdapter(this).setCurrentPos(mCurPos);
+		}
+		else if(mType==TYPE_HISTORY_SEARCH)
+		{
+			ba = new HistorySearchAdapter(this).setCurrentPos(mCurPos);
 		}
 		else if(mType==TYPE_SETTINGS)
 		{
@@ -430,6 +461,11 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 				return Db.getBookmarksTable().getHistoryCursor(HISTORY_PROJECTION);
 			else 
 				return cr.query(Browser.BOOKMARKS_URI, HISTORY_PROJECTION, "bookmark = 0", null, DbUtils.getOrder(IConst.DATE, false));
+		case TYPE_HISTORY_SEARCH:
+			SearchRecyclerAdapter ad = new SearchRecyclerAdapter(inst);
+			ad.refreshCursor();
+			c = ad.getCursor();
+			break;
 		case TYPE_BOOKMARKS:
 		case TYPE_BOOKMARK_FOLDER_SELECT:	
 			c = BookmarkFolderAdapter.getBookmarkCursorWithFolder(cr, 1);
@@ -491,6 +527,8 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 		}
 		else if(mType==TYPE_HISTORY)
 			ar.add(Action.CLEAR_DATA,Action.HISTORY_VIDEO,Action.HISTORY_SAVED_PAGES);
+		else if(mType==TYPE_HISTORY_SEARCH)
+			ar.add(Action.create(Action.HISTORY_SEARCH).setImageRes(R.drawable.clear).setText(R.string.clear_data_history));
 		else if(mType==TYPE_VIDEO_HISTORY)
 			ar.add(Action.CLEAR_DATA,Action.HISTORY,Action.HISTORY_SAVED_PAGES);
 		else if(mType==TYPE_SAVED_PAGES)
@@ -576,6 +614,27 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 		@Override
 		public boolean doAsync() throws Throwable {
 			mTempCursor = getCursorByType(getContext(), TYPE_HISTORY);
+			return true;
+		}
+		@Override
+		public void doAsyncUiThread(boolean result) {
+			setCursor(mTempCursor);
+		}
+		@Override
+		public Bookmark getBookmarkFromCursor(Cursor c) {
+			return Bookmark.fromManagedCursor(c);
+		}
+	}
+	public static class HistorySearchAdapter extends BookmarkAdapter.CursorBookmarkAdapter
+	{
+		public HistorySearchAdapter(Context context) {
+			super(context, null/*getCursorByType(context, TYPE_HISTORY)*/);
+			startAsyncLoader();
+		}
+		Cursor mTempCursor;
+		@Override
+		public boolean doAsync() throws Throwable {
+			mTempCursor = getCursorByType(getContext(), TYPE_HISTORY_SEARCH);
 			return true;
 		}
 		@Override
@@ -802,6 +861,17 @@ public class BookmarkActivity extends Activity implements IConst, OnAction,OnGlo
 		case Action.HISTORY:
 			mType=TYPE_HISTORY;
 			createAndSetAdapter();
+			break;
+		case Action.HISTORY_SEARCH:
+        	new ThemedDialog(this).setConfirm(this.getString(R.string.delete_confirm), null, new ConfirmOper()
+        	{
+				
+				@Override
+				public void onConfirm(Object userParam) {
+					stat.clearSearchHistory(BrowserApp.INSTANCE);
+					finish();
+				}
+			});
 			break;
 		case Action.NEW_TAB:
 			BrowserApp.sendGlobalEvent(BrowserApp.GLOBAL_ACTION, act);

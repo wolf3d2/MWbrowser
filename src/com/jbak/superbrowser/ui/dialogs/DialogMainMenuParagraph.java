@@ -2,21 +2,21 @@ package com.jbak.superbrowser.ui.dialogs;
 
 import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.MainActivity;
-import com.jbak.superbrowser.panels.InterfaceSettingsLayout;
+import com.jbak.superbrowser.panels.SetInterfaceLayout;
 import com.jbak.superbrowser.panels.PanelMainMenu;
 import com.jbak.superbrowser.panels.PanelQuickTools;
-import com.jbak.superbrowser.panels.ToolsMainMenuSettingsLayout;
-import com.jbak.superbrowser.panels.ToolsPanelSettingsLayout;
+import com.jbak.superbrowser.panels.SetMainMenuLayout;
+import com.jbak.superbrowser.panels.SetToolsPanelLayout;
 
 import android.content.Context;
 import android.view.View;
 
 public class DialogMainMenuParagraph extends ThemedDialog {
 
-	ToolsMainMenuSettingsLayout mLayout;
+	SetMainMenuLayout mLayout;
 	public DialogMainMenuParagraph(Context context,ActArray existActions) {
 		super(context);
-		mLayout = new ToolsMainMenuSettingsLayout(context, existActions);
+		mLayout = new SetMainMenuLayout(context, existActions);
 		setView(mLayout);
 		mTitle.setVisibility(View.GONE);
 		mContainer.setBackgroundColor(0x00000000);
@@ -34,7 +34,7 @@ public class DialogMainMenuParagraph extends ThemedDialog {
 		{
 			MainActivity ma = (MainActivity) context();
 //			ma.sendWebViewEvent(WebViewEvent.WWEVENT_UI_CHANGED, null, null, null);
-			InterfaceSettingsLayout.checkMagicKeyCanDisabled(ma);
+			SetInterfaceLayout.checkMagicKeyCanDisabled(ma);
 		}
 	}
 	@Override

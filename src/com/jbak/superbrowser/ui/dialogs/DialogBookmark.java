@@ -1,12 +1,14 @@
 package com.jbak.superbrowser.ui.dialogs;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -14,16 +16,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import ru.mail.mailnews.st;
 
+import com.jbak.superbrowser.ActArray;
 import com.jbak.superbrowser.Action;
 import com.jbak.superbrowser.Bookmark;
 import com.jbak.superbrowser.BookmarkActivity;
+import com.jbak.superbrowser.BrowserApp;
 import com.jbak.superbrowser.Db;
+import com.jbak.superbrowser.IConst;
 import com.jbak.superbrowser.Prefs;
 import com.jbak.superbrowser.stat;
+import com.jbak.superbrowser.UrlProcess.DownloadFileInfo;
 import com.mw.superbrowser.R;
 import com.jbak.superbrowser.adapters.BookmarkFolderAdapter;
+import com.jbak.superbrowser.stat.DownloadOptions;
+import com.jbak.superbrowser.ui.HorizontalPanel;
 import com.jbak.superbrowser.ui.OnAction;
+import com.jbak.superbrowser.ui.PanelButton;
 import com.jbak.superbrowser.ui.themes.MyTheme;
+import com.jbak.utils.Utils;
 
 public abstract class DialogBookmark extends ThemedDialog {
 
@@ -37,6 +47,7 @@ public abstract class DialogBookmark extends ThemedDialog {
 	Bookmark mParentFolder;
 	Bitmap mPreviewImage;
 	long mId;
+	HorizontalPanel mPanel;
 	
 	public DialogBookmark(Context context,Uri uri, String name,Bookmark parentFolder,Bitmap previewImage)
 	{
@@ -87,6 +98,20 @@ public abstract class DialogBookmark extends ThemedDialog {
 		if(mParentFolder!=null)
 			mDir.setText(mParentFolder.getTitle());
 		mDirImage = findViewById(R.id.dirImage);
+		
+		mPanel = (HorizontalPanel)v.findViewById(R.id.horizontal_panel);
+		//mPanel.setButtonsType(PanelButton.TYPE_BUTTON_TEXT_ONELINE);
+		ActArray ar = new ActArray();
+		ar.add(Action.create(Action.CLEAR_TEXT));
+		ar.add(Action.create(Action.SELECT_TEXT).setText(R.string.act_select_all_text));
+		ar.add(Action.create(Action.COPY_TEXT));
+		ar.add(Action.create(Action.PASTE));
+		mPanel.setButtonsType(PanelButton.TYPE_BUTTON_MEDIUM_BIG_WIDTH);
+		mPanel.setMinimumHeight(mPanel.getMaxHeight());
+		mPanel.setActions(ar);
+		mPanel.setVisibility(View.VISIBLE);
+		mPanel.setOnActionListener(this);
+		MyTheme.get().setViews(MyTheme.ITEM_HORIZONTAL_PANEL_BACKGROUND, mPanel);
 		if(mDownloadUri!=null) {
 			mUrl.setText(mDownloadUri.toString());
 		}else {
@@ -147,5 +172,62 @@ public abstract class DialogBookmark extends ThemedDialog {
 			doSave(mDownloadUri, mParentFolder,mName.getText().toString(),mId);
 		}
 	}
+	@Override
+	public void onAction(Action act) {
+		String str = null;
+		int ss = 0;
+		int se = 0;
+		switch (act.command) {
+		case Action.CLEAR_TEXT:
+			mName.setText("");
+			break;
+		case Action.SELECT_TEXT:
+			mName.selectAll();
+			break;
+		case Action.COPY_TEXT:
+			ss = mName.getSelectionStart();
+			se = mName.getSelectionEnd();
+			if (ss!=se)
+				str = mName.getText().toString().substring(ss, se);
+			if (str!=null)
+				stat.setClipboardString(getContext(), (String)mName.getText().toString());
+			break;
+		case Action.PASTE:
+			str = stat.getClipboardCharSequence(getContext()).toString();
+			if (str!=null&&str.length()>0) {
+				ss = Math.max(mName.getSelectionStart(), 0); 
+				se = Math.max(mName.getSelectionEnd(), 0); 
+				mName.getText().replace(Math.min(ss, se), 
+						Math.max(ss, se), str, 0, str.length()); 
+			}
+			break;
+		case Action.CANCEL:
+			super.onOk(false);
+			break;
+		case Action.OK:
+			super.onOk(true);
+			String destDir = mDir.getText().toString();
+			File f = new File(destDir);
+			if(!f.exists())
+				f.mkdirs();
+			if(mUrl.getVisibility()!=View.GONE)
+			{
+				try{
+					String text = mUrl.getText().toString();
+					Uri uri = Uri.parse(text);
+					if(uri.isHierarchical())
+						mDownloadUri = uri;
+				}
+				catch(Throwable e)
+				{
+					
+				}
+			}
+			doSave(mDownloadUri, mParentFolder,mName.getText().toString(),mId);
+			break;
+		}
+	}
+
 	public abstract void doSave(Uri uri,Bookmark parentDir,String name,long id);
+	
 }

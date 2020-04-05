@@ -31,6 +31,7 @@ import com.jbak.ui.CustomDialog;
 public class MenuPanelButton extends CustomDialog {
 
 	OnAction mActionListener;
+	
 	/** не переделывать - с такими настройками грида, title не показывается */
 	public MenuPanelButton(Context context,ActArray actions,OnAction listener) {
 		super(context, context instanceof MainActivity&&Prefs.getFullscreen()?R.style.CustomDialogFullscreenTheme:R.style.CustomDialogTheme);
@@ -145,6 +146,10 @@ public class MenuPanelButton extends CustomDialog {
 			{
 				ar.add(Action.create(Action.DELETE_FOLDER, bm));
 				ar.add(Action.create(Action.EDIT,bm));
+			}
+			else if(type==BookmarkActivity.TYPE_HISTORY_SEARCH)
+			{
+				ar.add(Action.create(Action.DELETE_ITEM, bm).setClosePanel(false));
 			}
 			else if(type!=BookmarkActivity.TYPE_WINDOOW_HISTORY)
 			{
