@@ -5,13 +5,9 @@ import com.mw.superbrowser.R;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat.Field;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
-
 import org.json.JSONObject;
 
 import ru.mail.mailnews.SiteApp;
@@ -20,14 +16,10 @@ import ru.mail.mailnews.st.UniObserver;
 import ru.mail.webimage.FileUtils;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -38,7 +30,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Looper;
 import android.speech.RecognizerIntent;
 import android.text.Editable;
@@ -62,7 +53,6 @@ import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.DownloadListener;
-import android.webkit.ValueCallback;
 import android.webkit.WebIconDatabase;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.PluginState;
@@ -77,14 +67,12 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.jbak.superbrowser.stat.DownloadOptions;
 import com.jbak.superbrowser.stat.FileUploadInfo;
 import com.jbak.superbrowser.UrlProcess.DownloadFileInfo;
 import com.jbak.superbrowser.WebViewEvent.EventInfo;
@@ -110,7 +98,6 @@ import com.jbak.superbrowser.ui.themes.MyTheme;
 import com.jbak.superbrowser.utils.DbClear;
 import com.jbak.superbrowser.utils.TempCookieStorage;
 import com.jbak.ui.ConfirmOper;
-import com.jbak.ui.CustomDialog;
 import com.jbak.ui.CustomDialog.OnUserInput;
 import com.jbak.ui.CustomPopup;
 import com.jbak.ui.UIUtils;
@@ -363,6 +350,29 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 					onSoftKeyboardVisible(false);
 			}
 		});
+		if (SiteApp.checkVersion(this, ini)) {
+        	new ThemedDialog(this).setConfirm(
+        			this.getString(R.string.upd_new_ver), 
+        			null, 
+        			new ConfirmOper() {
+				
+				@Override
+				public void onConfirm(Object userParam) {
+					try {
+						//mEditUrl.setText(SiteApp.SITE_APP+SiteApp.PAGE_DOWNLOAD);
+						runAction(Action.create(Action.NEW_TAB));
+						runAction(Action.create(Action.GO).setParam(SiteApp.SITE_APP
+								+SiteApp.PAGE_DOWNLOAD));
+//						MainActivity.inst.openUrl(SiteApp.SITE_APP+SiteApp.PAGE_DOWNLOAD, 
+//								Action.NEW_TAB);	
+						
+					} catch (Throwable e) {
+						// TODO: handle exception
+					}
+				}
+			});
+
+		}
 	}
 /** записываем настройки по умолчанию */	
 	void setDefaultSetting()
@@ -374,7 +384,6 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	/** самое первое открытие браузера */
 	boolean firstStartBrowser()
 	{
-		boolean ret = Prefs.getBoolean(Prefs.FIRST_START_BROWSER, true);
 		return Prefs.getBoolean(Prefs.FIRST_START_BROWSER, true);
 	}
 	void createIniFile(Context c)
@@ -403,7 +412,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 			}
 			if (!ini.isFileExist())
 				return false;
-			SiteApp.checkUpdate(ini);
+			SiteApp.checkUpdate(ini,c);
 			String codever = st.getAppVersionCode(c);
 			String param = ini.getParamValue(ini.VERSION_CODE);
 			if (param == null) {
@@ -884,7 +893,15 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 	void tabFirstStart()
 	{
 		int fs = Prefs.getStartApp();
-		if(fs==Prefs.START_APP_HOME_SCREEN)
+		if(fs==Prefs.START_APP_HOME_SCREEN_LIGHT)
+		{
+			if(getTabList().getCount()>0)
+				mWindowsState = MainPanel.STATE_WINDOWS_RESTORE;
+			else
+				mWindowsState =  MainPanel.STATE_WINDOWS_NONE;
+			getTabList().closeAllTabs(true);
+		}
+		if(fs==Prefs.START_APP_HOME_SCREEN_FULL)
 		{
 			if(getTabList().getCount()>0)
 				mWindowsState = MainPanel.STATE_WINDOWS_RESTORE;
@@ -1154,6 +1171,7 @@ public class MainActivity extends Activity implements OnClickListener,OnLongClic
 		initWebView(getWebView());
 	}
 	public static final String INCOGNITO_CACHE_FOLDER = "IncognitoCache";
+
 	@SuppressLint({ "NewApi", "SetJavaScriptEnabled" })
 	void initWebView(WebView ww)
 	{

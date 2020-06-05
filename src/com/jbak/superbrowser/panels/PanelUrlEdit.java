@@ -8,6 +8,8 @@ import ru.mail.mailnews.st;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -179,6 +181,31 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 //			if (mPanelSearch == null)
 //				return;
 //			return;
+		case Action.CREATE_URL_ON_DESKTOP:
+			MainActivity ma = ((MainActivity)getContext());
+			String url = mEditUrl.getText().toString();
+					
+					
+			Intent i = new Intent();
+			i.setAction(Intent.ACTION_VIEW);
+			i.setData(Uri.parse(url));
+// пока не знаю как добавить свой ярлык			
+//			Bitmap btm = (ma).getTab().getFavicon();
+//			if (btm == null)
+//				btm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+
+			url = ma.getTab().getWebView().getTitle();
+			Intent installer = new Intent();
+		    installer.putExtra("android.intent.extra.shortcut.INTENT", i);
+		    installer.putExtra("android.intent.extra.shortcut.NAME", url);
+		    installer.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", Intent.ShortcutIconResource.fromContext((MainActivity)getContext(), R.drawable.ic_launcher));
+		    installer.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+		    getContext().sendBroadcast(installer);
+		    onAddrStateChanged(STATE_ADDR_NONE);
+		    st.toast(R.string.act_created);
+
+//			((MainActivity)getContext()).runAction(a);
+			return;
 		case Action.CLEAR_TEXT:
 			mEditUrl.setText(null);
 			if(!mUserEditText)
@@ -282,6 +309,8 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 		}
 		else
 		{
+			if (text.startsWith(IConst.HTTP)||text.startsWith(IConst.HTTPS))
+				ar.add(Action.create(Action.CREATE_URL_ON_DESKTOP));
 			ar.add(Action.create(Action.CLEAR_TEXT));
 			mPanelSearch = new PanelSearch(getContext());
 			if (mPanelSearch.getPanel().getRealAdapter().getItemCount()>0) {
@@ -667,8 +696,10 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 						@Override
 						public void onConfirm(Object userParam) {
 							try {
-								MainActivity.inst.openUrl(SiteApp.SITE_APP+SiteApp.PAGE_DOWNLOAD, 
-										Action.NEW_TAB);	
+								mEditUrl.setText(SiteApp.SITE_APP+SiteApp.PAGE_DOWNLOAD);
+								runAction(Action.create(Action.GO));
+//								MainActivity.inst.openUrl(SiteApp.SITE_APP+SiteApp.PAGE_DOWNLOAD, 
+//										Action.NEW_TAB);	
 								
 							} catch (Throwable e) {
 								// TODO: handle exception

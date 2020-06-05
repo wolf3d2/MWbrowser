@@ -253,7 +253,12 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 				);
 		ar.add(searchSystem);
 		ar.add(new SettingsBookmark(c, Prefs.SEARCH_HIDE_KBD, R.string.set_search_search_hide_keyboard, Prefs.isSearchHideKeyboard(),R.string.yes,R.string.no, false));
-		ObjectKeyValues<Integer, Integer> vals = new ObjectKeyValues<Integer, Integer>(Prefs.START_RESTORE_WINDOWS,R.string.act_startAppRestoreWindows,Prefs.START_APP_HOME_SCREEN,R.string.act_startAppHomeScreen,Prefs.START_APP_HOMEPAGE,R.string.act_startAppHomePage);
+		ObjectKeyValues<Integer, Integer> vals = new ObjectKeyValues<Integer, Integer>(
+				Prefs.START_RESTORE_WINDOWS,R.string.act_startAppRestoreWindows,
+				Prefs.START_APP_HOMEPAGE,R.string.act_startAppLightHomePage,
+				Prefs.START_APP_HOME_SCREEN_LIGHT,R.string.act_startAppLightHomePage,
+				Prefs.START_APP_HOME_SCREEN_FULL,R.string.act_startAppHomeScreen
+				);
 		ar.add(new SettingsBookmark(c, Prefs.START_APP, R.string.act_startApp,vals.getValueByKey(Prefs.getInt(Prefs.START_APP, Prefs.START_RESTORE_WINDOWS))));
 		ar.add(new SettingsBookmark(c, null, R.string.main_menu_settings,null));
 		ar.add(new SettingsBookmark(c, null, R.string.set_homescreen,null));
@@ -487,11 +492,12 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 		{
 			ArrayList<Bookmark>ar = new ArrayList<Bookmark>();
 			ar.add(new SettingsBookmark(getContext(), null, R.string.act_startAppRestoreWindows, null).setParam(Prefs.START_RESTORE_WINDOWS));
-			ar.add(new SettingsBookmark(getContext(), null, R.string.act_startAppHomeScreen, null).setParam(Prefs.START_APP_HOME_SCREEN));
 			if (Prefs.get().getString(Prefs.HOME_PAGE, null)==null){
 				Prefs.setString(Prefs.HOME_PAGE, MainActivity.ABOUT_BLANK);
 			}
 			ar.add(new SettingsBookmark(getContext(), null, R.string.act_startAppHomePage, Prefs.get().getString(Prefs.HOME_PAGE, null)).setParam(Prefs.START_APP_HOMEPAGE));
+			ar.add(new SettingsBookmark(getContext(), null, R.string.act_startAppLightHomePage, null).setParam(Prefs.START_APP_HOME_SCREEN_LIGHT));
+			ar.add(new SettingsBookmark(getContext(), null, R.string.act_startAppHomeScreen, null).setParam(Prefs.START_APP_HOME_SCREEN_FULL));
 			showMenuTextIds(b, new OnMenuItemSelected() {
 				
 				@Override
@@ -537,28 +543,31 @@ public class SettingsAdapter extends BookmarkAdapter.ArrayBookmarkAdapter implem
 			st.pref_navigation=2;
 		else if(b.id==R.string.set_download_folder)
 			selectDownloadDir(b);
-		else if(b.id==R.string.clear_data_cache
-				||b.id==R.string.clear_data_history
-				||b.id==R.string.clear_data_cookies
-				||b.id==R.string.act_close_windows
-				||b.id==R.string.set_bookmarksMainMenu
-				||b.id==R.string.clear_passwords
-				||b.id==R.string.clear_kill_process
-				)
-		{
-			showMenuTextIds(b, new OnMenuItemSelected() {
-				
-				@Override
-				public void onMenuItemSelected(int selectedIndex,SettingsBookmark settingsEdit, SettingsBookmark settingsSelected) {
-					int p = selectedIndex==1?0:1;
-					settingsEdit.setParam(p);
-					settingsEdit.setDesc(settingsSelected.getTitle());
-					if(settingsEdit.id==R.string.set_bookmarksMainMenu)
-						Prefs.setInt(Prefs.SHOW_BOOKMARKS_MAIN_MENU, p);
-					onSettingChanged(settingsEdit);
-				}
-			}, R.string.yes,R.string.no);
-		}
+		
+// !!! вывод менюшки Да/Нет
+		
+//		else if(b.id==R.string.clear_data_cookies
+//				||b.id==R.string.clear_data_history
+//				||b.id==R.string.clear_data_cache
+//				||b.id==R.string.act_close_windows
+//				||b.id==R.string.set_bookmarksMainMenu
+//				||b.id==R.string.clear_passwords
+//				||b.id==R.string.clear_kill_process
+//				)
+//		{
+//			showMenuTextIds(b, new OnMenuItemSelected() {
+//				
+//				@Override
+//				public void onMenuItemSelected(int selectedIndex,SettingsBookmark settingsEdit, SettingsBookmark settingsSelected) {
+//					int p = selectedIndex==1?0:1;
+//					settingsEdit.setParam(p);
+//					settingsEdit.setDesc(settingsSelected.getTitle());
+//					if(settingsEdit.id==R.string.set_bookmarksMainMenu)
+//						Prefs.setInt(Prefs.SHOW_BOOKMARKS_MAIN_MENU, p);
+//					onSettingChanged(settingsEdit);
+//				}
+//			}, R.string.yes,R.string.no);
+//		}
 		else if(b.id==R.string.set_search_system)
 		{
 			ArrayList<Bookmark>ar = new ArrayList<Bookmark>();

@@ -188,6 +188,7 @@ public class Action {
 	public static final int JAVASCRIPT = 133;
 	public static final int JAVASCRIPT_DISABLED = 134;
 	public static final int HISTORY_SEARCH = 135;
+	public static final int CREATE_URL_ON_DESKTOP = 136;
 
 	public static final int MIN_FONT_RANGE[] = new int[]{1,5,6,7,8,9,10,11,12,13,14,16,18,20,22,24,30,32,40,48,60,72};
 	
@@ -271,6 +272,8 @@ public class Action {
 	public static Action create(int action,Object param)
 	{
 		switch (action) {
+		case CREATE_URL_ON_DESKTOP:
+			return new Action(action,action,R.string.act_create_label_on_desktop,param,R.drawable.desktop,R.drawable.plus);
 		case SEARCH_BY_PICTURE:
 			return new Action(action,action,R.string.act_search_by_image,param,R.drawable.images,R.drawable.search);
 //		case HISTORY_SEARCH:

@@ -21,6 +21,9 @@
     
     <string name="act_save_html">Save html only</string>
     <string name="act_search_by_image">Search by picture</string>
+    <string name="act_create_label_on_desktop">Create label</string>
+    <string name="act_created">Created</string>
+
 <!-- импорт/экспорт -->
     <string name="act_export">Export</string>
     <string name="act_export_path">Save folder:</string>
@@ -191,7 +194,7 @@
     <string name="navigation_panel_select_pos">Нажмите на один из значков для выбора позиции панели навигации.\nКнопки панели поддерживают длинное нажатие.</string>
     <string name="navigation_panel_size">Size button</string>
     <string name="magic_button_select_alpha">Прозрачность</string>
-    <string name="about_text">(текст прокручивается)\n\nОзнакомьтесь с помощью! Там указаны дополнительные возможности браузера.\n\n\u0020Автор: Михаил Вязёнкин.\nПервый автор: Юрий Бакунин\nДизайн иконок: Say Off kurarekurare@yandex.ru\n\nУдобный браузер, пишется для себя и публикуется с разрешения первого автора.\nВ программе собраны все те возможности, которые хотел увидеть в браузере.\n\nАбсолютно бесплатен!\nБлагодарность вы можете выразить, установив из маркета клавиатуру jbak2 keyboard (в других программах). У неё огромные возможности, очень маленький размер и требования к памяти.\n\nА ещё есть MWshare2save - небольшая программа, которая сохраняет полученный текст в файл (в папке Загрузки телефона) через кнопку Поделиться (share).\n\nКроме того, есть MWcosts - удобное ведение списков как обычный текст с автоматическим подсчётом с учётом различных валют.</string>
+    <string name="about_text">(текст прокручивается)\n\nОзнакомьтесь с помощью! Там указаны дополнительные возможности браузера.\n\n\u0020Автор: Михаил Вязёнкин.\nПервый автор: Юрий Бакунин\nДизайн иконок: Say Off kurarekurare@yandex.ru\n\nУдобный браузер, пишется для себя и публикуется с разрешения первого автора.\nВ программе собраны все те возможности, которые хотел увидеть в браузере.\n\nАбсолютно бесплатен!\nБлагодарность вы можете выразить, установив клавиатуру jbak2 keyboard (в других программах). У неё огромные возможности, очень маленький размер и требования к памяти.\n\nА ещё есть MWshare2save - небольшая программа, которая сохраняет полученный текст в файл (в папке Загрузки телефона) через кнопку Поделиться (share).\n\nКроме того, есть MWcosts - удобное ведение списков как обычный текст с автоматическим подсчётом с учётом различных валют.</string>
     <string name="feedback_subject">Feedback on\u0020</string>
     <string name="app_info">The report on the fail of MW browser.\nPlease, don\'t delete this information</string>
     <string name="app_info_os">OS</string>
@@ -206,7 +209,8 @@
     <string name="act_startApp">Start browser</string>
     <string name="act_startAppRestoreWindows">Last tabs</string>
     <string name="act_startAppRestoreWindows_setting_msg">При данном режиме запуска браузера, в Очистке при выходе, не должна быть включена настройка Закрыть все вкладки\nНе забудьте её выключить!</string>
-    <string name="act_startAppHomeScreen">Home screen</string>
+    <string name="act_startAppLightHomePage">Simple home screen</string>
+    <string name="act_startAppHomeScreen">(In developing) Home screen</string>
     <string name="select_homescreen_folder">Set as default folder for home screen</string>
     <string name="act_edit">Edit</string>
     <string name="act_search_apps">Search apps</string>
@@ -301,7 +305,7 @@
     <string name="act_system_wifi_settings">Wifi networks</string>
     
     <string name="do_you_want_send_crash_report">Do you want to send crash report by e-mail?\n\nThis is very important, if you want to make this app better!</string>
-    <string name="exit_confirm">Do you want to exit from Jbak browser?</string>
+    <string name="exit_confirm">Do you want to exit from MW browser?</string>
         <string name="set_history_miniature">Save thumbnail page?</string>
    <string name="no_more_ask">Don\'t ask more</string>
    <string name="set_exit_confirm">Exit confirmation</string>

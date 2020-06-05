@@ -1,5 +1,9 @@
 package ru.mail.mailnews;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
@@ -18,13 +22,23 @@ public class SiteApp
 	public static final String PAGE_OTHER_APP= "/index/vse_programmy/0-16";
 	public static final String PAGE_UPDATE = "/upd/act_ver_mwbrowser.htm";
 	public static final String PAGE_DOWNLOAD = "/load/mwbrowser/19";
+	public static final String PAGE_ADD_STAT = "http://vhost-33881.cloudpark.tech";
 
+	/** массив ссылок для скачивания проверочного файла наличия новой версии. <br>
+	 * Нулевой индекс - прямая ссылка. ПОРЯДОК НЕ МЕНЯТЬ!*/
+	public static final String[] AR_PAGE_UPDATE =  new String[]
+			{
+				SITE_APP+PAGE_UPDATE,
+				PAGE_ADD_STAT,
+				"https://is.gd/4EWpu8"
+					
+			};
     /** (сутки) частота проверки */
 	public static final long FREQ_UPDATE_TIME= 1000l*3600l*24l*1l;
 	// для тестирования
 //	public static final long FREQ_UPDATE_TIME = 1000l*120l;
 
-	public static void checkUpdate(final IniFile ini)
+	public static void checkUpdate(final IniFile ini, final Context c)
 	{
 		final long curtime = new Date().getTime();
 		long lastcheck = 0;
@@ -59,19 +73,45 @@ public class SiteApp
 				Scanner sc =  null;
 				info = null;
 				boolean fl = false;
+				for (int i=1;i<AR_PAGE_UPDATE.length;i++) {
+					try {
+						if (AR_PAGE_UPDATE[i].compareTo(AR_PAGE_UPDATE[1]) == 0) {
+							//param = "act=2";
+							AR_PAGE_UPDATE[i] = AR_PAGE_UPDATE[i]+"/index.php?act=2&v="+st.getAppVersionCode(c);
+						}
+						info = readUrl(AR_PAGE_UPDATE[i]);
+//						} else {
+//							sc =  new Scanner(new URL(AR_PAGE_UPDATE[i]).openStream(), "UTF-8");
+//							sc.useDelimiter("\\A");
+//							info = sc.next();
+//							sc.close();
+//						}
+					} catch (Throwable e) {
+					}
+					if (info != null&&info.startsWith(CHECK_KEY)) {
+						break;
+					}
+					info = null;
+			}
+			if (info == null) {
 				try {
-					sc =  new Scanner(new URL(SITE_APP+PAGE_UPDATE).openStream(), "UTF-8");
+					// прямая ссылка
+					sc =  new Scanner(new URL(AR_PAGE_UPDATE[0]).openStream(), "UTF-8");
 					sc.useDelimiter("\\A");
 					info = sc.next();
 					sc.close();
-					fl = true;
 				} catch (Throwable e) {
-					// если словили исключение, то причин 3:
-					// 1. нет инета
-					// 2. разрешения на инет нету
-					// 3.закрыли доступ к сайту через hosts
-					return;
 				}
+			}
+			// если до сих пор info = null, то причин 3:
+			// 1. нет инета
+			// 2. разрешения на инет нету
+			// 3.закрыли доступ к сайту через hosts
+			// а значит просто возврат
+			if (info == null) {
+				return;
+			}
+
 				// обрабатываем результат
 				if (info==null&&!fl) {
 					return;
@@ -111,14 +151,14 @@ public class SiteApp
 	 * Предварительно, перед этой функцией, должна отработать фукция checkUpdate, <br>
 	 * чтобы в par.ini уже были готовы данные для обработки <br>
 	 * Если возвращает:   <br>
-	 * 0 - новой версии нет <br>
-	 * 1 - есть новая версия <br>
-	 * 2 - прошло 3 месяца, а прога не обновлена <br>
+	 * false - новой версии нет <br>
+	 * true - есть новая версия <br>
 	 */
 	public static boolean checkVersion(Context c, IniFile ini) {
 		if (ini == null||c==null)
 			return false;
 		String ver = st.getAppVersionCode(c);
+		//ver = "28";
 		int vapp = 0;
 		try {
 			vapp = Integer.parseInt(ver);
@@ -137,5 +177,45 @@ public class SiteApp
 
 		return false;
 	}
+	private static String readUrl(String url) {
+		String str = null;
+		// local url variable
+		URL lurl = null;
+		HttpURLConnection urlConnection = null;
+		try {
+			lurl = new URL(url);
+			urlConnection = (HttpURLConnection) lurl.openConnection();
+			urlConnection.setRequestMethod("POST");
+			urlConnection.setDoOutput(true);
+			urlConnection.setRequestProperty("act", "2");
 
+		    //Send request
+//			if (param!=null) {
+//			    DataOutputStream wr = new DataOutputStream (
+//			    		urlConnection.getOutputStream());
+//			    wr.writeBytes(param);
+//			    wr.close();
+//			}
+		    OutputStreamWriter request = new OutputStreamWriter(urlConnection.getOutputStream());
+		    request.write("act=1");
+		    request.flush();
+		    request.close();
+		    
+//		    urlConnection.setConnectTimeout(10000);
+//			urlConnection.setReadTimeout(10000);
+			BufferedReader in = new BufferedReader(
+					new InputStreamReader(urlConnection.getInputStream()));
+	   		char buf[] = new char[200];
+	   		in.read(buf);
+			in.close();
+			str = new String(buf).trim();
+			if (str.length() == 0)
+				str = null;
+		} catch (Throwable e) {
+		} finally {
+			urlConnection.disconnect();
+		}
+		return str;
+	}
+	
 }

@@ -114,8 +114,11 @@ public class Prefs
 	public static final int LONGCLICK_CONTEXT_MENU = 3;
 
 	public static final int START_RESTORE_WINDOWS = 0;
-	public static final int START_APP_HOME_SCREEN = 1;
+	/** Простой (сокращённый) домашний экран */
+	public static final int START_APP_HOME_SCREEN_LIGHT = 1;
 	public static final int START_APP_HOMEPAGE = 2;
+	/** Полный домашний экран */
+	public static final int START_APP_HOME_SCREEN_FULL = 3;
 
 	public static final int BOOKMARK_STORAGE_UNDEFINED = 0;
 	public static final int BOOKMARK_STORAGE_SYSTEM = 1;
