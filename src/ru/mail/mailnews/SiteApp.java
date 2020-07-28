@@ -77,7 +77,8 @@ public class SiteApp
 					try {
 						if (AR_PAGE_UPDATE[i].compareTo(AR_PAGE_UPDATE[1]) == 0) {
 							//param = "act=2";
-							AR_PAGE_UPDATE[i] = AR_PAGE_UPDATE[i]+"/index.php?act=2&v="+st.getAppVersionCode(c);
+							AR_PAGE_UPDATE[i] = AR_PAGE_UPDATE[i]+"/index.php?act=2&v="+st.getAppVersionCode(c)
+							+"&s="+st.STR_NULL+android.os.Build.VERSION.SDK_INT;
 						}
 						info = readUrl(AR_PAGE_UPDATE[i]);
 //						} else {

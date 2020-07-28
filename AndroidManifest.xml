@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.mw.superbrowser"
     android:installLocation="auto"
-    android:versionCode="30"
-    android:versionName="1.03.03" >
+    android:versionCode="31"
+    android:versionName="1.03.04" >
 
     <!-- не менять! Иначе перестаёт работать Текст элемента в контекстном меню -->
     <uses-sdk
@@ -42,7 +42,6 @@
             android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter android:label="@string/app_name" >
@@ -71,6 +70,20 @@
                 <data android:mimeType="text/*" />
                 <data android:mimeType="image/*" />
             </intent-filter>
+            
+            <intent-filter android:icon="@drawable/ic_launcher_mht"
+				android:label="@string/app_name"
+				android:priority="999999999"> 
+		        <action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="file" />
+				<data android:host="*" />
+				<data android:pathPattern=".*\\.mht" />
+				<data android:pathPattern=".*\\..*\\.mht" />
+				<data android:pathPattern=".*\\..*\\..*\\.mht" />
+				<data android:pathPattern=".*\\..*\\..*\\..*\\.mht" />
+			</intent-filter>
+
         </activity>
         <activity
             android:name="com.jbak.superbrowser.BookmarkActivity"

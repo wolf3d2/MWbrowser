@@ -319,6 +319,8 @@ public class PanelUrlEdit extends LinearLayout implements WebViewEvent {
 				mPanelSearch = null;
 			if(mAddrState!=STATE_ADDR_SEARCH)
 				ar.add(Action.create(Action.COPY_URL_TO_CLIPBOARD));
+			if (text.compareTo(IConst.ABOUT_BLANK) != 0)
+				ar.add(Action.create(Action.SHARE_URL));
 			if(!TextUtils.isEmpty(text)&&(mAddrState==STATE_ADDR_URL||!mUserEditText&&isToolsVisible()&&stat.isWebAddr(text)))
 			{
 				if(text.equals(mUrl))

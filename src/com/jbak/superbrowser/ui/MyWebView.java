@@ -282,7 +282,7 @@ public class MyWebView extends WebView
 	/** счётчик одинаковых жестов - если больше 2, по тогда выводим "первая/последняя вкладка" */
 	int m_gesture_count = 0;
 	// обработка жестов
-	   SimpleOnGestureListener k,simpleongesturelistener = new SimpleOnGestureListener() {
+	   SimpleOnGestureListener simpleongesturelistener = new SimpleOnGestureListener() {
 			@Override
 			public boolean onDoubleTap(MotionEvent e) {
 				showFontSizeProgress();
